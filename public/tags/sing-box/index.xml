@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Lumi&#39;s Tech Blog</title>
-    <link>/</link>
-    <description>Recent content on Lumi&#39;s Tech Blog</description>
+    <title>Sing-Box on Lumi&#39;s Tech Blog</title>
+    <link>/tags/sing-box/</link>
+    <description>Recent content in Sing-Box on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/tags/sing-box/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>保姆级 VLESS &#43; Reality &amp; CDN 加速全指南</title>
       <link>/posts/vpn-tutorial/</link>

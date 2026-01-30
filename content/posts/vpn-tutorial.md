@@ -1,23 +1,39 @@
-# 保姆级教程：从零搭建 VLESS+Reality 与 CDN 加速梯子
+---
+title: "保姆级 VLESS + Reality & CDN 加速全指南"
+date: 2024-05-01T00:00:00+00:00
+description: "从零搭建 sing-box Reality 直连与 Cloudflare CDN 备用线路，包含架构原理、部署、客户端导入、排错与优化。"
+tags: ["Reality", "VLESS", "CDN", "Cloudflare", "sing-box", "X-UI"]
+---
 
-> 适合有基础 Linux 经验的新手，跟着做即可。全程采用双线路：直连 VLESS+Reality（抗封锁、低延迟）+ CDN VMess+WS（加速、伪装）。
+> 这是一份从零到上线的专业教程，涵盖 **VLESS + Reality 直连** 与 **VMess+WS+TLS 经 CDN** 的双线路方案，附带工作原理、排错与性能优化建议。适合具备基础 Linux 经验的读者。
 
-## 1. 为什么这样搭？
-- **稳定性**：Reality 直连不依赖域名或 CDN，抗干扰强；CDN 线路可作为备用，域名被墙还能换解析。 
-- **速度**：本地直连走 Reality，延迟低；遇到跨境网络差时，切换到 CDN 线路利用边缘节点提速。 
-- **抗封锁**：双模并行，端口、传输、域名多样化，降低被针对的概率。🎯
+## 目录
+1. 为什么要双线路（Reality 直连 + CDN 备用）
+2. 前置条件与规划
+3. 服务端部署步骤
+4. 客户端配置示例
+5. 如何理解 Cloudflare Tunnel 的工作方式
+6. 常见 502 / 超时错误排查
+7. 低延迟优化指南
+8. 安全与运维清单
 
-## 2. 前置条件
-- 一台境外 VPS（常见：Debian 11+/Ubuntu 22.04，1C1G 以上更佳，需 root）。
-- 基础 SSH/命令行操作经验，懂得修改配置文件、查看日志。 
-- 一个可用的域名（用于 CDN 方案），支持配置 DNS 记录。
+---
+
+## 1. 为什么要双线路？
+- **抗封锁与稳定性**：Reality 直连不依赖域名或 CDN，抗干扰强；CDN 线路可在域名遭遇干扰时快速切换。
+- **速度与体验**：直连延迟低、握手短；跨境链路拥塞或晚高峰时，可用 CDN 线路借助边缘节点绕路提速。
+- **灵活扩展**：两条线路并行，客户端可按延迟/健康度自动切换，也可手动一键切换。
+
+## 2. 前置条件与规划
+- **服务器**：境外 VPS（Debian 11+/Ubuntu 22.04，1C1G+，root 权限）。
+- **域名**：用于 CDN 方案；Reality 直连可不依赖域名。
+- **基础能力**：SSH、编辑配置、查看日志。
+- **端口规划**：建议 Reality 用 443/8443 或高位随机端口；WS 端口 443/8443，与防火墙放行一致。
 
 ## 3. 服务端部署
-### 3.1 开启 BBR
+### 3.1 开启 BBR（推荐）
 ```bash
-# 内核与 bbr 检查（Debian/Ubuntu）
 uname -r
-# 启用 BBR
 cat <<'EOF' | sudo tee /etc/sysctl.d/99-bbr.conf
 net.core.default_qdisc=fq
 net.ipv4.tcp_congestion_control=bbr
@@ -25,35 +41,52 @@ EOF
 sudo sysctl --system
 sysctl net.ipv4.tcp_congestion_control net.core.default_qdisc
 ```
-提示：输出含 `bbr` 和 `fq` 即生效。⚡
+输出含 `bbr` 和 `fq` 即生效。
 
-### 3.2 安装 sing-box（Reality）
-两种方式任选其一：
-1) **一键脚本 reality-ezpz**（快速上手）
+### 3.2 安装 sing-box（Reality 直连）
+**方案 A：一键脚本（快速上手）**
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/ok233wz/reality-ezpz/main/install.sh)
 ```
-脚本会生成 Reality 配置（含公私钥、短指纹），安装后按提示记录 `uuid/端口/serverName`。
+安装后记录：`uuid`、端口、`serverName`、`short_id`、Public/Private Key。
 
-2) **手动安装 sing-box**（自定义更强）
+**方案 B：官方脚本（便于自定义）**
 ```bash
-# 以 Debian/Ubuntu 为例
 sudo bash -c 'wget -O- https://sing-box.app/install.sh | bash'
-# 配置文件路径通常在 /etc/sing-box/config.json
 ```
-Reality 核心字段：
-- `type: vless` + `flow: xtls-rprx-vision`
-- `reality`: `private_key`/`public_key`、`server_name`（SNI）、`short_id`
-- 建议端口：443/8443/随机高位端口。
+关键字段（`/etc/sing-box/config.json`）：
+- `type: vless`，`flow: xtls-rprx-vision`
+- `reality`: `private_key`/`public_key`、`server_name`(SNI)、`short_id`
+- `dest/server_name` 选热门 HTTPS 站点，例如 `www.microsoft.com:443`
 
-### 3.3 安装 X-UI（VMess+WS+TLS+CDN）
-使用 docker-compose 方便升级回滚：
+**Reality 入站示例**
+```json
+{
+  "inbounds": [
+    {
+      "type": "vless",
+      "listen": "0.0.0.0",
+      "listen_port": 443,
+      "users": [{"uuid": "<uuid>", "flow": "xtls-rprx-vision"}],
+      "tls": {
+        "enabled": true,
+        "reality": {
+          "dest": "www.microsoft.com:443",
+          "server_name": "www.microsoft.com",
+          "private_key": "<private-key>",
+          "short_id": "a1b2c3d4"
+        }
+      }
+    }
+  ]
+}
+```
+
+### 3.3 安装 X-UI（VMess+WS+TLS，经 CDN）
 ```bash
-# 安装 docker & compose
 curl -fsSL https://get.docker.com | sh
 sudo systemctl enable --now docker
 
-# 创建目录
 mkdir -p /opt/x-ui && cd /opt/x-ui
 cat > docker-compose.yml <<'EOF'
 version: '3'
@@ -69,50 +102,16 @@ services:
     environment:
       - XRAY_VMESS_AEAD_FORCED=true
 EOF
-
-# 启动
 sudo docker compose up -d
-# 首次登录面板（默认 54321 端口）后请立即修改用户名/密码/端口！
 ```
-在面板中添加 **VMess + WebSocket + TLS** 节点：
-- 传输：WS，路径如 `/ws123`（随机字符串）。
-- TLS：勾选，自备证书或使用 ACME 获取；CDN 场景可用灵活证书。
-- 端口：443/8443/随机高位（配合防火墙放行）。
-- 域名：指向 CDN（如 Cloudflare）后端解析到服务器 IP，WS 路径需与面板一致。
+登录面板（默认 54321），**立刻修改用户名/密码/端口**。
 
-## 4. 双模策略：VLESS+Reality（直连）& VMess+WS（CDN）
-- **直连 VLESS+Reality**：无需域名，抗封锁，延迟低。适合日常主线路。 
-- **CDN VMess+WS**：走 443/80 伪装 HTTP，前置 CDN（Cloudflare/百度云加速等）。适合晚高峰或直连不稳时切换。 
-- 建议在客户端同时导入两条线路，使用「按延迟/按自动切换」策略或手动一键切换。
+在面板创建 **VMess + WebSocket + TLS**：
+- 传输：WS，路径如 `/ws123`（随机）。
+- TLS：开启；证书自签或 ACME。
+- 域名：解析到服务器 IP，CDN（如 Cloudflare）代理需“橙色云”开启。
 
-### Reality 配置示例（/etc/sing-box/config.json 摘要）
-```json
-{
-  "inbounds": [
-    {
-      "type": "vless",
-      "listen": "0.0.0.0",
-      "listen_port": 443,
-      "users": [{"uuid": "<your-uuid>", "flow": "xtls-rprx-vision"}],
-      "tls": {
-        "enabled": true,
-        "reality": {
-          "show": false,
-          "dest": "www.microsoft.com:443",
-          "xver": 0,
-          "server_name": "www.microsoft.com",
-          "private_key": "<your-private-key>",
-          "short_id": "a1b2c3d4"
-        }
-      }
-    }
-  ]
-}
-```
-- `dest/server_name` 选热门 HTTPS 站点（更像正常流量）。
-- `short_id` 4~8 hex，客户端需一致。
-
-### VMess+WS+TLS（X-UI 端导出的 JSON 摘要）
+**客户端导出摘要**
 ```json
 {
   "add": "your.domain.com",
@@ -124,11 +123,9 @@ sudo docker compose up -d
   "host": "your.domain.com"
 }
 ```
-- CDN 里将 `your.domain.com` 解析到服务器 IP，开启「代理」橙色云；WS 路径和端口保持一致。
 
-## 5. 客户端配置
-### Clash 系列（Clash Meta/Meta for Windows/Mac/Linux）
-在配置文件 `config.yaml` 中新增两个节点，示例：
+## 4. 客户端配置示例
+### Clash / Clash Meta
 ```yaml
 proxies:
   - name: "Reality-Direct"
@@ -167,26 +164,59 @@ proxy-groups:
       - CDN-VMess-WS
       - DIRECT
 ```
-在客户端选择 `🚀 Proxy` 后可随时切换两条线路。
 
 ### Shadowrocket（iOS）
-1. 扫码或导入两条订阅/节点（Reality 与 VMess+WS）。
-2. Reality 填写：服务器 IP、端口、UUID、Public Key、Short ID、SNI；传输选 Vision/Reality。 
-3. VMess+WS：服务器为域名，端口 443，UUID，TLS 开启，WS 路径 `/ws123`，Host 同域名。 
-4. 建议创建「按延迟排序」列表，方便快速切换。📱
-
-## 6. 安全与排错 Tips
-- 🔒 **改默认信息**：X-UI 登录端口、账号密码务必修改；定期更新容器镜像与系统。 
-- 🧱 **防火墙**：只放行实际使用端口（如 443/8443/54321 面板），其他端口关闭；可用 `ufw`/`firewalld`。 
-- 🎭 **伪装多样化**：Reality `server_name/dest` 可用常见大站；WS 路径/端口随机；如需再增强可加 WAF/CDN 自选端口。 
-- 🔄 **日志查看**：
-  - sing-box：`journalctl -u sing-box -e`
-  - docker x-ui：`docker logs -f x-ui`
-- 🧪 **常见问题**：
-  - 443 被占用 → 换端口或释放占用服务。
-  - Reality 无法连接 → 核对 Public Key、Short ID、SNI、端口防火墙。
-  - CDN 走不通 → 检查 WS 路径、证书、CDN 代理是否开启（橙色云）。
-  - TLS 失败 → 确认证书有效、时间同步（`timedatectl`）。
+- Reality：填服务器 IP、端口、UUID、Public Key、Short ID、SNI；传输选 Vision/Reality。
+- VMess+WS：服务器域名，端口 443，UUID，TLS 开启，WS 路径 `/ws123`，Host 填域名。
+- 建议在客户端创建「按延迟排序」或「自动切换」列表。
 
 ---
-收工！现在你拥有直连抗封锁 + CDN 加速的双模梯子，按需切换，稳速兼得。🚀
+
+## 5. How Cloudflare Tunnel Works
+- **定位**：Cloudflare Tunnel（cloudflared）在服务器端创建一条到 Cloudflare 边缘的持久出站隧道，无需暴露入站端口。
+- **流程**：
+  1) 服务器上的 `cloudflared` 主动连接最近的 Cloudflare 边缘节点。
+  2) 用户访问域名 → DNS 解析到 Cloudflare → 流量经已建立的隧道回源到本机服务。
+  3) 支持 `--url http://localhost:PORT` 方式将本地服务映射到公网域名，也可配合 `--protocol h2mux/quic` 提高握手与穿透效率。
+- **对比**：
+  - 传统反代：需在服务器开放 80/443，受防火墙/运营商限制。
+  - Tunnel：无入站暴露，穿透阻断能力更好，证书与 WAF 由 Cloudflare 处理。
+- **最佳实践**：
+  - 为 Tunnel 专用子域（如 `edge.example.com`）单独创建；
+  - 运行多条隧道做高可用；
+  - 选择 `--protocol quic` 获取更低时延与抖动。
+
+## 6. Troubleshooting Common 502 / Timeout Errors
+- **TLS/证书问题**：
+  - 502 多见于证书不匹配或过期；检查时间同步（`timedatectl`）。
+  - 在 Cloudflare 面板选择「完全（严格）」模式并确保证书合法。
+- **WS 路径/端口不一致**：客户端 `path` 必须与服务端一致；端口、防火墙需放行。
+- **CDN 代理未开启或缓存干扰**：确保橙色云开启；必要时在 Cloudflare 规则中为 WS 路径禁用缓存。
+- **回源超时**：
+  - 服务器压力过高或进程崩溃 → `docker logs -f x-ui` / `journalctl -u sing-box -e`。
+  - 边缘到源站链路差 → 切换数据中心（更换域名解析到其他 PoP）或临时改直连。
+- **SNI / Host 不匹配**：Reality 的 `server_name` 与客户端一致；WS 的 `Host` 头与证书域名一致。
+- **端口被占用**：443/8443 被其他服务占用会导致握手失败；用 `ss -tlnp` 排查并调整。
+
+## 7. Optimizing for Low Latency
+- **优先 Reality 直连**：减少中转环节；选稳定的热门 SNI 以获得更佳路由。
+- **BBR 与内核参数**：已启用 BBR；如需进一步调整可设置 `net.ipv4.tcp_fastopen = 3`（客户端亦需支持）。
+- **Cloudflare PoP 选择**：不同域名、前缀或负载均衡策略可命中更近的边缘节点；尝试多域名测试 RTT。
+- **协议与握手**：
+  - Reality：握手短、加密开销低，适合实时应用。
+  - Tunnel：`--protocol quic` 往往优于 h2mux，尤其在高丢包环境。
+- **客户端策略**：使用「按延迟/健康度自动切换」；定期测速，移除高抖动节点。
+- **UDP 支持**：开启 `udp: true` 以优化游戏/实时语音体验。
+
+## 8. 安全与运维清单
+- 更改 X-UI 默认登录端口/密码，限制面板暴露（可仅允许本地或安全网段访问）。
+- 定期更新：`sudo apt update && apt upgrade`，`docker pull enwaiax/x-ui && docker compose up -d`，`systemctl restart sing-box`。
+- 防火墙：只放行实际使用端口（如 443/8443/54321），其余关闭；可用 `ufw`/`firewalld`。
+- 日志巡检：
+  - sing-box：`journalctl -u sing-box -e`
+  - x-ui 容器：`docker logs -f x-ui`
+- 备份：定期备份 sing-box 配置、X-UI 数据库（`/opt/x-ui/db/`）。
+
+---
+
+**完成！** 现在你拥有具备抗封锁能力的 Reality 直连主线路与 Cloudflare CDN 备用线路，并掌握排错与优化要点。祝使用顺畅 🚀

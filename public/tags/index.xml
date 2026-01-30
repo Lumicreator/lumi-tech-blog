@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Lumi&#39;s Tech Blog</title>
-    <link>/tags/</link>
+    <link>http://localhost:1313/lumi-tech-blog/tags/</link>
     <description>Recent content in Tags on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/lumi-tech-blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>CDN</title>
-      <link>/tags/cdn/</link>
+      <link>http://localhost:1313/lumi-tech-blog/tags/cdn/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>/tags/cdn/</guid>
+      <guid>http://localhost:1313/lumi-tech-blog/tags/cdn/</guid>
       <description></description>
     </item>
     <item>
       <title>Cloudflare</title>
-      <link>/tags/cloudflare/</link>
+      <link>http://localhost:1313/lumi-tech-blog/tags/cloudflare/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>/tags/cloudflare/</guid>
+      <guid>http://localhost:1313/lumi-tech-blog/tags/cloudflare/</guid>
       <description></description>
     </item>
     <item>
       <title>Reality</title>
-      <link>/tags/reality/</link>
+      <link>http://localhost:1313/lumi-tech-blog/tags/reality/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>/tags/reality/</guid>
+      <guid>http://localhost:1313/lumi-tech-blog/tags/reality/</guid>
       <description></description>
     </item>
     <item>
       <title>Sing-Box</title>
-      <link>/tags/sing-box/</link>
+      <link>http://localhost:1313/lumi-tech-blog/tags/sing-box/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>/tags/sing-box/</guid>
+      <guid>http://localhost:1313/lumi-tech-blog/tags/sing-box/</guid>
       <description></description>
     </item>
     <item>
       <title>VLESS</title>
-      <link>/tags/vless/</link>
+      <link>http://localhost:1313/lumi-tech-blog/tags/vless/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>/tags/vless/</guid>
+      <guid>http://localhost:1313/lumi-tech-blog/tags/vless/</guid>
       <description></description>
     </item>
     <item>
       <title>X-UI</title>
-      <link>/tags/x-ui/</link>
+      <link>http://localhost:1313/lumi-tech-blog/tags/x-ui/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>/tags/x-ui/</guid>
+      <guid>http://localhost:1313/lumi-tech-blog/tags/x-ui/</guid>
       <description></description>
     </item>
   </channel>

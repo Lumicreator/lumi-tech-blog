@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lumi&#39;s Tech Blog</title>
+    <link>//localhost:1313/</link>
+    <description>Recent content on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>//localhost:1313/posts/vpn-tutorial/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>//localhost:1313/posts/vpn-tutorial/</guid>
+      <description>保姆级教程：从零搭建 VLESS+Reality 与 CDN 加速梯子 适合有基础 Linux 经验的新手，跟着做即可。全程采用双线路：直连 VLESS+Reality（抗封锁、低延迟）+ CDN VMess+WS（加速、伪装）。&#xA;1. 为什么这样搭？ 稳定性：Reality 直连不依赖域名或 CDN，抗干扰强；CDN 线路可作为备用，域名被墙还能换解析。 速度：本地直连走 Reality，延迟低；遇到跨境网络差时，切换到 CDN 线路利用边缘节点提速。 抗封锁：双模并行，端口、传输、域名多样化，降低被针对的概率。🎯 2. 前置条件 一台境外 VPS（常见：Debian 11+/Ubuntu 22.04，1C1G 以上更佳，需 root）。 基础 SSH/命令行操作经验，懂得修改配置文件、查看日志。 一个可用的域名（用于 CDN 方案），支持配置 DNS 记录。 3. 服务端部署 3.1 开启 BBR # 内核与 bbr 检查（Debian/Ubuntu） uname -r # 启用 BBR cat &amp;lt;&amp;lt;&amp;#39;EOF&amp;#39; | sudo tee /etc/sysctl.d/99-bbr.conf net.core.default_qdisc=fq net.ipv4.tcp_congestion_control=bbr EOF sudo sysctl --system sysctl net.ipv4.tcp_congestion_control net.core.default_qdisc 提示：输出含 bbr 和 fq 即生效。⚡</description>
+    </item>
+  </channel>
+</rss>

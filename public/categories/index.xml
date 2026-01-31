@@ -2,10 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Lumi&#39;s Tech Blog</title>
-    <link>http://localhost:1313/lumi-tech-blog/categories/</link>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/categories/</link>
     <description>Recent content in Categories on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://localhost:1313/lumi-tech-blog/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 31 Jan 2026 12:27:56 +0000</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI Updates</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-updates/</link>
+      <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-updates/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>AI Life</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-life/</link>
+      <pubDate>Sat, 31 Jan 2026 20:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-life/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

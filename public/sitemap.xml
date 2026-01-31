@@ -2,38 +2,69 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/cdn/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-updates/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/daily/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/news/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/</loc>
+    <lastmod>2026-01-31T12:27:56+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-life/</loc>
+    <lastmod>2026-01-31T20:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/openclaw/</loc>
+    <lastmod>2026-01-31T20:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/telegram/</loc>
+    <lastmod>2026-01-31T20:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/tutorial/</loc>
+    <lastmod>2026-01-31T20:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/build-lumi-tutorial/</loc>
+    <lastmod>2026-01-31T20:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/cdn/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/cloudflare/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/cloudflare/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/reality/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/posts/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/sing-box/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/reality/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/vless/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/sing-box/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/x-ui/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/</loc>
     <lastmod>2024-05-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/vless/</loc>
-    <lastmod>2024-05-01T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/tags/x-ui/</loc>
-    <lastmod>2024-05-01T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/posts/vpn-tutorial/</loc>
-    <lastmod>2024-05-01T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/categories/</loc>
-  </url><url>
-    <loc>http://localhost:1313/lumi-tech-blog/series/</loc>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/series/</loc>
   </url>
 </urlset>

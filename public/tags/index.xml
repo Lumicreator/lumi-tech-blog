@@ -2,52 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Lumi&#39;s Tech Blog</title>
-    <link>http://localhost:1313/lumi-tech-blog/tags/</link>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/</link>
     <description>Recent content in Tags on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/lumi-tech-blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 31 Jan 2026 12:27:56 +0000</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AI</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</link>
+      <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Daily</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/daily/</link>
+      <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/daily/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>News</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/news/</link>
+      <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/news/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>OpenClaw</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/openclaw/</link>
+      <pubDate>Sat, 31 Jan 2026 20:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/openclaw/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Telegram</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/telegram/</link>
+      <pubDate>Sat, 31 Jan 2026 20:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/telegram/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tutorial</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/tutorial/</link>
+      <pubDate>Sat, 31 Jan 2026 20:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/tutorial/</guid>
+      <description></description>
+    </item>
     <item>
       <title>CDN</title>
-      <link>http://localhost:1313/lumi-tech-blog/tags/cdn/</link>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/cdn/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/lumi-tech-blog/tags/cdn/</guid>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/cdn/</guid>
       <description></description>
     </item>
     <item>
       <title>Cloudflare</title>
-      <link>http://localhost:1313/lumi-tech-blog/tags/cloudflare/</link>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/cloudflare/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/lumi-tech-blog/tags/cloudflare/</guid>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/cloudflare/</guid>
       <description></description>
     </item>
     <item>
       <title>Reality</title>
-      <link>http://localhost:1313/lumi-tech-blog/tags/reality/</link>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/reality/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/lumi-tech-blog/tags/reality/</guid>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/reality/</guid>
       <description></description>
     </item>
     <item>
       <title>Sing-Box</title>
-      <link>http://localhost:1313/lumi-tech-blog/tags/sing-box/</link>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/sing-box/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/lumi-tech-blog/tags/sing-box/</guid>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/sing-box/</guid>
       <description></description>
     </item>
     <item>
       <title>VLESS</title>
-      <link>http://localhost:1313/lumi-tech-blog/tags/vless/</link>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/vless/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/lumi-tech-blog/tags/vless/</guid>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/vless/</guid>
       <description></description>
     </item>
     <item>
       <title>X-UI</title>
-      <link>http://localhost:1313/lumi-tech-blog/tags/x-ui/</link>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/tags/x-ui/</link>
       <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/lumi-tech-blog/tags/x-ui/</guid>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/tags/x-ui/</guid>
       <description></description>
     </item>
   </channel>

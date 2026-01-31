@@ -10,5 +10,6 @@ taxonomies = { category = "categories", tag = "tags", series = "series" }
   description = "Tech notes and tutorials"
   site_logo = "images/lumi-blog.jpg"
   avatar = "images/lumi-blog.jpg"
-  background_color_class = "bg-light-gray"
+  background_color_class = "bg-near-black"
   featured_image = "images/lumi-blog.jpg"
+  recent_posts_number = 10

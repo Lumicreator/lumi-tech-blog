@@ -80,7 +80,44 @@ graph TD subgraph Channels [消息渠道] WA[WhatsApp] TG[Telegram] DC[Discord] 
 目录 高层架构 核心组件 网关（控制平面） Agent 运行时 会话 渠道 技能 节点 通信协议 运行时工作流程 多 Agent 架构 安全模型 可扩展性 部署模式 CLI 参考 最佳实践 核心要点 未来路线图 高层架构 OpenClaw 采用以网关为中心的架构，由单个长期运行的进程管理所有渠道连接，并作为客户端、工具和自动化的控制平面。
 graph TD subgraph Channels [消息渠道] WA[WhatsApp] TG[Telegram] DC[Discord] SL[Slack] IM[iMessage] end subgraph Gateway [OpenClaw Gateway 控制平面] direction TB Router[Agent 路由器] SessionMgr[会话管理器] ToolExec[工具执行器] Cron[定时调度器] Canvas[Canvas 主机] Router --- SessionMgr SessionMgr --- ToolExec end subgraph Clients [客户端与节点] CLI[CLI 命令行] App[macOS 菜单栏应用] Nodes[设备节点 iOS/Android] end Channels ==&gt; Gateway Gateway &lt;==&gt; Clients ToolExec -."/>
 
-	
+	<style>
+   
+  .prose table, .nested-copy-line-height table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 1px solid #444;
+    background-color: #1a1a1a;
+    color: #eee;
+  }
+  .prose th, .prose td, .nested-copy-line-height th, .nested-copy-line-height td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #444;
+  }
+  .prose th, .nested-copy-line-height th {
+    background-color: #333;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+  .prose tr:nth-child(even), .nested-copy-line-height tr:nth-child(even) {
+    background-color: #222;
+  }
+  .prose tr:hover, .nested-copy-line-height tr:hover {
+    background-color: #2a2a2a;
+  }
+   
+  .prose td code, .nested-copy-line-height td code {
+    background-color: #333;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: #ffb86c;
+  }
+</style>
+
   </head>
 
   <body class="ma0 avenir bg-near-white">

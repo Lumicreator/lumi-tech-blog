@@ -55,7 +55,7 @@
     <meta property="og:title" content="WebSocket" />
 <meta property="og:description" content="Tech notes and tutorials" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://lumicreator.github.io/lumi-tech-blog/tags/websocket/" />
+<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/tags/websocket/" />
 <meta itemprop="name" content="WebSocket">
 <meta itemprop="description" content="Tech notes and tutorials"><meta name="twitter:card" content="summary"/><meta name="twitter:title" content="WebSocket"/>
 <meta name="twitter:description" content="Tech notes and tutorials"/>
@@ -110,7 +110,7 @@
   <div class="flex-l justify-between items-center center">
     <a href="/lumi-tech-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
       
-        <img src="/lumi-tech-blog/images/lumi-blog.jpg" class="w100 mw5-ns" alt="Lumi&#39;s Tech Blog" />
+        Lumi&#39;s Tech Blog
       
     </a>
     <div class="flex-l items-center">
@@ -157,15 +157,10 @@
     </h1>
     <div class="nested-links f5 lh-copy nested-copy-line-height">
       &ldquo;如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。&rdquo; —— Lumi
-引言 在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消息不丢、顺序不乱，并且能让多个客户端（比如你的手机和电脑）同步看到 AI 的思考过程，我们设计了一套精密的 WebSocket 类型化协议。
-今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：握手、心跳与多端同步。
-1. 握手阶段：初次见面的“暗号” 当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 connect 握手。
-客户端发起请求 (req:connect) { &#34;type&#34;: &#34;req&#34;, &#34;id&#34;: &#34;connect-1&#34;, &#34;method&#34;: &#34;connect&#34;, &#34;params&#34;: { &#34;minProtocol&#34;: 1, &#34;maxProtocol&#34;: 1, &#34;client&#34;: { &#34;id&#34;: &#34;pi-dashboard&#34;, &#34;version&#34;: &#34;1.0.0&#34;, &#34;platform&#34;: &#34;browser&#34; }, &#34;auth&#34;: { &#34;token&#34;: &#34;YOUR_SECRET_TOKEN&#34; } } } 网关响应 (res:hello-ok) 如果令牌和协议版本都对得上，网关会温柔地回应：
-{ &#34;type&#34;: &#34;res&#34;, &#34;id&#34;: &#34;connect-1&#34;, &#34;ok&#34;: true, &#34;payload&#34;: { &#34;version&#34;: &#34;2026.
+引言 在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消 …
     </div>
   </div>
 </div>
-
         </div>
       
     </section>
@@ -174,7 +169,7 @@
     </main>
     <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
   <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://lumicreator.github.io/lumi-tech-blog/" >
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://Lumicreator.github.io/lumi-tech-blog/" >
     &copy;  Lumi's Tech Blog 2026 
   </a>
     <div>

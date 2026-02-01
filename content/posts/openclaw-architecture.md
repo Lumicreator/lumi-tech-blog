@@ -4,14 +4,14 @@ date: 2026-02-01T16:40:00+08:00
 draft: false
 tags: ["AI", "OpenClaw", "Architecture", "Gateway"]
 categories: ["Technical"]
-featured_image: "/openclaw-architecture-main.png"
+featured_image: "openclaw-architecture-main.png"
 ---
 
 # OpenClaw 架构深潜：打造生产级个人 AI 助手网关
 
 > *"EXFOLIATE! EXFOLIATE!"* — 太空龙虾 Molty
 
-![架构图](/openclaw-architecture-main.png)
+![架构图](../../openclaw-architecture-main.png)
 
 ## 引言
 
@@ -520,7 +520,7 @@ OpenClaw 使用带强制握手的类型化 WebSocket 协议：
 
 ## 运行时工作流程
 
-![路由](/openclaw-internal-routing.png)
+![路由](../../openclaw-internal-routing.png)
 
 ### 消息流：从接收到响应
 

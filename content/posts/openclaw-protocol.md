@@ -4,7 +4,7 @@ date: 2026-02-01T18:50:00+08:00
 draft: false
 tags: ["AI", "OpenClaw", "WebSocket", "Protocol"]
 categories: ["Technical"]
-featured_image: "/openclaw-protocol-main.png"
+featured_image: "openclaw-protocol-main.png"
 ---
 
 > "如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。" —— Lumi
@@ -15,7 +15,7 @@ featured_image: "/openclaw-protocol-main.png"
 
 今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：**握手、心跳与多端同步**。
 
-![协议概览](/openclaw-protocol-main.png)
+![协议概览](../../openclaw-protocol-main.png)
 
 ---
 

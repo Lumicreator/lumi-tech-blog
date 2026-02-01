@@ -11,7 +11,7 @@ featured_image: "openclaw-architecture-main.png"
 
 > *"EXFOLIATE! EXFOLIATE!"* — 太空龙虾 Molty
 
-![架构图](/lumi-tech-blog/openclaw-architecture-main.png)
+![架构图](https://Lumicreator.github.io/lumi-tech-blog/openclaw-architecture-main.png)
 
 ## 引言
 
@@ -520,7 +520,7 @@ OpenClaw 使用带强制握手的类型化 WebSocket 协议：
 
 ## 运行时工作流程
 
-![路由](/lumi-tech-blog/openclaw-internal-routing.png)
+![路由](https://Lumicreator.github.io/lumi-tech-blog/openclaw-internal-routing.png)
 
 ### 消息流：从接收到响应
 

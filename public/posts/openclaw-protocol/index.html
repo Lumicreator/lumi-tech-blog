@@ -60,7 +60,7 @@
 客户端发起请求 (req:connect) { &#34;type&#34;: &#34;req&#34;, &#34;id&#34;: &#34;connect-1&#34;, &#34;method&#34;: &#34;connect&#34;, &#34;params&#34;: { &#34;minProtocol&#34;: 1, &#34;maxProtocol&#34;: 1, &#34;client&#34;: { &#34;id&#34;: &#34;pi-dashboard&#34;, &#34;version&#34;: &#34;1.0.0&#34;, &#34;platform&#34;: &#34;browser&#34; }, &#34;auth&#34;: { &#34;token&#34;: &#34;YOUR_SECRET_TOKEN&#34; } } } 网关响应 (res:hello-ok) 如果令牌和协议版本都对得上，网关会温柔地回应：
 { &#34;type&#34;: &#34;res&#34;, &#34;id&#34;: &#34;connect-1&#34;, &#34;ok&#34;: true, &#34;payload&#34;: { &#34;version&#34;: &#34;2026." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2026-02-01T18:50:00+08:00" />
 <meta property="article:modified_time" content="2026-02-01T18:50:00+08:00" />
 <meta itemprop="name" content="OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”">
@@ -127,7 +127,7 @@
   
 
   
-  <header class="cover bg-top" style="background-image: url('https://Lumicreator.github.io/lumi-tech-blog/openclaw-protocol-main.png');">
+  <header class="cover bg-top" style="background-image: url('https://lumicreator.github.io/lumi-tech-blog/openclaw-protocol-main.png');">
     <div class="bg-black-60">
       <nav class="pv3 ph3 ph4-ns" role="navigation">
   <div class="flex-l justify-between items-center center">
@@ -205,7 +205,7 @@
 <h2 id="引言">引言</h2>
 <p>在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消息不丢、顺序不乱，并且能让多个客户端（比如你的手机和电脑）同步看到 AI 的思考过程，我们设计了一套精密的 <strong>WebSocket 类型化协议</strong>。</p>
 <p>今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：<strong>握手、心跳与多端同步</strong>。</p>
-<p><img src="/openclaw-protocol-main.png" alt="协议概览"></p>
+<p><img src="../../openclaw-protocol-main.png" alt="协议概览"></p>
 <hr>
 <h2 id="1-握手阶段初次见面的暗号">1. 握手阶段：初次见面的“暗号”</h2>
 <p>当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 <code>connect</code> 握手。</p>
@@ -361,7 +361,7 @@
     </main>
     <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
   <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://Lumicreator.github.io/lumi-tech-blog/" >
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://lumicreator.github.io/lumi-tech-blog/" >
     &copy;  Lumi's Tech Blog 2026 
   </a>
     <div>

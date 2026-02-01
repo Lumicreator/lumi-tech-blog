@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>News on Lumi&#39;s Tech Blog</title>
-    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/news/</link>
+    <link>https://lumicreator.github.io/lumi-tech-blog/tags/news/</link>
     <description>Recent content in News on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 01 Feb 2026 09:00:01 +0000</lastBuildDate>
-    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/news/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lumicreator.github.io/lumi-tech-blog/tags/news/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AI News Daily: 2026-02-01</title>
-      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</link>
+      <link>https://lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</link>
       <pubDate>Sun, 01 Feb 2026 09:00:01 +0000</pubDate>
-      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</guid>
+      <guid>https://lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</guid>
       <description>AI Circle Latest Updates - 2026-02-01 Here are the most significant developments in the AI world today.&#xA;Nvidia CEO denies he’s ‘unhappy’ with OpenAI Nvidia&amp;rsquo;s CEO Jensen Huang denied reports that he was unhappy with OpenAI and said his company still planned to make a &amp;ldquo;huge&amp;rdquo; investment in the ChatGPT firm. NVIDIA announced in September that it would invest up to $100 billion in OpenAI, but recently, there have been suggestions that the deal might &amp;hellip;</description>
     </item>
     <item>
       <title>AI News Daily: 2026-01-31</title>
-      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</link>
+      <link>https://lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</link>
       <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
-      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</guid>
+      <guid>https://lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</guid>
       <description>AI Circle Latest Updates - 2026-01-31 Here are the most significant developments in the AI world today.&#xA;Peloton lays off 11 percent of its staff just a few months after launching its AI hardware Peloton said on Friday that it&amp;rsquo;s cutting around 11 percent of its staff, mostly impacting &amp;ldquo;engineers working on technology and enterprise-related efforts,&amp;rdquo; reports Bloomberg. Last August, Peloton laid off six percent of its workforce and told investors it would continue layoffs globally in 2026, in &amp;hellip;</description>
     </item>
   </channel>

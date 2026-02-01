@@ -15,7 +15,7 @@ featured_image: "openclaw-protocol-main.png"
 
 今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：**握手、心跳与多端同步**。
 
-![协议概览](../../openclaw-protocol-main.png)
+![协议概览](/lumi-tech-blog/openclaw-protocol-main.png)
 
 ---
 

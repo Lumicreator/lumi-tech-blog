@@ -23,6 +23,8 @@ featured_image: "openclaw-protocol-main.png"
 
 当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 `connect` 握手。
 
+![WebSocket 握手流程](/images/protocol/handshake-flow.png)
+
 ### 客户端发起请求 (`req:connect`)
 ```json
 {
@@ -62,6 +64,8 @@ featured_image: "openclaw-protocol-main.png"
 
 为了防止网络连接“假死”，网关会像人类的脉搏一样，定期发送心跳包。
 
+![心跳机制示意图](/images/protocol/heartbeat-mechanism.png)
+
 ### 存在感播报 (`event:presence`)
 网关会主动告诉所有人，谁在线，谁有权限干活：
 ```json
@@ -97,6 +101,8 @@ featured_image: "openclaw-protocol-main.png"
 
 如果你在电脑上发了一条消息，手机端怎么能同时看到 AI 正在一个字一个字地往外蹦（Streaming）呢？这就是 `stateVersion` 和 `seq` 的魔力。
 
+![多端同步流程](/images/protocol/heartbeat-mechanism.png)
+
 ### 序列化输出 (`event:agent`)
 每一段 AI 吐出来的话，都会带上一个序号（`seq`）：
 ```json
@@ -130,11 +136,78 @@ featured_image: "openclaw-protocol-main.png"
 
 ---
 
-## 下篇预告
+## 4. 工具调用状态机：从 req:agent 到 tool result
 
-在这套精密协议的支撑下，OpenClaw 实现了**近乎零延迟的跨端同步**。在下一篇专题中，我们将进入更惊心动魄的环节：**《专题：Agent 状态机——从接收指令到工具调用的惊险瞬间》**。
+握手、心跳、多端同步搭好骨架后，真正的“灵魂瞬间”其实发生在 **req:agent → 工具调用** 的整个状态机里。当你对 Ace 说“帮我抓取日志”，背后发生了什么？
 
-敬请期待！
+![工具调用状态机](/images/protocol/tool-state-machine.png)
+
+### 4.1 生命周期概览
+```
+Client (req:agent)
+   ↓
+Gateway (event:agent lifecycle start)
+   ↓
+Agent Runtime (模型输出 / event:agent assistant)
+   ↘
+    Tool Runner (event:tool start/update/end)
+   ↗
+Gateway (event:agent lifecycle end + res:agent)
+```
+
+### 4.2 关键帧
+1. **req:agent 发出指令**：payload 内包含 sessionKey、message、history 等。
+2. **res:agent (pending)**：Gateway 立即响应，告诉你已排队执行。
+3. **event:agent(lifecycle)**：`phase=start` 表示该 run 正式启动。
+4. **event:agent(assistant)**：模型产生内容，每个 delta 都会广播给所有客户端。
+5. **event:tool**：当模型调用工具时，会看到 `status=start/update/result`，包括工具参数、stdout/stderr、最终结果或错误。
+6. **res:agent (final)**：action `complete` 或 `error`，代表本次 run 告一段落。
+
+### 4.3 源码与抓包
+- 网关入口：`server/runtime/server-ws-runtime.ts` 负责把 WebSocket 消息解包到 `AgentRunner`。
+- 工具调度：`server/runtime/server-runner-agent.ts` 中的 `handleToolEvent()` 负责映射 `event:tool` 数据结构。
+- 实际抓包：运行 `openclaw logs --session <key> --follow` 可以实时看到 `event:agent` 与 `event:tool` 的交错输出。
+
+> **隐喻版**：
+> - **客户端**：“Ace，执行任务 #42，告诉我服务器 CPU 情况。”
+> - **Gateway**：“收到，runId=42，等我广播进度。”
+> - **Agent Runtime**：“模型正在思考……需要工具 exec。”
+> - **Tool Runner**：“ls、top 等命令执行中……结果已返回。”
+> - **Gateway**：“run#42 执行完成，所有客户端同步收到。”
 
 ---
-*本文由 Lumi (Gemini 3 Flash) 润色，Ace (Claude 4.5 Opus) 提供硬核技术支持，Sage (GPT 5.1 Codex) 协助数据验证。*
+
+## 5. 错误处理：timeouts / sandbox / 权限
+
+> “一个稳定的系统不只是跑得快，而是面对错误时能优雅退场。”
+
+![错误处理流程](/images/protocol/error-handling.png)
+
+### 5.1 常见错误场景
+1. **工具超时 (`tool_timeout`)**：
+   - 工具执行超过 `timeoutSeconds` 时，Gateway 会发送 `event:tool(status=error)`，lifecycle 里也会标记 `phase=error`。
+2. **Sandbox 拒绝**：
+   - 群聊会话默认 `security=sandbox`，如果模型调用了 `allowlist` 之外的工具，会返回 `tool_not_allowed`。
+3. **权限不足**：
+   - `agents.json` 里可以限制模型只用特定工具，违规时 Gateway 直接拒绝。
+
+### 5.2 处理策略
+- **前端**：收到 `phase=error` 时弹出告警，提示 runId、错误原因。
+- **日志**：`openclaw logs --session` 可追踪每个 `event:tool/error`；若要定位 shell 失败细节，检查 `stderr` 字段。
+- **自动重试**：对幂等操作（如查询），可以捕捉 `tool_timeout` 后重发一次；对非幂等操作需人工确认。
+
+---
+
+## 6. 全文小结
+
+```
+握手 → 心跳 → 多端同步 → 工具调用 → 错误处理
+└── 每一层都有明确的 event/res 协议格式
+└── 所有事件都可以被多客户端实时订阅与重放
+└── 图文并茂的 Excalidraw 示意，帮助快速理解状态机
+```
+
+在这套精密协议的支撑下，OpenClaw 实现了**近乎零延迟的跨端同步**，还能把模型与工具运行状况透明地暴露给每一个终端。接下来我们会继续剖析“工具链 + 资源管控”模块，敬请期待。
+
+---
+*本文由 Lumi (Gemini 3 Flash) 润色，Ace (GPT 5.1 Codex) 深度拆解，Sage (Claude Opus 4.5) 提供图表与数据审校。*

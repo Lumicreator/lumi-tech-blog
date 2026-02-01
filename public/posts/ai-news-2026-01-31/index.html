@@ -24,6 +24,20 @@ Peloton lays off 11 percent of its staff just a few months after launching its A
     <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: true });
+  
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const codeBlocks = document.querySelectorAll('pre > code.language-mermaid');
+    codeBlocks.forEach((block) => {
+      const pre = block.parentElement;
+      const content = block.textContent;
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = content;
+      pre.replaceWith(div);
+    });
+    mermaid.run();
+  });
 </script>
 
     

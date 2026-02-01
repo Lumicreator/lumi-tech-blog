@@ -23,7 +23,7 @@ featured_image: "openclaw-protocol-main.png"
 
 当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 `connect` 握手。
 
-![WebSocket 握手流程](/images/protocol/handshake-flow.png)
+![WebSocket 握手流程](/lumi-tech-blog/images/protocol/handshake-flow.png)
 
 ### 客户端发起请求 (`req:connect`)
 ```json
@@ -64,7 +64,7 @@ featured_image: "openclaw-protocol-main.png"
 
 为了防止网络连接“假死”，网关会像人类的脉搏一样，定期发送心跳包。
 
-![心跳机制示意图](/images/protocol/heartbeat-mechanism.png)
+![心跳机制示意图](/lumi-tech-blog/images/protocol/heartbeat-mechanism.png)
 
 ### 存在感播报 (`event:presence`)
 网关会主动告诉所有人，谁在线，谁有权限干活：
@@ -101,7 +101,7 @@ featured_image: "openclaw-protocol-main.png"
 
 如果你在电脑上发了一条消息，手机端怎么能同时看到 AI 正在一个字一个字地往外蹦（Streaming）呢？这就是 `stateVersion` 和 `seq` 的魔力。
 
-![多端同步流程](/images/protocol/heartbeat-mechanism.png)
+![多端同步流程](/lumi-tech-blog/images/protocol/heartbeat-mechanism.png)
 
 ### 序列化输出 (`event:agent`)
 每一段 AI 吐出来的话，都会带上一个序号（`seq`）：
@@ -140,7 +140,7 @@ featured_image: "openclaw-protocol-main.png"
 
 握手、心跳、多端同步搭好骨架后，真正的“灵魂瞬间”其实发生在 **req:agent → 工具调用** 的整个状态机里。当你对 Ace 说“帮我抓取日志”，背后发生了什么？
 
-![工具调用状态机](/images/protocol/tool-state-machine.png)
+![工具调用状态机](/lumi-tech-blog/images/protocol/tool-state-machine.png)
 
 ### 4.1 生命周期概览
 ```
@@ -181,7 +181,7 @@ Gateway (event:agent lifecycle end + res:agent)
 
 > “一个稳定的系统不只是跑得快，而是面对错误时能优雅退场。”
 
-![错误处理流程](/images/protocol/error-handling.png)
+![错误处理流程](/lumi-tech-blog/images/protocol/error-handling.png)
 
 ### 5.1 常见错误场景
 1. **工具超时 (`tool_timeout`)**：

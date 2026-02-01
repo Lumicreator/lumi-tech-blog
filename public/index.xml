@@ -6,8 +6,15 @@
     <description>Recent content on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 31 Jan 2026 12:27:56 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Feb 2026 16:40:00 +0800</lastBuildDate>
     <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenClaw 架构深潜：打造生产级个人 AI 助手网关</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-architecture/</link>
+      <pubDate>Sun, 01 Feb 2026 16:40:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-architecture/</guid>
+      <description>OpenClaw Architecture Deep Dive: Building a Production-Grade Personal AI Assistant Gateway &amp;ldquo;EXFOLIATE! EXFOLIATE!&amp;rdquo; — Molty the Space Lobster&#xA;Introduction OpenClaw is an open-source personal AI assistant framework that bridges modern LLMs to the messaging channels people actually use—WhatsApp, Telegram, Slack, Discord, Signal, iMessage, and more. Unlike cloud-hosted AI assistants, OpenClaw runs on your own infrastructure, giving you complete control over data, sessions, and tool execution.&#xA;This article provides a comprehensive architectural analysis of the OpenClaw system, targeting senior developers and architects who want to understand how to build, deploy, and extend production-grade AI assistant infrastructure.</description>
+    </item>
     <item>
       <title>AI News Daily: 2026-01-31</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</link>

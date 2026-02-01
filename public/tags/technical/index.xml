@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Technical on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/technical/</link>
+    <description>Recent content in Technical on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 01 Feb 2026 14:30:00 +0000</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/technical/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenClaw 记忆机制深度拆解：让 AI 真正懂你</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</link>
+      <pubDate>Sun, 01 Feb 2026 14:30:00 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</guid>
+      <description>OpenClaw 记忆机制深度拆解：让 AI 真正懂你 🧠✨ &amp;ldquo;AI 每次醒来都是失忆的，记忆让它从工具变成伙伴。&amp;rdquo;&#xA;一、引言：为什么 AI 需要&amp;quot;记忆&amp;quot;？ 想象一下，你每天早上醒来，都完全忘记了昨天发生的一切——你的朋友是谁、你喜欢什么、你正在做什么项目。这就是大多数 AI 助手的日常。&#xA;传统的对话式 AI 是&amp;quot;无状态&amp;quot;的：每次对话结束，一切归零。它可能在这次对话里表现得很聪明，但下次再来，它又是一张白纸。&#xA;OpenClaw 的记忆系统改变了这一点。它让 AI agent 拥有了：&#xA;连续性：记住之前的对话和决策 个性化：了解用户的偏好和习惯 协作能力：多个 agent 共享记忆，形成团队 二、记忆架构总览 OpenClaw 的记忆系统采用 Markdown 为真相源 的设计哲学——人类可读、Git 友好、离线可用。&#xA;2.1 记忆层次结构 层级 文件 作用 持久性 🎭 身份 SOUL.md 定义 agent 的人格、语气、价值观 永久 👤 用户 USER.md 记录用户信息、偏好、时区 永久 📚 长期记忆 MEMORY.md 精选的持久记忆（核心事实） 永久 📅 短期记忆 memory/YYYY-MM-DD.md 每日日志（append-only） 天级 🏷️ 实体 bank/entities/*.md 特定人/项目的专属页面 按需 💭 观点 bank/opinions.md 带置信度的判断（可演化） 可变 2.</description>
+    </item>
+  </channel>
+</rss>

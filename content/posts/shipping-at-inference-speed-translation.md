@@ -4,6 +4,10 @@ date: 2026-02-02T09:05:00+08:00
 draft: false
 tags: ["AI", "Development", "Productivity", "Translation"]
 categories: ["Technology"]
+cover:
+    image: "images/shipping-cover.png"
+    alt: "Shipping at Inference-Speed"
+    caption: "以推理速度交付"
 ---
 
 > **译者注**：本文翻译自 Peter Steinberger 的博文 *[Shipping at Inference-Speed](https://steipete.me/posts/2025/shipping-at-inference-speed)*。Peter 是著名的 iOS 开发者（PSPDFKit 创始人），最近他因开发了 Clawdis 和一系列 AI 驱动的工具而在 AI 开发圈备受关注。

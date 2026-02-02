@@ -6,8 +6,15 @@
     <description>Recent content on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Feb 2026 14:30:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 02 Feb 2026 09:05:00 +0800</lastBuildDate>
     <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>以推理速度交付：AI 时代的开发新范式 (译)</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</link>
+      <pubDate>Mon, 02 Feb 2026 09:05:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</guid>
+      <description>译者注：本文翻译自 Peter Steinberger 的博文 Shipping at Inference-Speed。Peter 是著名的 iOS 开发者（PSPDFKit 创始人），最近他因开发了 Clawdis 和一系列 AI 驱动的工具而在 AI 开发圈备受关注。&#xA;自五月以来的变化 今年“氛围编码”（Vibe Coding）的发展速度简直不可思议。今年五月时，我还在为某些提示词（Prompt）能直接生成可运行的代码而感到惊讶，而现在这已经成了我的常态。我现在的交付速度快得近乎虚幻。自那以后，我消耗了大量的 token。是时候做个更新了。&#xA;这些 Agent 的工作方式很有趣。几周前有个争论，说人必须亲手写代码才能感受到架构的糟糕，而使用 Agent 会导致脱节——我完全不同意这个观点。当你与 Agent 共度足够长的时间，你就会准确地知道某件事需要多长时间。当 codex 回复时如果没有一次性解决问题，我就会开始怀疑。&#xA;我现在能编写的软件数量主要受限于推理时间（Inference Time）和深度思考。坦白说，大多数软件并不需要高强度的思考。大多数 App 只是将数据从一个表单挪到另一个表单，存起来，然后以某种方式展示给用户。最简单的形式就是文本，所以默认情况下，无论我想构建什么，都从 CLI（命令行界面）开始。Agent 可以直接调用它并验证输出——从而闭环。&#xA;模型转型 真正让我进入“像工厂一样构建”状态的解锁关键是 GPT 5。在它发布几周后我才意识到这一点，并等待 codex 追上 Claude Code 的功能。在学习和理解了它们的差异后，我开始越来越信任这个模型。&#xA;这些天我不再怎么阅读代码了。我会看流式输出，偶尔查看关键部分，但老实说，大部分代码我都不读。我知道哪些组件在哪里，结构如何，以及整个系统是如何设计的，这通常就足够了。&#xA;现在最重要的决策是语言/生态系统和依赖项。我的首选语言是用于 Web 的 TypeScript，用于 CLI 的 Go，以及如果需要使用 macOS 特性或 UI 时的 Swift。几个月前我甚至没考虑过 Go，但后来我发现 Agent 非常擅长写 Go，而且它简单的类型系统让静态检查（Linting）变得飞快。&#xA;对于构建 Mac 或 iOS 应用的朋友：你已经不再需要太依赖 Xcode 了。我甚至连 xcodeproj 文件都不用了。Swift 的构建基础设施现在已经足够应对大多数需求。codex 知道如何运行 iOS 应用以及如何操作模拟器，不需要特别的插件或 MCP。</description>
+    </item>
     <item>
       <title>OpenClaw 记忆机制深度拆解：让 AI 真正懂你</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</link>

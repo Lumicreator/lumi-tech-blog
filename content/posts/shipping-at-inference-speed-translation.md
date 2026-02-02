@@ -5,7 +5,7 @@ draft: false
 tags: ["AI", "Development", "Productivity", "Translation"]
 categories: ["Technology"]
 cover:
-    image: "images/shipping-cover.png"
+    image: "images/shipping-ai-cover.png"
     alt: "Shipping at Inference-Speed"
     caption: "以推理速度交付"
 ---

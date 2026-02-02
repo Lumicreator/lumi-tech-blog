@@ -2,25 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</loc>
-    <lastmod>2026-02-02T01:14:00+00:00</lastmod>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/ai-evals/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/anthropic/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/anthropic-engineering/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
   </url><url>
     <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/engineering/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/technical/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/anthropic-evals/</loc>
+    <lastmod>2026-02-02T03:25:00+00:00</lastmod>
+  </url><url>
+    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</loc>
     <lastmod>2026-02-02T01:14:00+00:00</lastmod>
   </url><url>
     <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/development/</loc>
     <lastmod>2026-02-02T01:14:00+00:00</lastmod>
   </url><url>
-    <loc>https://Lumicreator.github.io/lumi-tech-blog/</loc>
-    <lastmod>2026-02-02T01:14:00+00:00</lastmod>
-  </url><url>
-    <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/</loc>
-    <lastmod>2026-02-02T01:14:00+00:00</lastmod>
-  </url><url>
     <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/productivity/</loc>
-    <lastmod>2026-02-02T01:14:00+00:00</lastmod>
-  </url><url>
-    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/</loc>
     <lastmod>2026-02-02T01:14:00+00:00</lastmod>
   </url><url>
     <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/technology/</loc>
@@ -39,9 +57,6 @@
     <lastmod>2026-02-01T14:30:00+00:00</lastmod>
   </url><url>
     <loc>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</loc>
-    <lastmod>2026-02-01T14:30:00+00:00</lastmod>
-  </url><url>
-    <loc>https://Lumicreator.github.io/lumi-tech-blog/tags/technical/</loc>
     <lastmod>2026-02-01T14:30:00+00:00</lastmod>
   </url><url>
     <loc>https://Lumicreator.github.io/lumi-tech-blog/categories/technical/</loc>

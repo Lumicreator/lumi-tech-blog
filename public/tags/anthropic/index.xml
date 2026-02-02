@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Anthropic on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/anthropic/</link>
+    <description>Recent content in Anthropic on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Feb 2026 03:25:00 +0000</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/anthropic/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计抗 AI 的技术评估：我们从三次迭代中发现的秘密</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/anthropic-evals/</link>
+      <pubDate>Mon, 02 Feb 2026 03:25:00 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/anthropic-evals/</guid>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;译者注&lt;/strong&gt;：本文翻译自 Anthropic 官方工程博客 &lt;em&gt;&lt;a href=&#34;https://www.anthropic.com/engineering/AI-resistant-technical-evaluations&#34;&gt;Designing AI-resistant technical evaluations&lt;/a&gt;&lt;/em&gt;。作者 Tristan Hume 是 Anthropic 性能优化团队负责人。&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;自五月以来的变化&#34;&gt;自五月以来的变化&lt;/h2&gt;&#xA;&lt;p&gt;随着 AI 能力的提升，评估技术候选人变得越来越难。一个今天能很好区分人类技能水平的“家庭作业”，明天可能就被模型轻易解决，从而变得毫无意义。&lt;/p&gt;&#xA;&lt;p&gt;自 2024 年初以来，我们的性能工程团队一直使用一项针对模拟加速器优化代码的测试。超过 1,000 名候选人完成了测试，其中数十人现在就在这里工作。但每一代新 Claude 模型的发布，都迫使我们重新设计测试。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

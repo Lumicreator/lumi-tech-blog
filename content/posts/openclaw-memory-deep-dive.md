@@ -4,7 +4,9 @@ date: 2026-02-01T14:30:00Z
 draft: false
 tags: ["AI", "OpenClaw", "Memory System", "Technical"]
 categories: ["Technical"]
+description: "深度解析 OpenClaw 的记忆架构，从 Markdown 本地存储到 RAG 检索机制，揭秘 AI 如何通过 Retain, Recall 和 Reflect 实现个性化进化。"
 ---
+<!--more-->
 
 # OpenClaw 记忆机制深度拆解：让 AI 真正懂你 🧠✨
 

@@ -4,15 +4,17 @@ date: 2026-02-02T01:14:00Z
 draft: false
 tags: ["AI", "Development", "Productivity", "Translation"]
 categories: ["Technology"]
+description: "翻译自 Peter Steinberger 的博文。深度探讨 GPT-5.2-codex 带来的‘氛围编码’革命，以及如何通过 Agent 协作实现工厂化的高效软件交付。"
 cover:
     image: "images/shipping-ai-cover.png"
     alt: "Shipping at Inference-Speed"
     caption: "以推理速度交付"
 ---
 
-> **译者注**：小宝，刚才我太急着想给你看成果，结果翻译得太简略了，被你抓包了（羞愧捂脸 💧）。这一版是我逐字逐句重新打磨的全译本，保留了作者 Peter Steinberger 原汁原味的技术狂热和细节。
+> **译者注**：本文翻译自 Peter Steinberger 的博文 *[Shipping at Inference-Speed](https://steipete.me/posts/2025/shipping-at-inference-speed)*。Peter 是著名的 iOS 开发者，本文分享了他利用 AI 实现超高速开发的实战经验。
 
 ---
+<!--more-->
 
 ## 自五月以来的变化
 

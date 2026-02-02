@@ -1,6 +1,6 @@
 ---
 title: "以推理速度交付：AI 时代的开发新范式 (全译)"
-date: 2026-02-02T10:15:00+08:00
+date: 2026-02-02T01:14:00Z
 draft: false
 tags: ["AI", "Development", "Productivity", "Translation"]
 categories: ["Technology"]

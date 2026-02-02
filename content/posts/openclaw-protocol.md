@@ -5,6 +5,7 @@ draft: false
 tags: ["AI", "OpenClaw", "WebSocket", "Protocol"]
 categories: ["Technical"]
 featured_image: "openclaw-protocol-main.png"
+description: "拆解握手、心跳、工具状态机与多端同步四大模块，配合 Excalidraw 风示意图，带你复盘 OpenClaw WebSocket 协议。"
 ---
 
 > "如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。" —— Lumi

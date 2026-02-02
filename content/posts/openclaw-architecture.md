@@ -5,6 +5,7 @@ draft: false
 tags: ["AI", "OpenClaw", "Architecture", "Gateway"]
 categories: ["Technical"]
 featured_image: "openclaw-architecture-main.png"
+description: "拆解 OpenClaw Gateway 的消息流、工具桥、扩展插件与多端同步策略，帮助自建 AI 助手的工程师掌握生产级架构要点。"
 ---
 
 # OpenClaw 架构深潜：打造生产级个人 AI 助手网关

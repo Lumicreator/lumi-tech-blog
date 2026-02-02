@@ -4,6 +4,7 @@ date: 2026-02-01T15:45:00Z
 draft: true
 tags: ["OpenClaw", "Memory", "AI Agents"]
 categories: ["Technical"]
+description: "草稿：记录 OpenClaw 记忆系统的设计方向，包含情节钩子、持久化策略与 RAG 测试计划，为后续深度稿打底。"
 ---
 
 > “AI 每次醒来都是失忆的，记忆让它从工具变成伙伴。”

@@ -14,6 +14,9 @@ tags: ["OpenClaw", "Browser", "VPS", "Automation", "VNC"]
 4. 使用 Browser 工具
 5. 持久化登录状态
 6. 身份伪装技巧
+7. 常见问题
+8. 完整启动脚本
+9. 安全访问：SSH 隧道
 
 ---
 
@@ -235,10 +238,56 @@ curl http://127.0.0.1:9222/json/version
 
 ### Q: 遇到验证码怎么办？
 
-通过 VNC 客户端连接到 VPS，手动完成验证码：
+通过 SSH 隧道 + VNC 客户端连接到 VPS，手动完成验证码（见下方安全访问章节）。
+
+---
+
+## 9. 安全访问：SSH 隧道
+
+**为什么不直接开放 VNC 端口？**
+- VNC 协议本身不加密，公网暴露有安全风险
+- 通过 SSH 隧道访问更安全
+
+### 9.1 建立 SSH 隧道
+
+在本地电脑执行：
+
+```bash
+# 将 VPS 的 5901 端口映射到本地 5901
+ssh -L 5901:127.0.0.1:5901 root@your-vps-ip
 ```
-VNC 地址：your-vps-ip:5901
+
+### 9.2 连接 VNC
+
+隧道建立后，用 VNC 客户端连接：
+
 ```
+地址：127.0.0.1:5901
+# 或
+地址：localhost:1
+```
+
+**推荐 VNC 客户端**：
+- macOS：内置"屏幕共享"或 RealVNC Viewer
+- Windows：RealVNC Viewer、TightVNC
+- Linux：Remmina、vncviewer
+
+### 9.3 一键脚本（macOS/Linux）
+
+创建 `~/vnc-vps.sh`：
+
+```bash
+#!/bin/bash
+VPS_IP="your-vps-ip"
+
+# 建立隧道并打开 VNC
+ssh -f -N -L 5901:127.0.0.1:5901 root@$VPS_IP
+sleep 1
+open vnc://127.0.0.1:5901  # macOS
+# vncviewer 127.0.0.1:5901  # Linux
+```
+
+这样每次只需运行脚本即可安全访问 VPS 桌面。
 
 ---
 

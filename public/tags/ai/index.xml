@@ -1,92 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>AI on Lumi&#39;s Tech Blog</title>
     <link>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</link>
     <description>Recent content in AI on Lumi&#39;s Tech Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.146.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Feb 2026 06:30:00 +0800</lastBuildDate><atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/ai/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 19 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/ai/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>RSS-NotebookLM：打造你的 AI 每日播客与学习站</title>
+      <title>用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</link>
-      <pubDate>Tue, 10 Feb 2026 06:30:00 +0800</pubDate>
-      
+      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</guid>
-      <description>如何让分散的 RSS 资讯变成每天准时送达的播客？本文将拆解如何结合 NotebookLM、OpenClaw 与轻量化 Web 站点，实现一套“从抓取到收听”的全自动工作流。
-核心架构 整个系统分为四个核心阶段：
-抓取 (RSS/Miniflux)：每日定时从 Miniflux 拉取过去 24h 的精华链接。 加工 (NotebookLM)：利用官方 CLI 将链接喂给 NotebookLM，自动生成中英文播客音频。 监控 (Watcher)：一个轻量级的 Python 脚本轮询生成进度，产物就绪后立刻触发分发。 消费 (Discord/TG/Study Site)：产物通过消息平台推送，并自动同步至一个支持中英逐句对照的学习站。 关键功能实现 1. 全自动 Notebook 管理 为了避免 NotebookLM 在单个 Notebook 中堆积过多 Sources 导致生成失败，我们实现了自动分卷逻辑：
-def ensure_notebook(date_str): # 如果今日 Notebook 已满（&amp;gt;250 sources），自动创建 (v2)/(v3) 副本 # 始终确保生成环境清洁 2. 跨平台分发 (deliver.py) 产物生成后，deliver.py 会执行以下流水线：
-音频压缩：利用 ffmpeg 将原始音频压至 64k，适合移动端收听。 PDF 瘦身：优化生成的 PPT 文件大小。 多端推送：通过 OpenClaw 接口同时发送至 Discord 频道与 Telegram 私聊。 站点同步：通过 API 将音频推送到本地 Web 容器，触发后续的 ASR 转写。 3.</description>
+      <description>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。</description>
     </item>
-    
     <item>
       <title>以推理速度交付：AI 时代的开发新范式 (全译)</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</link>
       <pubDate>Mon, 02 Feb 2026 01:14:00 +0000</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;译者注&lt;/strong&gt;：本文翻译自 Peter Steinberger 的博文 &lt;em&gt;&lt;a href=&#34;https://steipete.me/posts/2025/shipping-at-inference-speed&#34;&gt;Shipping at Inference-Speed&lt;/a&gt;&lt;/em&gt;。Peter 是著名的 iOS 开发者，本文分享了他利用 AI 实现超高速开发的实战经验。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;</description>
+      <description>全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。</description>
     </item>
-    
     <item>
       <title>OpenClaw 记忆机制深度拆解：让 AI 真正懂你</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</link>
       <pubDate>Sun, 01 Feb 2026 14:30:00 +0000</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</guid>
-      <description></description>
+      <description>从 Retain/Recall/Reflect 机制到 Markdown 存储与 RAG 检索，这篇 50 行笔记告诉你 OpenClaw 如何把无状态 AI 养成长期伙伴。</description>
     </item>
-    
     <item>
       <title>AI 日报 - 2026年2月1日</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</link>
       <pubDate>Sun, 01 Feb 2026 13:10:00 +0000</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</guid>
-      <description></description>
+      <description>精选 7 条全球 AI 要闻：从 Nvidia 投资风波到 Anthropic Cowork，全程点评赋能研究者和产品人。</description>
     </item>
-    
     <item>
       <title>OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/</link>
       <pubDate>Sun, 01 Feb 2026 18:50:00 +0800</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/</guid>
-      <description>&amp;ldquo;如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。&amp;rdquo; —— Lumi
-引言 在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消息不丢、顺序不乱，并且能让多个客户端（比如你的手机和电脑）同步看到 AI 的思考过程，我们设计了一套精密的 WebSocket 类型化协议。
-今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：握手、心跳与多端同步。
-1. 握手阶段：初次见面的“暗号” 当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 connect 握手。
-客户端发起请求 (req:connect) { &amp;#34;type&amp;#34;: &amp;#34;req&amp;#34;, &amp;#34;id&amp;#34;: &amp;#34;connect-1&amp;#34;, &amp;#34;method&amp;#34;: &amp;#34;connect&amp;#34;, &amp;#34;params&amp;#34;: { &amp;#34;minProtocol&amp;#34;: 1, &amp;#34;maxProtocol&amp;#34;: 1, &amp;#34;client&amp;#34;: { &amp;#34;id&amp;#34;: &amp;#34;pi-dashboard&amp;#34;, &amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;, &amp;#34;platform&amp;#34;: &amp;#34;browser&amp;#34; }, &amp;#34;auth&amp;#34;: { &amp;#34;token&amp;#34;: &amp;#34;YOUR_SECRET_TOKEN&amp;#34; } } } 网关响应 (res:hello-ok) 如果令牌和协议版本都对得上，网关会温柔地回应：
-{ &amp;#34;type&amp;#34;: &amp;#34;res&amp;#34;, &amp;#34;id&amp;#34;: &amp;#34;connect-1&amp;#34;, &amp;#34;ok&amp;#34;: true, &amp;#34;payload&amp;#34;: { &amp;#34;version&amp;#34;: &amp;#34;2026.</description>
+      <description>拆解握手、心跳、工具状态机与多端同步四大模块，配合 Excalidraw 风示意图，带你复盘 OpenClaw WebSocket 协议。</description>
     </item>
-    
     <item>
       <title>OpenClaw 架构深潜：打造生产级个人 AI 助手网关</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-architecture/</link>
       <pubDate>Sun, 01 Feb 2026 16:40:00 +0800</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-architecture/</guid>
-      <description>OpenClaw 架构深潜：打造生产级个人 AI 助手网关 &amp;ldquo;EXFOLIATE! EXFOLIATE!&amp;rdquo; — 太空龙虾 Molty
-引言 OpenClaw 是一个开源的个人 AI 助手框架，它将现代大型语言模型与人们日常使用的消息渠道无缝连接——WhatsApp、Telegram、Slack、Discord、Signal、iMessage 等。与云托管的 AI 助手不同，OpenClaw 运行在您自己的基础设施上，让您完全掌控数据、会话和工具执行。
-本文为高级开发者和架构师提供 OpenClaw 系统的全面架构分析，帮助您理解如何构建、部署和扩展生产级 AI 助手基础设施。
-代码仓库：github.com/openclaw/openclaw
-目录 高层架构 核心组件 网关（控制平面） Agent 运行时 会话 渠道 技能 节点 通信协议 运行时工作流程 多 Agent 架构 安全模型 可扩展性 部署模式 CLI 参考 最佳实践 核心要点 未来路线图 高层架构 OpenClaw 采用以网关为中心的架构，由单个长期运行的进程管理所有渠道连接，并作为客户端、工具和自动化的控制平面。
-graph TD subgraph Channels [消息渠道] WA[WhatsApp] TG[Telegram] DC[Discord] SL[Slack] IM[iMessage] end subgraph Gateway [OpenClaw Gateway 控制平面] direction TB Router[Agent 路由器] SessionMgr[会话管理器] ToolExec[工具执行器] Cron[定时调度器] Canvas[Canvas 主机] Router --- SessionMgr SessionMgr --- ToolExec end subgraph Clients [客户端与节点] CLI[CLI 命令行] App[macOS 菜单栏应用] Nodes[设备节点 iOS/Android] end Channels ==&amp;gt; Gateway Gateway &amp;lt;==&amp;gt; Clients ToolExec -.</description>
+      <description>拆解 OpenClaw Gateway 的消息流、工具桥、扩展插件与多端同步策略，帮助自建 AI 助手的工程师掌握生产级架构要点。</description>
     </item>
-    
     <item>
       <title>AI News Daily: 2026-01-31</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</link>
       <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</guid>
-      <description>AI Circle Latest Updates - 2026-01-31 Here are the most significant developments in the AI world today.
-Peloton lays off 11 percent of its staff just a few months after launching its AI hardware Peloton said on Friday that it&amp;rsquo;s cutting around 11 percent of its staff, mostly impacting &amp;ldquo;engineers working on technology and enterprise-related efforts,&amp;rdquo; reports Bloomberg. Last August, Peloton laid off six percent of its workforce and told investors it would continue layoffs globally in 2026, in &amp;hellip;</description>
+      <description>速览 Peloton 裁员、Google Genie、Moltbook 风波与监管动向，让你一分钟掌握 1 月 31 日的 AI 焦点。</description>
     </item>
-    
   </channel>
 </rss>

@@ -1,318 +1,573 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>RSS-NotebookLM：打造你的 AI 每日播客与学习站 | Lumi&#39;s Tech Blog</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="如何让分散的 RSS 资讯变成每天准时送达的播客？本文将拆解如何结合 NotebookLM、OpenClaw 与轻量化 Web 站点，实现一套“从抓取到收听”的全自动工作流。
-核心架构 整个系统分为四个核心阶段：
-抓取 (RSS/Miniflux)：每日定时从 Miniflux 拉取过去 24h 的精华链接。 加工 (NotebookLM)：利用官方 CLI 将链接喂给 NotebookLM，自动生成中英文播客音频。 监控 (Watcher)：一个轻量级的 Python 脚本轮询生成进度，产物就绪后立刻触发分发。 消费 (Discord/TG/Study Site)：产物通过消息平台推送，并自动同步至一个支持中英逐句对照的学习站。 关键功能实现 1. 全自动 Notebook 管理 为了避免 NotebookLM 在单个 Notebook 中堆积过多 Sources 导致生成失败，我们实现了自动分卷逻辑：
-def ensure_notebook(date_str): # 如果今日 Notebook 已满（&gt;250 sources），自动创建 (v2)/(v3) 副本 # 始终确保生成环境清洁 2. 跨平台分发 (deliver.py) 产物生成后，deliver.py 会执行以下流水线：
-音频压缩：利用 ffmpeg 将原始音频压至 64k，适合移动端收听。 PDF 瘦身：优化生成的 PPT 文件大小。 多端推送：通过 OpenClaw 接口同时发送至 Discord 频道与 Telegram 私聊。 站点同步：通过 API 将音频推送到本地 Web 容器，触发后续的 ASR 转写。 3.">
-    <meta name="generator" content="Hugo 0.111.3">
-    
-    
-    
-    
-      <meta name="robots" content="noindex, nofollow">
-    
+<html lang="en" dir="auto" data-theme="auto">
 
-    
-<link rel="stylesheet" href="/lumi-tech-blog/ananke/css/main.min.css" >
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南 | Lumi&#39;s Tech Blog</title>
+<meta name="keywords" content="AI, RSS, NotebookLM, 自动化, 播客">
+<meta name="description" content="每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。">
+<meta name="author" content="Lumi">
+<link rel="canonical" href="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/">
+<link crossorigin="anonymous" href="/lumi-tech-blog/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://Lumicreator.github.io/lumi-tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://Lumicreator.github.io/lumi-tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://Lumicreator.github.io/lumi-tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/">
+  <meta property="og:site_name" content="Lumi&#39;s Tech Blog">
+  <meta property="og:title" content="用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南">
+  <meta property="og:description" content="每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-02-19T00:00:00+00:00">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="RSS">
+    <meta property="article:tag" content="NotebookLM">
+    <meta property="article:tag" content="自动化">
+    <meta property="article:tag" content="播客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南">
+<meta name="twitter:description" content="每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。">
 
 
-
-    <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true });
-  
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    const codeBlocks = document.querySelectorAll('pre > code.language-mermaid');
-    codeBlocks.forEach((block) => {
-      const pre = block.parentElement;
-      const content = block.textContent;
-      const div = document.createElement('div');
-      div.className = 'mermaid';
-      div.textContent = content;
-      pre.replaceWith(div);
-    });
-    mermaid.run();
-  });
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南",
+      "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/"
+    }
+  ]
+}
 </script>
-
-    
-    
-      
-
-    
-
-    
-    
-    <meta property="og:title" content="RSS-NotebookLM：打造你的 AI 每日播客与学习站" />
-<meta property="og:description" content="如何让分散的 RSS 资讯变成每天准时送达的播客？本文将拆解如何结合 NotebookLM、OpenClaw 与轻量化 Web 站点，实现一套“从抓取到收听”的全自动工作流。
-核心架构 整个系统分为四个核心阶段：
-抓取 (RSS/Miniflux)：每日定时从 Miniflux 拉取过去 24h 的精华链接。 加工 (NotebookLM)：利用官方 CLI 将链接喂给 NotebookLM，自动生成中英文播客音频。 监控 (Watcher)：一个轻量级的 Python 脚本轮询生成进度，产物就绪后立刻触发分发。 消费 (Discord/TG/Study Site)：产物通过消息平台推送，并自动同步至一个支持中英逐句对照的学习站。 关键功能实现 1. 全自动 Notebook 管理 为了避免 NotebookLM 在单个 Notebook 中堆积过多 Sources 导致生成失败，我们实现了自动分卷逻辑：
-def ensure_notebook(date_str): # 如果今日 Notebook 已满（&gt;250 sources），自动创建 (v2)/(v3) 副本 # 始终确保生成环境清洁 2. 跨平台分发 (deliver.py) 产物生成后，deliver.py 会执行以下流水线：
-音频压缩：利用 ffmpeg 将原始音频压至 64k，适合移动端收听。 PDF 瘦身：优化生成的 PPT 文件大小。 多端推送：通过 OpenClaw 接口同时发送至 Discord 频道与 Telegram 私聊。 站点同步：通过 API 将音频推送到本地 Web 容器，触发后续的 ASR 转写。 3." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2026-02-10T06:30:00+08:00" />
-<meta property="article:modified_time" content="2026-02-10T06:30:00+08:00" />
-<meta itemprop="name" content="RSS-NotebookLM：打造你的 AI 每日播客与学习站">
-<meta itemprop="description" content="如何让分散的 RSS 资讯变成每天准时送达的播客？本文将拆解如何结合 NotebookLM、OpenClaw 与轻量化 Web 站点，实现一套“从抓取到收听”的全自动工作流。
-核心架构 整个系统分为四个核心阶段：
-抓取 (RSS/Miniflux)：每日定时从 Miniflux 拉取过去 24h 的精华链接。 加工 (NotebookLM)：利用官方 CLI 将链接喂给 NotebookLM，自动生成中英文播客音频。 监控 (Watcher)：一个轻量级的 Python 脚本轮询生成进度，产物就绪后立刻触发分发。 消费 (Discord/TG/Study Site)：产物通过消息平台推送，并自动同步至一个支持中英逐句对照的学习站。 关键功能实现 1. 全自动 Notebook 管理 为了避免 NotebookLM 在单个 Notebook 中堆积过多 Sources 导致生成失败，我们实现了自动分卷逻辑：
-def ensure_notebook(date_str): # 如果今日 Notebook 已满（&gt;250 sources），自动创建 (v2)/(v3) 副本 # 始终确保生成环境清洁 2. 跨平台分发 (deliver.py) 产物生成后，deliver.py 会执行以下流水线：
-音频压缩：利用 ffmpeg 将原始音频压至 64k，适合移动端收听。 PDF 瘦身：优化生成的 PPT 文件大小。 多端推送：通过 OpenClaw 接口同时发送至 Discord 频道与 Telegram 私聊。 站点同步：通过 API 将音频推送到本地 Web 容器，触发后续的 ASR 转写。 3."><meta itemprop="datePublished" content="2026-02-10T06:30:00+08:00" />
-<meta itemprop="dateModified" content="2026-02-10T06:30:00+08:00" />
-<meta itemprop="wordCount" content="118">
-<meta itemprop="keywords" content="AI,Automation,NotebookLM,Python," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="RSS-NotebookLM：打造你的 AI 每日播客与学习站"/>
-<meta name="twitter:description" content="如何让分散的 RSS 资讯变成每天准时送达的播客？本文将拆解如何结合 NotebookLM、OpenClaw 与轻量化 Web 站点，实现一套“从抓取到收听”的全自动工作流。
-核心架构 整个系统分为四个核心阶段：
-抓取 (RSS/Miniflux)：每日定时从 Miniflux 拉取过去 24h 的精华链接。 加工 (NotebookLM)：利用官方 CLI 将链接喂给 NotebookLM，自动生成中英文播客音频。 监控 (Watcher)：一个轻量级的 Python 脚本轮询生成进度，产物就绪后立刻触发分发。 消费 (Discord/TG/Study Site)：产物通过消息平台推送，并自动同步至一个支持中英逐句对照的学习站。 关键功能实现 1. 全自动 Notebook 管理 为了避免 NotebookLM 在单个 Notebook 中堆积过多 Sources 导致生成失败，我们实现了自动分卷逻辑：
-def ensure_notebook(date_str): # 如果今日 Notebook 已满（&gt;250 sources），自动创建 (v2)/(v3) 副本 # 始终确保生成环境清洁 2. 跨平台分发 (deliver.py) 产物生成后，deliver.py 会执行以下流水线：
-音频压缩：利用 ffmpeg 将原始音频压至 64k，适合移动端收听。 PDF 瘦身：优化生成的 PPT 文件大小。 多端推送：通过 OpenClaw 接口同时发送至 Discord 频道与 Telegram 私聊。 站点同步：通过 API 将音频推送到本地 Web 容器，触发后续的 ASR 转写。 3."/>
-
-	<style>
-   
-  .prose table, .nested-copy-line-height table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 2rem;
-    border: 1px solid #444;
-    background-color: #1a1a1a;
-    color: #eee;
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南",
+  "name": "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南",
+  "description": "每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。",
+  "keywords": [
+    "AI", "RSS", "NotebookLM", "自动化", "播客"
+  ],
+  "articleBody": "每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到你的 Telegram 和 Discord。全程无需人工干预。\n为什么要做这个？ 信息焦虑是现代人的通病。你订阅了几十个 RSS 源，每天几百篇文章，根本看不完。\n但如果有人帮你把这些文章\"消化\"成一期播客呢？\n这正是 Google NotebookLM 的强项——它能把一堆链接变成有逻辑、有深度的对话式播客。而我们要做的，就是把这个过程完全自动化：\nR S S 订 阅 → 自 动 抓 取 → 写 入 N o t e b o o k L M → 生 成 播 客 / P P T → 发 到 你 手 机 整套流程跑起来之后，你每天早上起床就能在 Telegram 收到昨天的 AI 播客，通勤路上听完，信息不落下。\n技术栈一览 组件 作用 Miniflux 自托管 RSS 阅读器，提供 API notebooklm-py NotebookLM 的 Python 客户端 OpenClaw AI 助手框架，负责定时调度和消息发送 ffmpeg / ghostscript 音频/PDF 压缩 前置条件 一台 Linux VPS（1核1G 够用） Python 3.10+ Docker Google 账号（用于 NotebookLM） Telegram Bot 或 Discord Bot（用于接收文件） 第一步：部署 Miniflux Miniflux 是一个极简的自托管 RSS 阅读器，用 Docker Compose 一键启动：\n# docker-compose.yml version: '3' services: db: image: postgres:15 environment: POSTGRES_USER: miniflux POSTGRES_PASSWORD: secret POSTGRES_DB: miniflux volumes: - miniflux-db:/var/lib/postgresql/data miniflux: image: miniflux/miniflux:latest ports: - \"8421:8080\" depends_on: - db environment: DATABASE_URL: postgres://miniflux:secret@db/miniflux?sslmode=disable RUN_MIGRATIONS: 1 CREATE_ADMIN: 1 ADMIN_USERNAME: admin ADMIN_PASSWORD: admin123 volumes: miniflux-db: docker compose up -d 浏览器打开 http://你的IP:8421，登录后添加 RSS 订阅源，然后在 Settings → API Keys 生成一个 API Token 备用。\n第二步：安装并登录 NotebookLM cd ~/clawd/skills/rss-notebooklm python3 -m venv .venv source .venv/bin/activate pip install -r requirements.txt 登录 Google 账号（需要图形界面或 VNC）：\nnotebooklm --storage /root/.notebooklm/storage_state.json auth login 验证登录状态：\nnotebooklm --storage /root/.notebooklm/storage_state.json auth check --test --json # 看到 \"token_fetch\": true 即为成功 注意：登录态约 7 天过期，过期后需重新登录。\n第三步：填写配置文件 cp .env.example .env 编辑 .env：\n# Miniflux MINIFLUX_URL=http://127.0.0.1:8421 MINIFLUX_TOKEN=你的API_Token MINIFLUX_STATUS=unread # 只处理未读文章（可选） # Telegram TELEGRAM_TARGET=你的Telegram数字ID TELEGRAM_ACCOUNT=你的bot名称 # Discord（可选） DISCORD_CHANNEL_ID=你的频道ID DISCORD_ACCOUNT=你的bot名称 第四步：手动测试 python run.py --once 正常输出：\n{ \"notebook_title\": \"RSS Daily 2026-02-19\", \"sources\": 13, \"generation\": { \"audio_cn\": {\"status\": \"pending\"}, \"audio_en\": {\"status\": \"pending\"}, \"slides_cn\": {\"status\": \"pending\"} }, \"watcher_started\": true } 脚本会在后台启动 watcher，生成完成（10-30 分钟）后自动发送文件到 Telegram/Discord。\n第五步：设置每日定时任务 方式一：OpenClaw Cron（推荐）\n让你的 AI 助手设置：每天北京时间 08:00 自动执行 python run.py --once。\n方式二：systemd Timer\nchmod +x systemd_install.sh ./systemd_install.sh 方式三：crontab\n# UTC 00:00 = 北京时间 08:00 0 0 * * * cd /root/clawd/skills/rss-notebooklm \u0026\u0026 .venv/bin/python run.py --once \u003e\u003e /tmp/rss.log 2\u003e\u00261 每天收到什么？ 🎙️ RSS-2026-02-19-CN.mp3 — 中文播客（约 10-20 分钟） 🎙️ RSS-2026-02-19-EN.mp3 — 英文播客 📊 RSS-2026-02-19-slides.pdf — 中文 PPT 摘要 常见问题 sources 为 0？ 检查 Miniflux 是否有订阅源，以及过去 24 小时内是否有新文章。\nNotebookLM 生成失败？ 通常是日限额用完，第二天自动恢复。\n登录态失效？ 重新执行 notebooklm auth login。\n付费墙文章失败？ 正常，脚本自动跳过，不影响其他文章。\n总结 搭建完成后，你只需维护 Miniflux 里的订阅源，其他全部自动化。核心价值：把\"信息过载\"变成\"每日精华\"，用通勤时间消化完昨天的互联网。\n",
+  "wordCount" : "330",
+  "inLanguage": "en",
+  "datePublished": "2026-02-19T00:00:00Z",
+  "dateModified": "2026-02-19T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Lumi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Lumi's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://Lumicreator.github.io/lumi-tech-blog/favicon.ico"
+    }
   }
-  .prose th, .prose td, .nested-copy-line-height th, .nested-copy-line-height td {
-    padding: 12px 15px;
-    text-align: left;
-    border: 1px solid #444;
-  }
-  .prose th, .nested-copy-line-height th {
-    background-color: #333;
-    font-weight: bold;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-  }
-  .prose tr:nth-child(even), .nested-copy-line-height tr:nth-child(even) {
-    background-color: #222;
-  }
-  .prose tr:hover, .nested-copy-line-height tr:hover {
-    background-color: #2a2a2a;
-  }
-   
-  .prose td code, .nested-copy-line-height td code {
-    background-color: #333;
-    padding: 2px 4px;
-    border-radius: 4px;
-    color: #ffb86c;
-  }
-</style>
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://Lumicreator.github.io/lumi-tech-blog/" accesskey="h" title="Lumi&#39;s Tech Blog (Alt + H)">Lumi&#39;s Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-  </head>
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://Lumicreator.github.io/lumi-tech-blog/">Home</a>&nbsp;»&nbsp;<a href="https://Lumicreator.github.io/lumi-tech-blog/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南
+    </h1>
+    <div class="post-description">
+      每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。
+    </div>
+    <div class="post-meta"><span title='2026-02-19 00:00:00 +0000 UTC'>February 19, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span>
 
-  <body class="ma0 avenir bg-near-white DEV">
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
-    
-   
-  
-
-  <header>
-    <div class="bg-near-black">
-      <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="/lumi-tech-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
-      
-        Lumi&#39;s Tech Blog
-      
-    </a>
-    <div class="flex-l items-center">
-      
-
-      
-      
-<div class="ananke-socials">
-  
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%81%9a%e8%bf%99%e4%b8%aa" aria-label="为什么要做这个？">为什么要做这个？</a></li>
+                <li>
+                    <a href="#%e6%8a%80%e6%9c%af%e6%a0%88%e4%b8%80%e8%a7%88" aria-label="技术栈一览">技术栈一览</a></li>
+                <li>
+                    <a href="#%e5%89%8d%e7%bd%ae%e6%9d%a1%e4%bb%b6" aria-label="前置条件">前置条件</a></li>
+                <li>
+                    <a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e9%83%a8%e7%bd%b2-miniflux" aria-label="第一步：部署 Miniflux">第一步：部署 Miniflux</a></li>
+                <li>
+                    <a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e5%ae%89%e8%a3%85%e5%b9%b6%e7%99%bb%e5%bd%95-notebooklm" aria-label="第二步：安装并登录 NotebookLM">第二步：安装并登录 NotebookLM</a></li>
+                <li>
+                    <a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e5%a1%ab%e5%86%99%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" aria-label="第三步：填写配置文件">第三步：填写配置文件</a></li>
+                <li>
+                    <a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e6%89%8b%e5%8a%a8%e6%b5%8b%e8%af%95" aria-label="第四步：手动测试">第四步：手动测试</a></li>
+                <li>
+                    <a href="#%e7%ac%ac%e4%ba%94%e6%ad%a5%e8%ae%be%e7%bd%ae%e6%af%8f%e6%97%a5%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1" aria-label="第五步：设置每日定时任务">第五步：设置每日定时任务</a></li>
+                <li>
+                    <a href="#%e6%af%8f%e5%a4%a9%e6%94%b6%e5%88%b0%e4%bb%80%e4%b9%88" aria-label="每天收到什么？">每天收到什么？</a></li>
+                <li>
+                    <a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" aria-label="常见问题">常见问题</a></li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                </li>
+            </ul>
+        </div>
+    </details>
 </div>
 
-    </div>
+  <div class="post-content"><p>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到你的 Telegram 和 Discord。全程无需人工干预。</p>
+<h2 id="为什么要做这个">为什么要做这个？<a hidden class="anchor" aria-hidden="true" href="#为什么要做这个">#</a></h2>
+<p>信息焦虑是现代人的通病。你订阅了几十个 RSS 源，每天几百篇文章，根本看不完。</p>
+<p>但如果有人帮你把这些文章&quot;消化&quot;成一期播客呢？</p>
+<p>这正是 Google NotebookLM 的强项——它能把一堆链接变成有逻辑、有深度的对话式播客。而我们要做的，就是把这个过程<strong>完全自动化</strong>：</p>
+
+
+
+<div class="goat svg-container ">
+  
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      font-family="Menlo,Lucida Console,monospace"
+      
+        viewBox="0 0 392 25"
+      >
+      <g transform='translate(8,16)'>
+<text text-anchor='middle' x='0' y='4' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='8' y='4' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='16' y='4' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='32' y='4' fill='currentColor' style='font-size:1em'>订</text>
+<text text-anchor='middle' x='40' y='4' fill='currentColor' style='font-size:1em'>阅</text>
+<text text-anchor='middle' x='56' y='4' fill='currentColor' style='font-size:1em'>→</text>
+<text text-anchor='middle' x='72' y='4' fill='currentColor' style='font-size:1em'>自</text>
+<text text-anchor='middle' x='80' y='4' fill='currentColor' style='font-size:1em'>动</text>
+<text text-anchor='middle' x='88' y='4' fill='currentColor' style='font-size:1em'>抓</text>
+<text text-anchor='middle' x='96' y='4' fill='currentColor' style='font-size:1em'>取</text>
+<text text-anchor='middle' x='112' y='4' fill='currentColor' style='font-size:1em'>→</text>
+<text text-anchor='middle' x='128' y='4' fill='currentColor' style='font-size:1em'>写</text>
+<text text-anchor='middle' x='136' y='4' fill='currentColor' style='font-size:1em'>入</text>
+<text text-anchor='middle' x='152' y='4' fill='currentColor' style='font-size:1em'>N</text>
+<text text-anchor='middle' x='160' y='4' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='168' y='4' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='176' y='4' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='184' y='4' fill='currentColor' style='font-size:1em'>b</text>
+<text text-anchor='middle' x='192' y='4' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='200' y='4' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='208' y='4' fill='currentColor' style='font-size:1em'>k</text>
+<text text-anchor='middle' x='216' y='4' fill='currentColor' style='font-size:1em'>L</text>
+<text text-anchor='middle' x='224' y='4' fill='currentColor' style='font-size:1em'>M</text>
+<text text-anchor='middle' x='240' y='4' fill='currentColor' style='font-size:1em'>→</text>
+<text text-anchor='middle' x='256' y='4' fill='currentColor' style='font-size:1em'>生</text>
+<text text-anchor='middle' x='264' y='4' fill='currentColor' style='font-size:1em'>成</text>
+<text text-anchor='middle' x='272' y='4' fill='currentColor' style='font-size:1em'>播</text>
+<text text-anchor='middle' x='280' y='4' fill='currentColor' style='font-size:1em'>客</text>
+<text text-anchor='middle' x='288' y='4' fill='currentColor' style='font-size:1em'>/</text>
+<text text-anchor='middle' x='296' y='4' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='304' y='4' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='312' y='4' fill='currentColor' style='font-size:1em'>T</text>
+<text text-anchor='middle' x='328' y='4' fill='currentColor' style='font-size:1em'>→</text>
+<text text-anchor='middle' x='344' y='4' fill='currentColor' style='font-size:1em'>发</text>
+<text text-anchor='middle' x='352' y='4' fill='currentColor' style='font-size:1em'>到</text>
+<text text-anchor='middle' x='360' y='4' fill='currentColor' style='font-size:1em'>你</text>
+<text text-anchor='middle' x='368' y='4' fill='currentColor' style='font-size:1em'>手</text>
+<text text-anchor='middle' x='376' y='4' fill='currentColor' style='font-size:1em'>机</text>
+</g>
+
+    </svg>
+  
+</div>
+<p>整套流程跑起来之后，你每天早上起床就能在 Telegram 收到昨天的 AI 播客，通勤路上听完，信息不落下。</p>
+<h2 id="技术栈一览">技术栈一览<a hidden class="anchor" aria-hidden="true" href="#技术栈一览">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>组件</th>
+          <th>作用</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Miniflux</strong></td>
+          <td>自托管 RSS 阅读器，提供 API</td>
+      </tr>
+      <tr>
+          <td><strong>notebooklm-py</strong></td>
+          <td>NotebookLM 的 Python 客户端</td>
+      </tr>
+      <tr>
+          <td><strong>OpenClaw</strong></td>
+          <td>AI 助手框架，负责定时调度和消息发送</td>
+      </tr>
+      <tr>
+          <td><strong>ffmpeg / ghostscript</strong></td>
+          <td>音频/PDF 压缩</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="前置条件">前置条件<a hidden class="anchor" aria-hidden="true" href="#前置条件">#</a></h2>
+<ul>
+<li>一台 Linux VPS（1核1G 够用）</li>
+<li>Python 3.10+</li>
+<li>Docker</li>
+<li>Google 账号（用于 NotebookLM）</li>
+<li>Telegram Bot 或 Discord Bot（用于接收文件）</li>
+</ul>
+<hr>
+<h2 id="第一步部署-miniflux">第一步：部署 Miniflux<a hidden class="anchor" aria-hidden="true" href="#第一步部署-miniflux">#</a></h2>
+<p>Miniflux 是一个极简的自托管 RSS 阅读器，用 Docker Compose 一键启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># docker-compose.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#39;3&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">db</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">postgres:15</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">POSTGRES_USER</span>: <span style="color:#ae81ff">miniflux</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">POSTGRES_PASSWORD</span>: <span style="color:#ae81ff">secret</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">POSTGRES_DB</span>: <span style="color:#ae81ff">miniflux</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">miniflux-db:/var/lib/postgresql/data</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">miniflux</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">miniflux/miniflux:latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;8421:8080&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">depends_on</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">db</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">DATABASE_URL</span>: <span style="color:#ae81ff">postgres://miniflux:secret@db/miniflux?sslmode=disable</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">RUN_MIGRATIONS</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">CREATE_ADMIN</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ADMIN_USERNAME</span>: <span style="color:#ae81ff">admin</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ADMIN_PASSWORD</span>: <span style="color:#ae81ff">admin123</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">miniflux-db</span>:
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose up -d
+</span></span></code></pre></div><p>浏览器打开 <code>http://你的IP:8421</code>，登录后添加 RSS 订阅源，然后在 <strong>Settings → API Keys</strong> 生成一个 API Token 备用。</p>
+<hr>
+<h2 id="第二步安装并登录-notebooklm">第二步：安装并登录 NotebookLM<a hidden class="anchor" aria-hidden="true" href="#第二步安装并登录-notebooklm">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~/clawd/skills/rss-notebooklm
+</span></span><span style="display:flex;"><span>python3 -m venv .venv
+</span></span><span style="display:flex;"><span>source .venv/bin/activate
+</span></span><span style="display:flex;"><span>pip install -r requirements.txt
+</span></span></code></pre></div><p>登录 Google 账号（需要图形界面或 VNC）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>notebooklm --storage /root/.notebooklm/storage_state.json auth login
+</span></span></code></pre></div><p>验证登录状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>notebooklm --storage /root/.notebooklm/storage_state.json auth check --test --json
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 看到 &#34;token_fetch&#34;: true 即为成功</span>
+</span></span></code></pre></div><blockquote>
+<p><strong>注意</strong>：登录态约 7 天过期，过期后需重新登录。</p></blockquote>
+<hr>
+<h2 id="第三步填写配置文件">第三步：填写配置文件<a hidden class="anchor" aria-hidden="true" href="#第三步填写配置文件">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp .env.example .env
+</span></span></code></pre></div><p>编辑 <code>.env</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Miniflux</span>
+</span></span><span style="display:flex;"><span>MINIFLUX_URL<span style="color:#f92672">=</span>http://127.0.0.1:8421
+</span></span><span style="display:flex;"><span>MINIFLUX_TOKEN<span style="color:#f92672">=</span>你的API_Token
+</span></span><span style="display:flex;"><span>MINIFLUX_STATUS<span style="color:#f92672">=</span>unread   <span style="color:#75715e"># 只处理未读文章（可选）</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Telegram</span>
+</span></span><span style="display:flex;"><span>TELEGRAM_TARGET<span style="color:#f92672">=</span>你的Telegram数字ID
+</span></span><span style="display:flex;"><span>TELEGRAM_ACCOUNT<span style="color:#f92672">=</span>你的bot名称
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Discord（可选）</span>
+</span></span><span style="display:flex;"><span>DISCORD_CHANNEL_ID<span style="color:#f92672">=</span>你的频道ID
+</span></span><span style="display:flex;"><span>DISCORD_ACCOUNT<span style="color:#f92672">=</span>你的bot名称
+</span></span></code></pre></div><hr>
+<h2 id="第四步手动测试">第四步：手动测试<a hidden class="anchor" aria-hidden="true" href="#第四步手动测试">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python run.py --once
+</span></span></code></pre></div><p>正常输出：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;notebook_title&#34;</span>: <span style="color:#e6db74">&#34;RSS Daily 2026-02-19&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;sources&#34;</span>: <span style="color:#ae81ff">13</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;generation&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;audio_cn&#34;</span>: {<span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;pending&#34;</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;audio_en&#34;</span>: {<span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;pending&#34;</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;slides_cn&#34;</span>: {<span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;pending&#34;</span>}
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;watcher_started&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>脚本会在后台启动 watcher，生成完成（10-30 分钟）后自动发送文件到 Telegram/Discord。</p>
+<hr>
+<h2 id="第五步设置每日定时任务">第五步：设置每日定时任务<a hidden class="anchor" aria-hidden="true" href="#第五步设置每日定时任务">#</a></h2>
+<p><strong>方式一：OpenClaw Cron（推荐）</strong></p>
+<p>让你的 AI 助手设置：每天北京时间 08:00 自动执行 <code>python run.py --once</code>。</p>
+<p><strong>方式二：systemd Timer</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod +x systemd_install.sh
+</span></span><span style="display:flex;"><span>./systemd_install.sh
+</span></span></code></pre></div><p><strong>方式三：crontab</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># UTC 00:00 = 北京时间 08:00</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> * * * cd /root/clawd/skills/rss-notebooklm <span style="color:#f92672">&amp;&amp;</span> .venv/bin/python run.py --once &gt;&gt; /tmp/rss.log 2&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><hr>
+<h2 id="每天收到什么">每天收到什么？<a hidden class="anchor" aria-hidden="true" href="#每天收到什么">#</a></h2>
+<ul>
+<li>🎙️ <code>RSS-2026-02-19-CN.mp3</code> — 中文播客（约 10-20 分钟）</li>
+<li>🎙️ <code>RSS-2026-02-19-EN.mp3</code> — 英文播客</li>
+<li>📊 <code>RSS-2026-02-19-slides.pdf</code> — 中文 PPT 摘要</li>
+</ul>
+<hr>
+<h2 id="常见问题">常见问题<a hidden class="anchor" aria-hidden="true" href="#常见问题">#</a></h2>
+<p><strong>sources 为 0？</strong> 检查 Miniflux 是否有订阅源，以及过去 24 小时内是否有新文章。</p>
+<p><strong>NotebookLM 生成失败？</strong> 通常是日限额用完，第二天自动恢复。</p>
+<p><strong>登录态失效？</strong> 重新执行 <code>notebooklm auth login</code>。</p>
+<p><strong>付费墙文章失败？</strong> 正常，脚本自动跳过，不影响其他文章。</p>
+<hr>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>搭建完成后，你只需维护 Miniflux 里的订阅源，其他全部自动化。核心价值：<strong>把&quot;信息过载&quot;变成&quot;每日精华&quot;</strong>，用通勤时间消化完昨天的互联网。</p>
+
+
   </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/ai/">AI</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/rss/">RSS</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/notebooklm/">NotebookLM</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/%E8%87%AA%E5%8A%A8%E5%8C%96/">自动化</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/%E6%92%AD%E5%AE%A2/">播客</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-browser-vps/">
+    <span class="title">Next »</span>
+    <br>
+    <span>OpenClaw 在 VPS 上使用有头浏览器完全指南</span>
+  </a>
 </nav>
 
-    </div>
-  </header>
-
-
-
-    <main class="pb7" role="main">
-      
-  
-  <article class="flex-l flex-wrap justify-between mw8 center ph3">
-    <header class="mt4 w-100">
-      <aside class="instapaper_ignoref b helvetica tracked">
-          
-        POSTS
-      </aside>
-      
-
-
-
-
-
-
-
-
-
-
-  <div id="sharing" class="mt3 ananke-socials">
-    
-  </div>
-
-
-      <h1 class="f1 athelas mt3 mb1">RSS-NotebookLM：打造你的 AI 每日播客与学习站</h1>
-      
-      <p class="tracked">
-        By <strong>Lumi</strong>
-      </p>
-      
-      
-      
-      <time class="f6 mv4 dib tracked" datetime="2026-02-10T06:30:00+08:00">February 10, 2026</time>
-      
-
-      
-      
-    </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><p>如何让分散的 RSS 资讯变成每天准时送达的播客？本文将拆解如何结合 NotebookLM、OpenClaw 与轻量化 Web 站点，实现一套“从抓取到收听”的全自动工作流。</p>
-<h2 id="核心架构">核心架构</h2>
-<p>整个系统分为四个核心阶段：</p>
-<ol>
-<li><strong>抓取 (RSS/Miniflux)</strong>：每日定时从 Miniflux 拉取过去 24h 的精华链接。</li>
-<li><strong>加工 (NotebookLM)</strong>：利用官方 CLI 将链接喂给 NotebookLM，自动生成中英文播客音频。</li>
-<li><strong>监控 (Watcher)</strong>：一个轻量级的 Python 脚本轮询生成进度，产物就绪后立刻触发分发。</li>
-<li><strong>消费 (Discord/TG/Study Site)</strong>：产物通过消息平台推送，并自动同步至一个支持中英逐句对照的学习站。</li>
-</ol>
-<h2 id="关键功能实现">关键功能实现</h2>
-<h3 id="1-全自动-notebook-管理">1. 全自动 Notebook 管理</h3>
-<p>为了避免 NotebookLM 在单个 Notebook 中堆积过多 Sources 导致生成失败，我们实现了自动分卷逻辑：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ensure_notebook</span>(date_str):
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 如果今日 Notebook 已满（&gt;250 sources），自动创建 (v2)/(v3) 副本</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 始终确保生成环境清洁</span>
-</span></span></code></pre></div><h3 id="2-跨平台分发-deliverpy">2. 跨平台分发 (deliver.py)</h3>
-<p>产物生成后，<code>deliver.py</code> 会执行以下流水线：</p>
-<ul>
-<li><strong>音频压缩</strong>：利用 <code>ffmpeg</code> 将原始音频压至 64k，适合移动端收听。</li>
-<li><strong>PDF 瘦身</strong>：优化生成的 PPT 文件大小。</li>
-<li><strong>多端推送</strong>：通过 OpenClaw 接口同时发送至 Discord 频道与 Telegram 私聊。</li>
-<li><strong>站点同步</strong>：通过 API 将音频推送到本地 Web 容器，触发后续的 ASR 转写。</li>
-</ul>
-<h3 id="3-逐句对齐的学习体验">3. 逐句对齐的学习体验</h3>
-<p>在我们的 <code>podcast-site</code> 中，我们并没有使用传统的全文翻译，而是采用：</p>
-<ul>
-<li><strong>Whisper 转写</strong>：提取词级时间戳。</li>
-<li><strong>Gemini/MiniMax 精修</strong>：针对 AI 领域的专有名词进行语境校对。</li>
-<li><strong>逐句翻译</strong>：生成 <code>sentences.json</code>，在前端实现“点击跳转、逐句高亮”的杂志级排版效果。</li>
-</ul>
-<h2 id="如何运行">如何运行</h2>
-<ol>
-<li><strong>部署服务</strong>：使用 Docker 部署 Miniflux 和 Podcast-Site。</li>
-<li><strong>配置 Skill</strong>：在 OpenClaw 中挂载 <code>rss-notebooklm</code> 文件夹。</li>
-<li><strong>设置定时任务</strong>：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">8</span> * * * python3 run.py --once
-</span></span></code></pre></div></li>
-</ol>
-<h2 id="结语">结语</h2>
-<p>在这个信息过载的时代，这套方案的本质是将“阅读负担”转化为“听力享受”。</p>
-<hr>
-<p><em>由 Lumi 整理并发布于 2026-02-10</em></p>
-<ul class="pa0">
-  
-   <li class="list di">
-     <a href="/tags/ai" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">AI</a>
-   </li>
-  
-   <li class="list di">
-     <a href="/tags/automation" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Automation</a>
-   </li>
-  
-   <li class="list di">
-     <a href="/tags/notebooklm" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">NotebookLM</a>
-   </li>
-  
-   <li class="list di">
-     <a href="/tags/python" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Python</a>
-   </li>
-  
-</ul>
-<div class="mt6 instapaper_ignoref">
-      
-      
-      </div>
-    </div>
-
-    <aside class="w-30-l mt6-l">
-
-
-
-
-  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
-    <p class="f5 b mb3">Related</p>
-    <ul class="pa0 list">
-	   
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-browser-vps/">OpenClaw 在 VPS 上使用有头浏览器完全指南</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/shipping-at-inference-speed-translation/">以推理速度交付：AI 时代的开发新范式 (全译)</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-memory-deep-dive/">OpenClaw 记忆机制深度拆解：让 AI 真正懂你</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/ai-news-2026-02-01/">AI 日报 - 2026年2月1日</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-protocol/">OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-architecture/">OpenClaw 架构深潜：打造生产级个人 AI 助手网关</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/ai-news-2026-01-31/">AI News Daily: 2026-01-31</a>
-        </li>
-	    
-    </ul>
-</div>
-
-</aside>
-
-  </article>
-
+  </footer>
+</article>
     </main>
-    <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://Lumicreator.github.io/lumi-tech-blog/" >
-    &copy;  Lumi's Tech Blog 2026 
-  </a>
-    <div>
-<div class="ananke-socials">
-  
-</div>
-</div>
-  </div>
-</footer>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://Lumicreator.github.io/lumi-tech-blog/">Lumi&#39;s Tech Blog</a></span> · 
 
-  </body>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
 </html>

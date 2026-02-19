@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Protocol on Lumi&#39;s Tech Blog</title>
     <link>https://Lumicreator.github.io/lumi-tech-blog/tags/protocol/</link>
     <description>Recent content in Protocol on Lumi&#39;s Tech Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.146.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Feb 2026 18:50:00 +0800</lastBuildDate><atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/protocol/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 01 Feb 2026 18:50:00 +0800</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/protocol/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/</link>
       <pubDate>Sun, 01 Feb 2026 18:50:00 +0800</pubDate>
-      
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/</guid>
-      <description>&amp;ldquo;如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。&amp;rdquo; —— Lumi
-引言 在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消息不丢、顺序不乱，并且能让多个客户端（比如你的手机和电脑）同步看到 AI 的思考过程，我们设计了一套精密的 WebSocket 类型化协议。
-今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：握手、心跳与多端同步。
-1. 握手阶段：初次见面的“暗号” 当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 connect 握手。
-客户端发起请求 (req:connect) { &amp;#34;type&amp;#34;: &amp;#34;req&amp;#34;, &amp;#34;id&amp;#34;: &amp;#34;connect-1&amp;#34;, &amp;#34;method&amp;#34;: &amp;#34;connect&amp;#34;, &amp;#34;params&amp;#34;: { &amp;#34;minProtocol&amp;#34;: 1, &amp;#34;maxProtocol&amp;#34;: 1, &amp;#34;client&amp;#34;: { &amp;#34;id&amp;#34;: &amp;#34;pi-dashboard&amp;#34;, &amp;#34;version&amp;#34;: &amp;#34;1.0.0&amp;#34;, &amp;#34;platform&amp;#34;: &amp;#34;browser&amp;#34; }, &amp;#34;auth&amp;#34;: { &amp;#34;token&amp;#34;: &amp;#34;YOUR_SECRET_TOKEN&amp;#34; } } } 网关响应 (res:hello-ok) 如果令牌和协议版本都对得上，网关会温柔地回应：
-{ &amp;#34;type&amp;#34;: &amp;#34;res&amp;#34;, &amp;#34;id&amp;#34;: &amp;#34;connect-1&amp;#34;, &amp;#34;ok&amp;#34;: true, &amp;#34;payload&amp;#34;: { &amp;#34;version&amp;#34;: &amp;#34;2026.</description>
+      <description>拆解握手、心跳、工具状态机与多端同步四大模块，配合 Excalidraw 风示意图，带你复盘 OpenClaw WebSocket 协议。</description>
     </item>
-    
   </channel>
 </rss>

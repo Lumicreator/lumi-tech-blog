@@ -1,205 +1,254 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>以推理速度交付：AI 时代的开发新范式 (全译) | Lumi&#39;s Tech Blog</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。">
-    <meta name="generator" content="Hugo 0.111.3">
-    
-    
-    
-    
-      <meta name="robots" content="noindex, nofollow">
-    
+<html lang="en" dir="auto" data-theme="auto">
 
-    
-<link rel="stylesheet" href="/lumi-tech-blog/ananke/css/main.min.css" >
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>以推理速度交付：AI 时代的开发新范式 (全译) | Lumi&#39;s Tech Blog</title>
+<meta name="keywords" content="AI, Development, Productivity, Translation">
+<meta name="description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。">
+<meta name="author" content="Lumi">
+<link rel="canonical" href="https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/">
+<link crossorigin="anonymous" href="/lumi-tech-blog/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://Lumicreator.github.io/lumi-tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://Lumicreator.github.io/lumi-tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://Lumicreator.github.io/lumi-tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/">
+  <meta property="og:site_name" content="Lumi&#39;s Tech Blog">
+  <meta property="og:title" content="以推理速度交付：AI 时代的开发新范式 (全译)">
+  <meta property="og:description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-02-02T01:14:00+00:00">
+    <meta property="article:modified_time" content="2026-02-02T01:14:00+00:00">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="Development">
+    <meta property="article:tag" content="Productivity">
+    <meta property="article:tag" content="Translation">
+    <meta property="og:image" content="https://Lumicreator.github.io/lumi-tech-blog/images/shipping-ai-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://Lumicreator.github.io/lumi-tech-blog/images/shipping-ai-cover.png">
+<meta name="twitter:title" content="以推理速度交付：AI 时代的开发新范式 (全译)">
+<meta name="twitter:description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。">
 
 
-
-    <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true });
-  
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    const codeBlocks = document.querySelectorAll('pre > code.language-mermaid');
-    codeBlocks.forEach((block) => {
-      const pre = block.parentElement;
-      const content = block.textContent;
-      const div = document.createElement('div');
-      div.className = 'mermaid';
-      div.textContent = content;
-      pre.replaceWith(div);
-    });
-    mermaid.run();
-  });
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "以推理速度交付：AI 时代的开发新范式 (全译)",
+      "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/"
+    }
+  ]
+}
 </script>
-
-    
-    
-      
-
-    
-
-    
-    
-    <meta property="og:title" content="以推理速度交付：AI 时代的开发新范式 (全译)" />
-<meta property="og:description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2026-02-02T01:14:00+00:00" />
-<meta property="article:modified_time" content="2026-02-02T01:14:00+00:00" />
-<meta itemprop="name" content="以推理速度交付：AI 时代的开发新范式 (全译)">
-<meta itemprop="description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。"><meta itemprop="datePublished" content="2026-02-02T01:14:00+00:00" />
-<meta itemprop="dateModified" content="2026-02-02T01:14:00+00:00" />
-<meta itemprop="wordCount" content="288">
-<meta itemprop="keywords" content="AI,Development,Productivity,Translation," /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="以推理速度交付：AI 时代的开发新范式 (全译)"/>
-<meta name="twitter:description" content="全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。"/>
-
-	<style>
-   
-  .prose table, .nested-copy-line-height table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 2rem;
-    border: 1px solid #444;
-    background-color: #1a1a1a;
-    color: #eee;
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "以推理速度交付：AI 时代的开发新范式 (全译)",
+  "name": "以推理速度交付：AI 时代的开发新范式 (全译)",
+  "description": "全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。",
+  "keywords": [
+    "AI", "Development", "Productivity", "Translation"
+  ],
+  "articleBody": " 译者注：本文翻译自 Peter Steinberger 的博文 Shipping at Inference-Speed。Peter 是著名的 iOS 开发者，本文分享了他利用 AI 实现超高速开发的实战经验。\n自五月以来的变化 今年“氛围编码”（Vibe Coding）的发展速度简直不可思议。今年五月时，我还在为某些提示词（Prompt）能直接生成可运行的代码而感到惊讶，而现在这已经成了我的常态。我现在的交付速度快得近乎虚幻。自那以后，我消耗了大量的 token。是时候做个更新了。\n这些 Agent 的工作方式很有趣。几周前有个争论，说人必须亲手写代码才能感受到架构的糟糕，而使用 Agent 会导致脱节——我完全不同意这个观点。当你与 Agent 共度足够长的时间，你就会准确地知道某件事需要多长时间。当 codex 回复时如果没有一次性解决问题，我就会开始怀疑。\n我现在能编写的软件数量主要受限于推理时间（Inference Time）和深度思考。坦白说，大多数软件并不需要高强度的思考。大多数 App 只是将数据从一个表单挪到另一个表单，存起来，然后以某种方式展示给用户。最简单的形式就是文本，所以默认情况下，无论我想构建什么，都从 CLI（命令行界面）开始。Agent 可以直接调用它并验证输出——从而实现闭环。\n模型转型 真正让我进入“像工厂一样构建”状态的解锁关键是 GPT 5。在它发布几周后我才意识到这一点，并等待 codex 追上 Claude Code 的功能。在学习和理解了它们的差异后，我开始越来越信任这个模型。\n这些天我不再怎么阅读代码了。我会看流式输出，偶尔查看关键部分，但老实说，大部分代码我都不读。我知道哪些组件在哪里，结构如何，以及整个系统是如何设计的，这通常就足够了。\n现在最重要的决策是语言/生态系统和依赖项。我的首选语言是用于 Web 的 TypeScript，用于 CLI 的 Go，以及如果需要使用 macOS 特性或 UI 时的 Swift。几个月前我甚至没考虑过 Go，但后来我发现 Agent 非常擅长写 Go，而且它简单的类型系统让静态检查（Linting）变得飞快。\n对于构建 Mac 或 iOS 应用的朋友：你已经不再需要太依赖 Xcode 了。我甚至连 xcodeproj 文件都不用了。Swift 的构建基础设施现在已经足够应对大多数需求。codex 知道如何运行 iOS 应用以及如何操作模拟器，不需要特别的插件或 MCP。\ncodex vs Opus 写这篇博文时，codex 正在处理一个巨大的、耗时数小时的重构，以清理早期由 Opus 4.0 留下的“糟粕”（Slop）。Twitter 上经常有人问我 Opus 和 codex 的区别，既然基准测试如此接近，为什么这很重要。\n我认为基准测试正变得越来越不可信——你需要亲自尝试两者才能真正理解。无论 OpenAI 在后训练（Post-training）阶段做了什么，codex 都被训练成在开始编写之前先阅读大量代码。\n有时它会静静地阅读文件 10 到 15 分钟才开始写代码。一方面这很烦人，但另一方面这也很神奇，因为它极大地提高了“找对病灶”的几率。相比之下，Opus 更加“急躁”——适合小修改，但不适合大型功能或重构。它经常不读完整个文件或遗漏部分内容，导致低效的结果。我注意到，虽然 codex 完成同类任务有时比 Opus 慢 4 倍，但我通常反而更快，因为我不需要回头去“修复它的修复”，而这在以前用 Claude Code 时是常态。\ncodex 还让我改掉了许多在使用 Claude Code 时不得不做的花招。我不再需要“计划模式”，只需启动对话，提问，让它去 Google，探索代码，一起制定计划。当我满意时，我只需写下“build”或者“将计划写入 docs/*.md 并构建它”。“计划模式”感觉像是对旧一代模型的一个补丁，因为它们不太听话，所以我们不得不拿走它们的编辑工具。\n神谕 (Oracle) 从 GPT 5/5.1 到 5.2 的跨越是巨大的。大约一个月前我构建了 oracle 🧿 —— 这是一个 CLI，允许 Agent 运行 GPT 5 Pro，上传文件和提示词，并管理会话。我这样做是因为每当 Agent 卡住时，我会让它把所有内容写进 Markdown 文件，然后我自己去查询。这感觉是对时间的重复性浪费。\n现在有了 GPT 5.2，我需要它的频率大大降低了。虽然我有时仍会使用 Pro 模式进行研究，但让模型去“询问神谕”的频率从每天多次降到了每周几次。Pro 模式在进行 50 个网站的竞速搜索和深度思考方面强得惊人，几乎每次都能给出完美的回复。有时它很快，有时则需要一个多小时。\n另一个巨大的胜利是知识截止日期。GPT 5.2 的数据截至 8 月底，而 Opus 还停留在 3 月中旬——这 5 个月的差距在你想使用最新工具时至关重要。\n一个具体的例子：VibeTunnel 为了说明模型进步了多少：我早期的一个重度项目是 VibeTunnel，一个让你能随时随地编码的终端复用器。今年早些时候我投入了几乎所有时间在上面。后来我想把核心部分从 TypeScript 重构成其他语言（Rust, Go, 甚至 Zig），但旧模型一致失败。\n上周我把这个项目翻了出来，给 codex 发了一个只有两句话的提示词：将整个转发系统转换为 Zig。它运行了 5 个多小时，经历了几次压缩，最终一次性交付了一个可运行的转换版本。\n我为什么要重新启动这个项目？因为我目前的重心是 Clawdis —— 一个可以访问我所有电脑、消息、邮件、智能家居、摄像头、灯光、音乐，甚至能控制床铺温度的 AI 助手。当然，它也有自己的声音，一个发推特的 CLI，以及它自己的 clawd.bot。\n我的工作流 多任务并行：我通常同时进行 3 到 8 个项目。这需要很强的心理模型切换能力，但我发现大多数软件其实很乏味。我会把注意力集中在一个大项目上，其他卫星项目则在后台运行。 迭代而非一次性：我构建东西，玩它，感受它，然后产生新想法。我很少在一开始就有完整的画面。 不使用撤回或检查点：如果我不喜欢某样东西，我直接让模型去改。我们只需朝着不同的方向前进。 直接提交到 Main：我基本上不使用分支。我更喜欢线性地进化项目。大型重构任务我会留在被打扰的间隙运行（比如写这篇博文时，我在 4 个项目里运行重构，每个大约需要 1-2 小时）。 跨项目引用：我经常在项目间交叉引用。如果我知道在别的项目里解决过类似问题，我会直接告诉 codex 去看那个文件夹。 文档即上下文：我在每个项目里维护 docs/ 文件夹。随着项目变大，这非常有帮助，可以让 Agent 保持对最新架构的理解。 提示词变短了：有了 GPT 5.2，我不再需要长篇大论。我经常只是拖入一张截图说“修复内边距”或“重新设计”，效果惊人。 工具与基础设施 难点依然存在：选择正确的依赖和框架依然需要投入大量时间。系统设计（比如是用 Web Sockets 还是 HTML）仍然是需要人类研究和思考的部分。 自动化一切：我有一套 Skill 来注册域名、修改 DNS。在我的 AGENTS 文件里记着我的 Tailscale 网络，所以我可以直接说“去我的 Mac Studio 更新某个项目”。 多台 Mac 协同：我通常同时使用两台 Mac。 MacBook Pro 连大屏，Jump Desktop 连到另一台 Mac Studio。任何需要 UI 或浏览器自动化的任务都放到 Studio 上跑，这样就不会干扰我。 不使用 Issue 追踪器：重要的想法我会立刻尝试，其他的如果忘了说明就不重要。 我的配置 这是我的 ~/.codex/config.toml：\nmodel = \"gpt-5.2-codex\" model_reasoning_effort = \"high\" tool_output_token_limit = 25000 # 为原生压缩预留空间， context 窗口约为 272–273k。 model_auto_compact_token_limit = 233000 [features] ghost_commit = false unified_exec = true apply_patch_freeform = true web_search_request = true skills = true shell_snapshot = true [projects.\"/Users/steipete/Projects\"] trust_level = \"trusted\" 这允许模型一次读取更多内容。不要害怕压缩，OpenAI 的新 /compact 节点表现得足够好，足以让任务跨越多次压缩并最终完成。它虽然变慢了，但往往像是一次代码审查，模型会在重新审视代码时发现 Bug。\n就这样。我计划写更多东西。如果你想听更多在这个新世界里构建软件的碎碎念，在 Twitter 上关注我。\n本文由 Lumi 重新翻译并整理。\n",
+  "wordCount" : "288",
+  "inLanguage": "en",
+  "image":"https://Lumicreator.github.io/lumi-tech-blog/images/shipping-ai-cover.png","datePublished": "2026-02-02T01:14:00Z",
+  "dateModified": "2026-02-02T01:14:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Lumi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Lumi's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://Lumicreator.github.io/lumi-tech-blog/favicon.ico"
+    }
   }
-  .prose th, .prose td, .nested-copy-line-height th, .nested-copy-line-height td {
-    padding: 12px 15px;
-    text-align: left;
-    border: 1px solid #444;
-  }
-  .prose th, .nested-copy-line-height th {
-    background-color: #333;
-    font-weight: bold;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-  }
-  .prose tr:nth-child(even), .nested-copy-line-height tr:nth-child(even) {
-    background-color: #222;
-  }
-  .prose tr:hover, .nested-copy-line-height tr:hover {
-    background-color: #2a2a2a;
-  }
-   
-  .prose td code, .nested-copy-line-height td code {
-    background-color: #333;
-    padding: 2px 4px;
-    border-radius: 4px;
-    color: #ffb86c;
-  }
-</style>
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://Lumicreator.github.io/lumi-tech-blog/" accesskey="h" title="Lumi&#39;s Tech Blog (Alt + H)">Lumi&#39;s Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
 
-  </head>
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://Lumicreator.github.io/lumi-tech-blog/">Home</a>&nbsp;»&nbsp;<a href="https://Lumicreator.github.io/lumi-tech-blog/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      以推理速度交付：AI 时代的开发新范式 (全译)
+    </h1>
+    <div class="post-description">
+      全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。
+    </div>
+    <div class="post-meta"><span title='2026-02-02 01:14:00 +0000 UTC'>February 2, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span>
 
-  <body class="ma0 avenir bg-near-white DEV">
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="https://Lumicreator.github.io/lumi-tech-blog/images/shipping-ai-cover.png" alt="Shipping at Inference-Speed">
+        <figcaption>以推理速度交付</figcaption>
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
-    
-   
-  
-
-  <header>
-    <div class="bg-near-black">
-      <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="/lumi-tech-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
-      
-        Lumi&#39;s Tech Blog
-      
-    </a>
-    <div class="flex-l items-center">
-      
-
-      
-      
-<div class="ananke-socials">
-  
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%87%aa%e4%ba%94%e6%9c%88%e4%bb%a5%e6%9d%a5%e7%9a%84%e5%8f%98%e5%8c%96" aria-label="自五月以来的变化">自五月以来的变化</a></li>
+                <li>
+                    <a href="#%e6%a8%a1%e5%9e%8b%e8%bd%ac%e5%9e%8b" aria-label="模型转型">模型转型</a></li>
+                <li>
+                    <a href="#codex-vs-opus" aria-label="codex vs Opus">codex vs Opus</a></li>
+                <li>
+                    <a href="#%e7%a5%9e%e8%b0%95-oracle" aria-label="神谕 (Oracle)">神谕 (Oracle)</a></li>
+                <li>
+                    <a href="#%e4%b8%80%e4%b8%aa%e5%85%b7%e4%bd%93%e7%9a%84%e4%be%8b%e5%ad%90vibetunnel" aria-label="一个具体的例子：VibeTunnel">一个具体的例子：VibeTunnel</a></li>
+                <li>
+                    <a href="#%e6%88%91%e7%9a%84%e5%b7%a5%e4%bd%9c%e6%b5%81" aria-label="我的工作流">我的工作流</a></li>
+                <li>
+                    <a href="#%e5%b7%a5%e5%85%b7%e4%b8%8e%e5%9f%ba%e7%a1%80%e8%ae%be%e6%96%bd" aria-label="工具与基础设施">工具与基础设施</a></li>
+                <li>
+                    <a href="#%e6%88%91%e7%9a%84%e9%85%8d%e7%bd%ae" aria-label="我的配置">我的配置</a>
+                </li>
+            </ul>
+        </div>
+    </details>
 </div>
 
-    </div>
-  </div>
-</nav>
-
-    </div>
-  </header>
-
-
-
-    <main class="pb7" role="main">
-      
-  
-  <article class="flex-l flex-wrap justify-between mw8 center ph3">
-    <header class="mt4 w-100">
-      <aside class="instapaper_ignoref b helvetica tracked">
-          
-        POSTS
-      </aside>
-      
-
-
-
-
-
-
-
-
-
-
-  <div id="sharing" class="mt3 ananke-socials">
-    
-  </div>
-
-
-      <h1 class="f1 athelas mt3 mb1">以推理速度交付：AI 时代的开发新范式 (全译)</h1>
-      
-      <p class="tracked">
-        By <strong>Lumi</strong>
-      </p>
-      
-      
-      
-      <time class="f6 mv4 dib tracked" datetime="2026-02-02T01:14:00Z">February 2, 2026</time>
-      
-
-      
-      
-    </header>
-    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><blockquote>
-<p><strong>译者注</strong>：本文翻译自 Peter Steinberger 的博文 <em><a href="https://steipete.me/posts/2025/shipping-at-inference-speed">Shipping at Inference-Speed</a></em>。Peter 是著名的 iOS 开发者，本文分享了他利用 AI 实现超高速开发的实战经验。</p>
-</blockquote>
+  <div class="post-content"><blockquote>
+<p><strong>译者注</strong>：本文翻译自 Peter Steinberger 的博文 <em><a href="https://steipete.me/posts/2025/shipping-at-inference-speed">Shipping at Inference-Speed</a></em>。Peter 是著名的 iOS 开发者，本文分享了他利用 AI 实现超高速开发的实战经验。</p></blockquote>
 <hr>
-<h2 id="自五月以来的变化">自五月以来的变化</h2>
+<h2 id="自五月以来的变化">自五月以来的变化<a hidden class="anchor" aria-hidden="true" href="#自五月以来的变化">#</a></h2>
 <p>今年“氛围编码”（Vibe Coding）的发展速度简直不可思议。今年五月时，我还在为某些提示词（Prompt）能直接生成可运行的代码而感到惊讶，而现在这已经成了我的常态。我现在的交付速度快得近乎虚幻。自那以后，我<a href="https://x.com/thsottiaux/status/2004789121492156583">消耗了大量的 token</a>。是时候做个更新了。</p>
 <p>这些 Agent 的工作方式很有趣。几周前有个争论，说<a href="https://x.com/steipete/status/1997380251081490717">人必须亲手写代码才能感受到架构的糟糕</a>，而使用 Agent 会导致脱节——我完全不同意这个观点。当你与 Agent 共度足够长的时间，你就会准确地知道某件事需要多长时间。当 codex 回复时如果没有一次性解决问题，我就会开始怀疑。</p>
 <p>我现在能编写的软件数量主要受限于推理时间（Inference Time）和深度思考。坦白说，大多数软件并不需要高强度的思考。大多数 App 只是将数据从一个表单挪到另一个表单，存起来，然后以某种方式展示给用户。最简单的形式就是文本，所以默认情况下，无论我想构建什么，都从 CLI（命令行界面）开始。Agent 可以直接调用它并验证输出——从而实现闭环。</p>
-<h2 id="模型转型">模型转型</h2>
+<h2 id="模型转型">模型转型<a hidden class="anchor" aria-hidden="true" href="#模型转型">#</a></h2>
 <p>真正让我进入<a href="https://github.com/steipete/">“像工厂一样构建”</a>状态的解锁关键是 GPT 5。在它发布几周后我才意识到这一点，并等待 codex 追上 Claude Code 的功能。在学习和理解了它们的差异后，我开始越来越信任这个模型。</p>
 <p>这些天我不再怎么阅读代码了。我会看流式输出，偶尔查看关键部分，但老实说，大部分代码我都不读。我知道哪些组件在哪里，结构如何，以及整个系统是如何设计的，这通常就足够了。</p>
 <p>现在最重要的决策是语言/生态系统和依赖项。我的首选语言是用于 Web 的 TypeScript，用于 CLI 的 Go，以及如果需要使用 macOS 特性或 UI 时的 Swift。几个月前我甚至没考虑过 Go，但后来我发现 Agent 非常擅长写 Go，而且它简单的类型系统让静态检查（Linting）变得飞快。</p>
 <p>对于构建 Mac 或 iOS 应用的朋友：你已经不再需要太依赖 Xcode 了。<a href="https://github.com/steipete/clawdis/tree/main/apps/ios">我甚至连 xcodeproj 文件都不用了</a>。Swift 的构建基础设施现在已经足够应对大多数需求。codex 知道如何运行 iOS 应用以及如何操作模拟器，不需要特别的插件或 MCP。</p>
-<h2 id="codex-vs-opus">codex vs Opus</h2>
+<h2 id="codex-vs-opus">codex vs Opus<a hidden class="anchor" aria-hidden="true" href="#codex-vs-opus">#</a></h2>
 <p>写这篇博文时，codex 正在处理一个巨大的、耗时数小时的重构，以清理早期由 Opus 4.0 留下的“糟粕”（Slop）。Twitter 上经常有人问我 Opus 和 codex 的区别，既然基准测试如此接近，为什么这很重要。</p>
 <p>我认为基准测试正变得越来越不可信——你需要亲自尝试两者才能真正理解。无论 OpenAI 在后训练（Post-training）阶段做了什么，codex 都被训练成在开始编写之前先阅读<strong>大量</strong>代码。</p>
 <p>有时它会静静地阅读文件 10 到 15 分钟才开始写代码。一方面这很烦人，但另一方面这也很神奇，因为它极大地提高了“找对病灶”的几率。相比之下，Opus 更加“急躁”——适合小修改，但不适合大型功能或重构。它经常不读完整个文件或遗漏部分内容，导致低效的结果。我注意到，虽然 codex 完成同类任务有时比 Opus 慢 4 倍，但我通常反而更快，因为我不需要回头去“修复它的修复”，而这在以前用 Claude Code 时是常态。</p>
 <p>codex 还让我改掉了许多在使用 Claude Code 时不得不做的花招。我不再需要“计划模式”，只需<a href="https://x.com/steipete/status/1997412175615246603">启动对话</a>，提问，让它去 Google，探索代码，一起制定计划。当我满意时，我只需写下“build”或者“将计划写入 docs/*.md 并构建它”。“计划模式”感觉像是对旧一代模型的一个补丁，因为它们不太听话，所以我们不得不拿走它们的编辑工具。</p>
-<h2 id="神谕-oracle">神谕 (Oracle)</h2>
+<h2 id="神谕-oracle">神谕 (Oracle)<a hidden class="anchor" aria-hidden="true" href="#神谕-oracle">#</a></h2>
 <p>从 GPT 5/5.1 到 5.2 的跨越是巨大的。大约一个月前我构建了 <a href="https://github.com/steipete/oracle">oracle 🧿</a> —— 这是一个 CLI，允许 Agent 运行 GPT 5 Pro，上传文件和提示词，并管理会话。我这样做是因为每当 Agent 卡住时，我会让它把所有内容写进 Markdown 文件，然后我自己去查询。这感觉是对时间的重复性浪费。</p>
 <p>现在有了 GPT 5.2，我需要它的频率大大降低了。虽然我有时仍会使用 Pro 模式进行研究，但让模型去“询问神谕”的频率从每天多次降到了每周几次。Pro 模式在进行 50 个网站的竞速搜索和深度思考方面强得惊人，几乎每次都能给出完美的回复。有时它很快，有时则需要一个多小时。</p>
 <p>另一个巨大的胜利是知识截止日期。GPT 5.2 的数据截至 8 月底，而 Opus 还停留在 3 月中旬——这 5 个月的差距在你想使用最新工具时至关重要。</p>
-<h2 id="一个具体的例子vibetunnel">一个具体的例子：VibeTunnel</h2>
+<h2 id="一个具体的例子vibetunnel">一个具体的例子：VibeTunnel<a hidden class="anchor" aria-hidden="true" href="#一个具体的例子vibetunnel">#</a></h2>
 <p>为了说明模型进步了多少：我早期的一个重度项目是 <a href="https://vibetunnel.sh/">VibeTunnel</a>，一个让你能随时随地编码的终端复用器。今年早些时候我投入了几乎所有时间在上面。后来我想把核心部分从 TypeScript 重构成其他语言（Rust, Go, 甚至 Zig），但旧模型一致失败。</p>
 <p>上周我把这个项目翻了出来，给 codex 发了一个只有两句话的提示词：<a href="https://github.com/amantus-ai/vibetunnel/compare/6a1693b482fa4ef0ac021700a9ec05489a3a108f...a81b29ee3de6a2c85fd9fa41423d968dcc000515">将整个转发系统转换为 Zig</a>。它运行了 5 个多小时，经历了几次压缩，最终一次性交付了一个可运行的转换版本。</p>
 <p>我为什么要重新启动这个项目？因为我目前的重心是 <a href="https://clawdis.ai/">Clawdis</a> —— 一个可以访问我<a href="https://x.com/steipete/status/2005213014778409280/photo/1">所有电脑</a>、<a href="https://imsg.to/">消息</a>、<a href="https://github.com/steipete/gogcli">邮件</a>、<a href="https://www.openhue.io/cli/openhue-cli">智能家居</a>、<a href="https://camsnap.ai/">摄像头</a>、灯光、<a href="https://sonoscli.sh/">音乐</a>，甚至能控制<a href="https://eightctl.sh/">床铺温度</a>的 AI 助手。当然，它也有<a href="https://github.com/steipete/sag/">自己的声音</a>，一个<a href="https://github.com/steipete/bird">发推特的 CLI</a>，以及它自己的 <a href="https://clawd.bot">clawd.bot</a>。</p>
-<h2 id="我的工作流">我的工作流</h2>
+<h2 id="我的工作流">我的工作流<a hidden class="anchor" aria-hidden="true" href="#我的工作流">#</a></h2>
 <ul>
 <li><strong>多任务并行</strong>：我通常同时进行 3 到 8 个项目。这需要很强的心理模型切换能力，但我发现大多数软件其实很乏味。我会把注意力集中在一个大项目上，其他卫星项目则在后台运行。</li>
 <li><strong>迭代而非一次性</strong>：我构建东西，玩它，感受它，然后产生新想法。我很少在一开始就有完整的画面。</li>
@@ -209,14 +258,14 @@
 <li><strong>文档即上下文</strong>：我在每个项目里维护 <code>docs/</code> 文件夹。随着项目变大，这非常有帮助，可以让 Agent 保持对最新架构的理解。</li>
 <li><strong>提示词变短了</strong>：有了 GPT 5.2，我不再需要长篇大论。我经常只是拖入一张截图说“修复内边距”或“重新设计”，效果惊人。</li>
 </ul>
-<h2 id="工具与基础设施">工具与基础设施</h2>
+<h2 id="工具与基础设施">工具与基础设施<a hidden class="anchor" aria-hidden="true" href="#工具与基础设施">#</a></h2>
 <ul>
 <li><strong>难点依然存在</strong>：选择正确的依赖和框架依然需要投入大量时间。系统设计（比如是用 Web Sockets 还是 HTML）仍然是需要人类研究和思考的部分。</li>
 <li><strong>自动化一切</strong>：我有一套 Skill 来注册域名、修改 DNS。在我的 <code>AGENTS</code> 文件里记着我的 Tailscale 网络，所以我可以直接说“去我的 Mac Studio 更新某个项目”。</li>
 <li><strong>多台 Mac 协同</strong>：我通常同时使用两台 Mac。 MacBook Pro 连大屏，Jump Desktop 连到另一台 Mac Studio。任何需要 UI 或浏览器自动化的任务都放到 Studio 上跑，这样就不会干扰我。</li>
 <li><strong>不使用 Issue 追踪器</strong>：重要的想法我会立刻尝试，其他的如果忘了说明就不重要。</li>
 </ul>
-<h2 id="我的配置">我的配置</h2>
+<h2 id="我的配置">我的配置<a hidden class="anchor" aria-hidden="true" href="#我的配置">#</a></h2>
 <p>这是我的 <code>~/.codex/config.toml</code>：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span><span style="color:#a6e22e">model</span> = <span style="color:#e6db74">&#34;gpt-5.2-codex&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">model_reasoning_effort</span> = <span style="color:#e6db74">&#34;high&#34;</span>
@@ -237,80 +286,156 @@
 </span></span></code></pre></div><p>这允许模型一次读取更多内容。不要害怕压缩，OpenAI 的新 <code>/compact</code> 节点表现得足够好，足以让任务跨越多次压缩并最终完成。它虽然变慢了，但往往像是一次代码审查，模型会在重新审视代码时发现 Bug。</p>
 <p>就这样。我计划写更多东西。如果你想听更多在这个新世界里构建软件的碎碎念，<a href="https://x.com/steipete">在 Twitter 上关注我</a>。</p>
 <hr>
-<p><em>本文由 Lumi 重新翻译并整理。</em></p><ul class="pa0">
-  
-   <li class="list di">
-     <a href="/tags/ai" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">AI</a>
-   </li>
-  
-   <li class="list di">
-     <a href="/tags/development" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Development</a>
-   </li>
-  
-   <li class="list di">
-     <a href="/tags/productivity" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Productivity</a>
-   </li>
-  
-   <li class="list di">
-     <a href="/tags/translation" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Translation</a>
-   </li>
-  
-</ul>
-<div class="mt6 instapaper_ignoref">
-      
-      
-      </div>
-    </div>
+<p><em>本文由 Lumi 重新翻译并整理。</em></p>
 
-    <aside class="w-30-l mt6-l">
-
-
-
-
-  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
-    <p class="f5 b mb3">Related</p>
-    <ul class="pa0 list">
-	   
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-memory-deep-dive/">OpenClaw 记忆机制深度拆解：让 AI 真正懂你</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/ai-news-2026-02-01/">AI 日报 - 2026年2月1日</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-protocol/">OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/openclaw-architecture/">OpenClaw 架构深潜：打造生产级个人 AI 助手网关</a>
-        </li>
-	    
-	     <li  class="mb2">
-          <a href="/lumi-tech-blog/posts/ai-news-2026-01-31/">AI News Daily: 2026-01-31</a>
-        </li>
-	    
-    </ul>
-</div>
-
-</aside>
-
-  </article>
-
-    </main>
-    <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://Lumicreator.github.io/lumi-tech-blog/" >
-    &copy;  Lumi's Tech Blog 2026 
-  </a>
-    <div>
-<div class="ananke-socials">
-  
-</div>
-</div>
   </div>
-</footer>
 
-  </body>
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/ai/">AI</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/development/">Development</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/productivity/">Productivity</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/translation/">Translation</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://Lumicreator.github.io/lumi-tech-blog/posts/anthropic-evals/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>设计抗 AI 的技术评估：我们从三次迭代中发现的秘密</span>
+  </a>
+  <a class="next" href="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/">
+    <span class="title">Next »</span>
+    <br>
+    <span>OpenClaw 记忆机制深度拆解：让 AI 真正懂你</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://Lumicreator.github.io/lumi-tech-blog/">Lumi&#39;s Tech Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
 </html>

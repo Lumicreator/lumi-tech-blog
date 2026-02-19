@@ -1,218 +1,250 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <title>Technical | Lumi&#39;s Tech Blog</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="Tech notes and tutorials">
-    <meta name="generator" content="Hugo 0.111.3">
-    
-    
-    
-    
-      <meta name="robots" content="noindex, nofollow">
-    
+<html lang="en" dir="auto" data-theme="auto">
 
-    
-<link rel="stylesheet" href="/lumi-tech-blog/ananke/css/main.min.css" >
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Technical | Lumi&#39;s Tech Blog</title>
+<meta name="keywords" content="">
+<meta name="description" content="Tech notes and tutorials">
+<meta name="author" content="Lumi">
+<link rel="canonical" href="https://Lumicreator.github.io/lumi-tech-blog/categories/technical/">
+<link crossorigin="anonymous" href="/lumi-tech-blog/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://Lumicreator.github.io/lumi-tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://Lumicreator.github.io/lumi-tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://Lumicreator.github.io/lumi-tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://Lumicreator.github.io/lumi-tech-blog/categories/technical/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://Lumicreator.github.io/lumi-tech-blog/categories/technical/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
 
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
 
+            .list {
+                background: var(--theme);
+            }
 
-    <script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true });
-  
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    const codeBlocks = document.querySelectorAll('pre > code.language-mermaid');
-    codeBlocks.forEach((block) => {
-      const pre = block.parentElement;
-      const content = block.textContent;
-      const div = document.createElement('div');
-      div.className = 'mermaid';
-      div.textContent = content;
-      pre.replaceWith(div);
-    });
-    mermaid.run();
-  });
-</script>
+            .toc {
+                background: var(--entry);
+            }
+        }
 
-    
-    
-      
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
 
-    
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
 
-    
-    
-      <link href="/lumi-tech-blog/categories/technical/index.xml" rel="alternate" type="application/rss+xml" title="Lumi&#39;s Tech Blog" />
-      <link href="/lumi-tech-blog/categories/technical/index.xml" rel="feed" type="application/rss+xml" title="Lumi&#39;s Tech Blog" />
-      
-    
-    
-    <meta property="og:title" content="Technical" />
-<meta property="og:description" content="Tech notes and tutorials" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/categories/technical/" />
-<meta itemprop="name" content="Technical">
-<meta itemprop="description" content="Tech notes and tutorials"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Technical"/>
-<meta name="twitter:description" content="Tech notes and tutorials"/>
+</script><meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/categories/technical/">
+  <meta property="og:site_name" content="Lumi&#39;s Tech Blog">
+  <meta property="og:title" content="Technical">
+  <meta property="og:description" content="Tech notes and tutorials">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Technical">
+<meta name="twitter:description" content="Tech notes and tutorials">
 
-	<style>
-   
-  .prose table, .nested-copy-line-height table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 2rem;
-    border: 1px solid #444;
-    background-color: #1a1a1a;
-    color: #eee;
-  }
-  .prose th, .prose td, .nested-copy-line-height th, .nested-copy-line-height td {
-    padding: 12px 15px;
-    text-align: left;
-    border: 1px solid #444;
-  }
-  .prose th, .nested-copy-line-height th {
-    background-color: #333;
-    font-weight: bold;
-    color: #fff;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.05em;
-  }
-  .prose tr:nth-child(even), .nested-copy-line-height tr:nth-child(even) {
-    background-color: #222;
-  }
-  .prose tr:hover, .nested-copy-line-height tr:hover {
-    background-color: #2a2a2a;
-  }
-   
-  .prose td code, .nested-copy-line-height td code {
-    background-color: #333;
-    padding: 2px 4px;
-    border-radius: 4px;
-    color: #ffb86c;
-  }
-</style>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://Lumicreator.github.io/lumi-tech-blog/" accesskey="h" title="Lumi&#39;s Tech Blog (Alt + H)">Lumi&#39;s Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header"><div class="breadcrumbs"><a href="https://Lumicreator.github.io/lumi-tech-blog/">Home</a>&nbsp;»&nbsp;<a href="https://Lumicreator.github.io/lumi-tech-blog/categories/">Categories</a></div>
+  <h1>
+    Technical
+  </h1>
+</header>
 
-  </head>
-
-  <body class="ma0 avenir bg-near-white DEV">
-
-    
-
-  <header>
-    <div class="pb3-m pb6-l bg-near-black">
-      <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="/lumi-tech-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
-      
-        Lumi&#39;s Tech Blog
-      
-    </a>
-    <div class="flex-l items-center">
-      
-
-      
-      
-<div class="ananke-socials">
-  
-</div>
-
-    </div>
-  </div>
-</nav>
-
-      <div class="tc-l pv3 ph3 ph4-ns">
-        <h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">
-          Technical
-        </h1>
-        
-      </div>
-    </div>
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">OpenClaw 记忆机制深度拆解：让 AI 真正懂你
+    </h2>
   </header>
+  <div class="entry-content">
+    <p></p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-01 14:30:00 +0000 UTC'>February 1, 2026</span>&nbsp;·&nbsp;<span>5 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
+  <a class="entry-link" aria-label="post link to OpenClaw 记忆机制深度拆解：让 AI 真正懂你" href="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/"></a>
+</article>
 
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> “如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。” —— Lumi
+引言 在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消息不丢、顺序不乱，并且能让多个客户端（比如你的手机和电脑）同步看到 AI 的思考过程，我们设计了一套精密的 WebSocket 类型化协议。
+今天，我们将深入“老家”最底层的神经网络，拆解 OpenClaw 通信的三大核心支柱：握手、心跳与多端同步。
+1. 握手阶段：初次见面的“暗号” 当一个新的客户端（比如你刚刚打开的 Web 控制台）想要接入 Gateway 时，它不能直接大喊大叫，必须先通过一个标准的 connect 握手。
+客户端发起请求 (req:connect) { &#34;type&#34;: &#34;req&#34;, &#34;id&#34;: &#34;connect-1&#34;, &#34;method&#34;: &#34;connect&#34;, &#34;params&#34;: { &#34;minProtocol&#34;: 1, &#34;maxProtocol&#34;: 1, &#34;client&#34;: { &#34;id&#34;: &#34;pi-dashboard&#34;, &#34;version&#34;: &#34;1.0.0&#34;, &#34;platform&#34;: &#34;browser&#34; }, &#34;auth&#34;: { &#34;token&#34;: &#34;YOUR_SECRET_TOKEN&#34; } } } 网关响应 (res:hello-ok) 如果令牌和协议版本都对得上，网关会温柔地回应：
+{ &#34;type&#34;: &#34;res&#34;, &#34;id&#34;: &#34;connect-1&#34;, &#34;ok&#34;: true, &#34;payload&#34;: { &#34;version&#34;: &#34;2026.1.29&#34;, &#34;session&#34;: { &#34;sessionId&#34;: &#34;UUID-HERE&#34;, &#34;sessionKey&#34;: &#34;agent:ace:telegram:group:...&#34; } } } ✨ Lumi 的对话隐喻：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-01 18:50:00 +0800 +0800'>February 1, 2026</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
+  <a class="entry-link" aria-label="post link to OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”" href="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/"></a>
+</article>
 
-    <main class="pb7" role="main">
-      
-  <article class="cf pa3 pa4-m pa4-l">
-    <div class="measure-wide-l center f4 lh-copy nested-copy-line-height nested-links mid-gray">
-      <p>Below you will find pages that utilize the taxonomy term “Technical”</p>
-    </div>
-  </article>
-  <div class="mw8 center">
-    <section class="flex-ns flex-wrap justify-around mt5">
-      
-        <div class="relative w-100  mb4 bg-white">
-          <div class="relative w-100 mb4 bg-white nested-copy-line-height">
-  <div class="bg-white mb3 pa4 gray overflow-hidden">
-    <span class="f6 db">Posts</span>
-    <h1 class="f3 near-black">
-      <a href="/lumi-tech-blog/posts/openclaw-memory-deep-dive/" class="link black dim">
-        OpenClaw 记忆机制深度拆解：让 AI 真正懂你
-      </a>
-    </h1>
-    <div class="nested-links f5 lh-copy nested-copy-line-height">
-      
-    </div>
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">OpenClaw 架构深潜：打造生产级个人 AI 助手网关
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>OpenClaw 架构深潜：打造生产级个人 AI 助手网关 “EXFOLIATE! EXFOLIATE!” — 太空龙虾 Molty
+引言 OpenClaw 是一个开源的个人 AI 助手框架，它将现代大型语言模型与人们日常使用的消息渠道无缝连接——WhatsApp、Telegram、Slack、Discord、Signal、iMessage 等。与云托管的 AI 助手不同，OpenClaw 运行在您自己的基础设施上，让您完全掌控数据、会话和工具执行。
+本文为高级开发者和架构师提供 OpenClaw 系统的全面架构分析，帮助您理解如何构建、部署和扩展生产级 AI 助手基础设施。
+代码仓库：github.com/openclaw/openclaw
+目录 高层架构 核心组件 网关（控制平面） Agent 运行时 会话 渠道 技能 节点 通信协议 运行时工作流程 多 Agent 架构 安全模型 可扩展性 部署模式 CLI 参考 最佳实践 核心要点 未来路线图 高层架构 OpenClaw 采用以网关为中心的架构，由单个长期运行的进程管理所有渠道连接，并作为客户端、工具和自动化的控制平面。
+graph TD subgraph Channels [消息渠道] WA[WhatsApp] TG[Telegram] DC[Discord] SL[Slack] IM[iMessage] end subgraph Gateway [OpenClaw Gateway 控制平面] direction TB Router[Agent 路由器] SessionMgr[会话管理器] ToolExec[工具执行器] Cron[定时调度器] Canvas[Canvas 主机] Router --- SessionMgr SessionMgr --- ToolExec end subgraph Clients [客户端与节点] CLI[CLI 命令行] App[macOS 菜单栏应用] Nodes[设备节点 iOS/Android] end Channels ==&gt; Gateway Gateway &lt;==&gt; Clients ToolExec -.-&gt; Sandbox[Docker 沙箱] 核心设计原则 单一事实来源：每台主机一个网关实例，独占所有渠道会话（这对 WhatsApp 的单会话限制尤为关键） 默认本地回环：网关默认绑定至 127.0.0.1:18789，远程访问需显式配置 协议优先：所有通信采用带 JSON Schema 验证的类型化 WebSocket 协议 确定性路由：响应消息确定性地返回至来源渠道，无需模型参与路由决策 本地优先：专为个人使用设计，会话状态持久化存储于本地 核心组件 网关（控制平面） 网关是 OpenClaw 的核心——一个 Node.js 进程，负责：
+...</p>
   </div>
-</div>
-        </div>
-      
-        <div class="relative w-100  mb4 bg-white">
-          <div class="relative w-100 mb4 bg-white nested-copy-line-height">
-  <div class="bg-white mb3 pa4 gray overflow-hidden">
-    <span class="f6 db">Posts</span>
-    <h1 class="f3 near-black">
-      <a href="/lumi-tech-blog/posts/openclaw-protocol/" class="link black dim">
-        OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”
-      </a>
-    </h1>
-    <div class="nested-links f5 lh-copy nested-copy-line-height">
-      &ldquo;如果说 Gateway 是 OpenClaw 的心脏，那么 WebSocket 协议就是它的神经网络。每一帧数据的跳动，都是在传递 AI 的思考与指令。&rdquo; —— Lumi
-引言 在 OpenClaw 的世界里，机器人与人、机器人与服务器之间的交流并不是杂乱无章的。为了保证消 …
-    </div>
-  </div>
-</div>
-        </div>
-      
-        <div class="relative w-100  mb4 bg-white">
-          <div class="relative w-100 mb4 bg-white nested-copy-line-height">
-  <div class="bg-white mb3 pa4 gray overflow-hidden">
-    <span class="f6 db">Posts</span>
-    <h1 class="f3 near-black">
-      <a href="/lumi-tech-blog/posts/openclaw-architecture/" class="link black dim">
-        OpenClaw 架构深潜：打造生产级个人 AI 助手网关
-      </a>
-    </h1>
-    <div class="nested-links f5 lh-copy nested-copy-line-height">
-      OpenClaw 架构深潜：打造生产级个人 AI 助手网关 &ldquo;EXFOLIATE! EXFOLIATE!&rdquo; — 太空龙虾 Molty
-引言 OpenClaw 是一个开源的个人 AI 助手框架，它将现代大型语言模型与人们日常使用的消息渠道无缝连 …
-    </div>
-  </div>
-</div>
-        </div>
-      
-    </section>
-  </div>
-
+  <footer class="entry-footer"><span title='2026-02-01 16:40:00 +0800 +0800'>February 1, 2026</span>&nbsp;·&nbsp;<span>16 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
+  <a class="entry-link" aria-label="post link to OpenClaw 架构深潜：打造生产级个人 AI 助手网关" href="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-architecture/"></a>
+</article>
     </main>
-    <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://Lumicreator.github.io/lumi-tech-blog/" >
-    &copy;  Lumi's Tech Blog 2026 
-  </a>
-    <div>
-<div class="ananke-socials">
-  
-</div>
-</div>
-  </div>
-</footer>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://Lumicreator.github.io/lumi-tech-blog/">Lumi&#39;s Tech Blog</a></span> · 
 
-  </body>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
 </html>

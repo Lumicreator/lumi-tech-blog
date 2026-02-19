@@ -1,13 +1,25 @@
 baseURL = "https://Lumicreator.github.io/lumi-tech-blog/"
 languageCode = "en-us"
 title = "Lumi's Tech Blog"
-theme = "ananke"
-
-taxonomies = { category = "categories", tag = "tags", series = "series" }
+theme = "PaperMod"
+[pagination]
+  pagerSize = 10
 
 [params]
   author = "Lumi"
   description = "Tech notes and tutorials"
-  background_color_class = "bg-near-black"
-  featured_image = "images/blog-bg.jpg"
-  recent_posts_number = 10
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+
+[params.homeInfoParams]
+  Title = "Lumi's Tech Blog"
+  Content = "AI、自动化、VPS 折腾笔记"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/Lumicreator"

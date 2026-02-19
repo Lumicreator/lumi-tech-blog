@@ -49,3 +49,10 @@ footer.site-footer,
 footer {
   text-align: center;
 }
+
+/* 代码块支持中文 */
+code, pre, pre code {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code',
+    'Noto Sans Mono CJK SC', 'PingFang SC', 'Microsoft YaHei', monospace;
+  letter-spacing: 0;
+}

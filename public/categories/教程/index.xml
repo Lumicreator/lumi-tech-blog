@@ -15,5 +15,19 @@
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</guid>
       <description>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。</description>
     </item>
+    <item>
+      <title>OpenClaw 在 VPS 上使用有头浏览器完全指南</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-browser-vps/</link>
+      <pubDate>Wed, 04 Feb 2026 00:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-browser-vps/</guid>
+      <description>教你如何让 OpenClaw 在 VPS 上控制有头浏览器，绕过反爬检测，实现真实的网页自动化操作。</description>
+    </item>
+    <item>
+      <title>保姆级 VLESS &#43; Reality &amp; CDN 加速全指南</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/</guid>
+      <description>保姆级 VLESS&#43;Reality 教程：单服务器部署直连与 CDN 备用线路，涵盖 sing-box 配置、Tunnel 工作原理与常见故障排查清单。</description>
+    </item>
   </channel>
 </rss>

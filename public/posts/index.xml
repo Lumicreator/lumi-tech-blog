@@ -44,13 +44,6 @@
       <description>从 Retain/Recall/Reflect 机制到 Markdown 存储与 RAG 检索，这篇 50 行笔记告诉你 OpenClaw 如何把无状态 AI 养成长期伙伴。</description>
     </item>
     <item>
-      <title>AI 日报 - 2026年2月1日</title>
-      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</link>
-      <pubDate>Sun, 01 Feb 2026 13:10:00 +0000</pubDate>
-      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-02-01/</guid>
-      <description>精选 7 条全球 AI 要闻：从 Nvidia 投资风波到 Anthropic Cowork，全程点评赋能研究者和产品人。</description>
-    </item>
-    <item>
       <title>OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-protocol/</link>
       <pubDate>Sun, 01 Feb 2026 18:50:00 +0800</pubDate>
@@ -63,13 +56,6 @@
       <pubDate>Sun, 01 Feb 2026 16:40:00 +0800</pubDate>
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-architecture/</guid>
       <description>拆解 OpenClaw Gateway 的消息流、工具桥、扩展插件与多端同步策略，帮助自建 AI 助手的工程师掌握生产级架构要点。</description>
-    </item>
-    <item>
-      <title>AI News Daily: 2026-01-31</title>
-      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</link>
-      <pubDate>Sat, 31 Jan 2026 12:27:56 +0000</pubDate>
-      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/ai-news-2026-01-31/</guid>
-      <description>速览 Peloton 裁员、Google Genie、Moltbook 风波与监管动向，让你一分钟掌握 1 月 31 日的 AI 焦点。</description>
     </item>
     <item>
       <title>保姆级 VLESS &#43; Reality &amp; CDN 加速全指南</title>

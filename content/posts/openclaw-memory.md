@@ -3,7 +3,7 @@ title: "OpenClaw 记忆机制深度拆解"
 date: 2026-02-01T15:45:00Z
 draft: true
 tags: ["OpenClaw", "Memory", "AI Agents"]
-categories: ["Technical"]
+categories: ["技术"]
 description: "草稿：记录 OpenClaw 记忆系统的设计方向，包含情节钩子、持久化策略与 RAG 测试计划，为后续深度稿打底。"
 ---
 

@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>AI on Lumi&#39;s Tech Blog</title>
-    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/ai/</link>
-    <description>Recent content in AI on Lumi&#39;s Tech Blog</description>
+    <title>技术 on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/categories/%E6%8A%80%E6%9C%AF/</link>
+    <description>Recent content in 技术 on Lumi&#39;s Tech Blog</description>
     <generator>Hugo -- 0.146.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Feb 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/ai/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南</title>
-      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</link>
-      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
-      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</guid>
-      <description>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。</description>
-    </item>
-    <item>
-      <title>以推理速度交付：AI 时代的开发新范式 (全译)</title>
-      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</link>
-      <pubDate>Mon, 02 Feb 2026 01:14:00 +0000</pubDate>
-      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</guid>
-      <description>全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。</description>
-    </item>
+    <lastBuildDate>Sun, 01 Feb 2026 14:30:00 +0000</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>OpenClaw 记忆机制深度拆解：让 AI 真正懂你</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-memory-deep-dive/</link>

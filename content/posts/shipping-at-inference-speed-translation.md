@@ -3,7 +3,7 @@ title: "以推理速度交付：AI 时代的开发新范式 (全译)"
 date: 2026-02-02T01:14:00Z
 draft: false
 tags: ["AI", "Development", "Productivity", "Translation"]
-categories: ["Technology"]
+categories: ["AI 前沿"]
 description: "全译 Peter Steinberger 的 Inference-Speed 方法，解析 GPT-5.2-codex 在“氛围编码”、Agent 工厂与软件生产线中的实践细节。"
 cover:
     image: "images/shipping-ai-cover.png"

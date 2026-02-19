@@ -2,6 +2,7 @@
 title: "保姆级 VLESS + Reality & CDN 加速全指南"
 date: 2024-05-01T00:00:00+00:00
 description: "保姆级 VLESS+Reality 教程：单服务器部署直连与 CDN 备用线路，涵盖 sing-box 配置、Tunnel 工作原理与常见故障排查清单。"
+categories: ["教程"]
 tags: ["Reality", "VLESS", "CDN", "Cloudflare", "sing-box", "X-UI"]
 ---
 

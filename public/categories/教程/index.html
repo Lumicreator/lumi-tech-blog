@@ -138,6 +138,36 @@ R S S 订 阅 → 自 动 抓 取 → 写 入 N o t e b o o k L M → 生 成 �
   <footer class="entry-footer"><span title='2026-02-19 00:00:00 +0000 UTC'>February 19, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
   <a class="entry-link" aria-label="post link to 用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南" href="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/"></a>
 </article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">OpenClaw 在 VPS 上使用有头浏览器完全指南
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 本教程教你如何在 VPS 上配置有头浏览器，让 OpenClaw 像真人一样操作网页，绕过各种反爬和机器人检测。
+目录 为什么需要有头浏览器 环境准备 配置 OpenClaw Browser Profile 使用 Browser 工具 持久化登录状态 身份伪装技巧 常见问题 完整启动脚本 安全访问：SSH 隧道 1. 为什么需要有头浏览器？ Headless 浏览器的问题：
+容易被网站检测为机器人 很多网站（如 Twitter/X、Google）会直接拒绝服务 验证码更难通过 有头浏览器的优势：
+行为特征与真实用户一致 可以通过 VNC 手动介入处理验证码 登录状态可持久保存 2. 环境准备 2.1 安装 VNC 服务 # 安装 TigerVNC apt update &amp;&amp; apt install -y tigervnc-standalone-server # 设置 VNC 密码 vncpasswd # 启动 VNC（分辨率 1280x800） vncserver :1 -geometry 1280x800 -depth 24 2.2 安装桌面环境（可选，轻量） # 安装 fluxbox（轻量级窗口管理器） apt install -y fluxbox # 或者安装 xfce4（功能更全） apt install -y xfce4 xfce4-goodies 2.3 安装 Chromium apt install -y chromium 2.4 启动有头浏览器 # 在 VNC 显示器上启动 Chromium，开启远程调试端口 nohup bash -c &#39;DISPLAY=:1 chromium \ --no-sandbox \ --no-first-run \ --remote-debugging-port=9222 \ --user-data-dir=/root/chrome-data \ https://google.com&#39; &gt; /tmp/chrome.log 2&gt;&amp;1 &amp; 参数说明：
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2026-02-04 00:00:00 +0800 +0800'>February 4, 2026</span>&nbsp;·&nbsp;<span>4 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
+  <a class="entry-link" aria-label="post link to OpenClaw 在 VPS 上使用有头浏览器完全指南" href="https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-browser-vps/"></a>
+</article>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">保姆级 VLESS &#43; Reality &amp; CDN 加速全指南
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p> 这是一份从零到上线的专业教程，涵盖 VLESS &#43; Reality 直连 与 VMess&#43;WS&#43;TLS 经 CDN 的双线路方案，附带工作原理、排错与性能优化建议。适合具备基础 Linux 经验的读者。
+目录 为什么要双线路（Reality 直连 &#43; CDN 备用） 前置条件与规划 服务端部署步骤 客户端配置示例 如何理解 Cloudflare Tunnel 的工作方式 常见 502 / 超时错误排查 低延迟优化指南 安全与运维清单 1. 为什么要双线路？ 抗封锁与稳定性：Reality 直连不依赖域名或 CDN，抗干扰强；CDN 线路可在域名遭遇干扰时快速切换。 速度与体验：直连延迟低、握手短；跨境链路拥塞或晚高峰时，可用 CDN 线路借助边缘节点绕路提速。 灵活扩展：两条线路并行，客户端可按延迟/健康度自动切换，也可手动一键切换。 2. 前置条件与规划 服务器：境外 VPS（Debian 11&#43;/Ubuntu 22.04，1C1G&#43;，root 权限）。 域名：用于 CDN 方案；Reality 直连可不依赖域名。 基础能力：SSH、编辑配置、查看日志。 端口规划：建议 Reality 用 443/8443 或高位随机端口；WS 端口 443/8443，与防火墙放行一致。 3. 服务端部署 3.1 开启 BBR（推荐） uname -r cat &lt;&lt;&#39;EOF&#39; | sudo tee /etc/sysctl.d/99-bbr.conf net.core.default_qdisc=fq net.ipv4.tcp_congestion_control=bbr EOF sudo sysctl --system sysctl net.ipv4.tcp_congestion_control net.core.default_qdisc 输出含 bbr 和 fq 即生效。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2024-05-01 00:00:00 +0000 UTC'>May 1, 2024</span>&nbsp;·&nbsp;<span>3 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
+  <a class="entry-link" aria-label="post link to 保姆级 VLESS &#43; Reality & CDN 加速全指南" href="https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/"></a>
+</article>
     </main>
     
 <footer class="footer">

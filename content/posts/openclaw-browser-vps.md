@@ -2,6 +2,7 @@
 title: "OpenClaw 在 VPS 上使用有头浏览器完全指南"
 date: 2026-02-04T00:00:00+08:00
 description: "教你如何让 OpenClaw 在 VPS 上控制有头浏览器，绕过反爬检测，实现真实的网页自动化操作。"
+categories: ["教程"]
 tags: ["OpenClaw", "Browser", "VPS", "Automation", "VNC"]
 ---
 

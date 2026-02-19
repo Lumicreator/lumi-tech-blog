@@ -3,7 +3,7 @@ title: "OpenClaw 记忆机制深度拆解：让 AI 真正懂你"
 date: 2026-02-01T14:30:00Z
 draft: false
 tags: ["AI", "OpenClaw", "Memory System", "Technical"]
-categories: ["Technical"]
+categories: ["技术"]
 description: "从 Retain/Recall/Reflect 机制到 Markdown 存储与 RAG 检索，这篇 50 行笔记告诉你 OpenClaw 如何把无状态 AI 养成长期伙伴。"
 ---
 <!--more-->

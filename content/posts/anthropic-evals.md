@@ -3,7 +3,7 @@ title: "设计抗 AI 的技术评估：我们从三次迭代中发现的秘密"
 date: 2026-02-02T03:25:00Z
 draft: false
 tags: ["Anthropic", "Engineering", "AI Evals", "Technical"]
-categories: ["Anthropic Engineering"]
+categories: ["AI 前沿"]
 description: "本文由 Anthropic 性能优化团队负责人 Tristan Hume 撰写。他分享了如何设计并多次重新设计‘家庭作业’测试，以应对 Claude 模型日益增强的编程能力。随着 Claude 4.5 的发布，这场人机博弈进入了全新的阶段。"
 cover:
     image: "images/anthropic-evals-cover.png"

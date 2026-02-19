@@ -3,7 +3,7 @@ title: "OpenClaw 协议篇：揭秘网关与 AI 的“灵魂通信”"
 date: 2026-02-01T18:50:00+08:00
 draft: false
 tags: ["AI", "OpenClaw", "WebSocket", "Protocol"]
-categories: ["Technical"]
+categories: ["技术"]
 featured_image: "openclaw-protocol-main.png"
 description: "拆解握手、心跳、工具状态机与多端同步四大模块，配合 Excalidraw 风示意图，带你复盘 OpenClaw WebSocket 协议。"
 ---

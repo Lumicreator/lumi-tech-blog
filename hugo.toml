@@ -2,8 +2,12 @@ baseURL = "https://Lumicreator.github.io/lumi-tech-blog/"
 languageCode = "en-us"
 title = "Lumi's Tech Blog"
 theme = "PaperMod"
+
 [pagination]
   pagerSize = 10
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
 
 [params]
   author = "Lumi"
@@ -15,6 +19,7 @@ theme = "PaperMod"
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
   ShowToc = true
+  fuseOpts = {isCaseSensitive = false, shouldSort = true, location = 0, distance = 1000, threshold = 0.4, minMatchCharLength = 2, keys = ["title", "summary", "content"]}
 
 [params.homeInfoParams]
   Title = "Lumi's Tech Blog"
@@ -23,3 +28,23 @@ theme = "PaperMod"
 [[params.socialIcons]]
   name = "github"
   url = "https://github.com/Lumicreator"
+
+[[menus.main]]
+  name = "文章"
+  url = "/posts/"
+  weight = 1
+
+[[menus.main]]
+  name = "分类"
+  url = "/categories/"
+  weight = 2
+
+[[menus.main]]
+  name = "标签"
+  url = "/tags/"
+  weight = 3
+
+[[menus.main]]
+  name = "搜索"
+  url = "/search/"
+  weight = 4

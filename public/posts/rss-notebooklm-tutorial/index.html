@@ -5,9 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南 | Lumi&#39;s Tech Blog</title>
+<title>我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客 | Lumi&#39;s Tech Blog</title>
 <meta name="keywords" content="AI, RSS, NotebookLM, 自动化, 播客">
-<meta name="description" content="每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。">
+<meta name="description" content="订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。">
 <meta name="author" content="Lumi">
 <link rel="canonical" href="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/">
 <link crossorigin="anonymous" href="/lumi-tech-blog/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
@@ -72,8 +72,8 @@
 
 </script><meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/">
   <meta property="og:site_name" content="Lumi&#39;s Tech Blog">
-  <meta property="og:title" content="用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南">
-  <meta property="og:description" content="每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。">
+  <meta property="og:title" content="我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客">
+  <meta property="og:description" content="订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。">
   <meta property="og:locale" content="en-us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -85,8 +85,8 @@
     <meta property="article:tag" content="自动化">
     <meta property="article:tag" content="播客">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南">
-<meta name="twitter:description" content="每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。">
+<meta name="twitter:title" content="我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客">
+<meta name="twitter:description" content="订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。">
 
 
 <script type="application/ld+json">
@@ -103,7 +103,7 @@
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南",
+      "name": "我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客",
       "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/"
     }
   ]
@@ -113,14 +113,14 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南",
-  "name": "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南",
-  "description": "每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。",
+  "headline": "我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客",
+  "name": "我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客",
+  "description": "订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。",
   "keywords": [
     "AI", "RSS", "NotebookLM", "自动化", "播客"
   ],
-  "articleBody": "每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到你的 Telegram 和 Discord。全程无需人工干预。\n为什么要做这个？ 信息焦虑是现代人的通病。你订阅了几十个 RSS 源，每天几百篇文章，根本看不完。\n但如果有人帮你把这些文章\"消化\"成一期播客呢？\n这正是 Google NotebookLM 的强项——它能把一堆链接变成有逻辑、有深度的对话式播客。而我们要做的，就是把这个过程完全自动化：\nR S S 订 阅 → 自 动 抓 取 → 写 入 N o t e b o o k L M → 生 成 播 客 / P P T → 发 到 你 手 机 整套流程跑起来之后，你每天早上起床就能在 Telegram 收到昨天的 AI 播客，通勤路上听完，信息不落下。\n技术栈一览 组件 作用 Miniflux 自托管 RSS 阅读器，提供 API notebooklm-py NotebookLM 的 Python 客户端 OpenClaw AI 助手框架，负责定时调度和消息发送 ffmpeg / ghostscript 音频/PDF 压缩 前置条件 一台 Linux VPS（1核1G 够用） Python 3.10+ Docker Google 账号（用于 NotebookLM） Telegram Bot 或 Discord Bot（用于接收文件） 第一步：部署 Miniflux Miniflux 是一个极简的自托管 RSS 阅读器，用 Docker Compose 一键启动：\n# docker-compose.yml version: '3' services: db: image: postgres:15 environment: POSTGRES_USER: miniflux POSTGRES_PASSWORD: secret POSTGRES_DB: miniflux volumes: - miniflux-db:/var/lib/postgresql/data miniflux: image: miniflux/miniflux:latest ports: - \"8421:8080\" depends_on: - db environment: DATABASE_URL: postgres://miniflux:secret@db/miniflux?sslmode=disable RUN_MIGRATIONS: 1 CREATE_ADMIN: 1 ADMIN_USERNAME: admin ADMIN_PASSWORD: admin123 volumes: miniflux-db: docker compose up -d 浏览器打开 http://你的IP:8421，登录后添加 RSS 订阅源，然后在 Settings → API Keys 生成一个 API Token 备用。\n第二步：安装并登录 NotebookLM cd ~/clawd/skills/rss-notebooklm python3 -m venv .venv source .venv/bin/activate pip install -r requirements.txt 登录 Google 账号（需要图形界面或 VNC）：\nnotebooklm --storage /root/.notebooklm/storage_state.json auth login 验证登录状态：\nnotebooklm --storage /root/.notebooklm/storage_state.json auth check --test --json # 看到 \"token_fetch\": true 即为成功 注意：登录态约 7 天过期，过期后需重新登录。\n第三步：填写配置文件 cp .env.example .env 编辑 .env：\n# Miniflux MINIFLUX_URL=http://127.0.0.1:8421 MINIFLUX_TOKEN=你的API_Token MINIFLUX_STATUS=unread # 只处理未读文章（可选） # Telegram TELEGRAM_TARGET=你的Telegram数字ID TELEGRAM_ACCOUNT=你的bot名称 # Discord（可选） DISCORD_CHANNEL_ID=你的频道ID DISCORD_ACCOUNT=你的bot名称 第四步：手动测试 python run.py --once 正常输出：\n{ \"notebook_title\": \"RSS Daily 2026-02-19\", \"sources\": 13, \"generation\": { \"audio_cn\": {\"status\": \"pending\"}, \"audio_en\": {\"status\": \"pending\"}, \"slides_cn\": {\"status\": \"pending\"} }, \"watcher_started\": true } 脚本会在后台启动 watcher，生成完成（10-30 分钟）后自动发送文件到 Telegram/Discord。\n第五步：设置每日定时任务 方式一：OpenClaw Cron（推荐）\n让你的 AI 助手设置：每天北京时间 08:00 自动执行 python run.py --once。\n方式二：systemd Timer\nchmod +x systemd_install.sh ./systemd_install.sh 方式三：crontab\n# UTC 00:00 = 北京时间 08:00 0 0 * * * cd /root/clawd/skills/rss-notebooklm \u0026\u0026 .venv/bin/python run.py --once \u003e\u003e /tmp/rss.log 2\u003e\u00261 每天收到什么？ 🎙️ RSS-2026-02-19-CN.mp3 — 中文播客（约 10-20 分钟） 🎙️ RSS-2026-02-19-EN.mp3 — 英文播客 📊 RSS-2026-02-19-slides.pdf — 中文 PPT 摘要 常见问题 sources 为 0？ 检查 Miniflux 是否有订阅源，以及过去 24 小时内是否有新文章。\nNotebookLM 生成失败？ 通常是日限额用完，第二天自动恢复。\n登录态失效？ 重新执行 notebooklm auth login。\n付费墙文章失败？ 正常，脚本自动跳过，不影响其他文章。\n总结 搭建完成后，你只需维护 Miniflux 里的订阅源，其他全部自动化。核心价值：把\"信息过载\"变成\"每日精华\"，用通勤时间消化完昨天的互联网。\n",
-  "wordCount" : "330",
+  "articleBody": "我有一个坏习惯：疯狂订阅 RSS。\nHacker News、少数派、几十个技术博客……每天早上打开 RSS 阅读器，未读数字像债务一样压着我。看不完，但又不敢取关，怕错过什么重要的东西。\n直到我意识到：我根本不需要\"看\"，我需要的是\"听\"。\n通勤路上、做饭的时候、跑步的时候——这些碎片时间加起来每天有两三个小时。如果有人帮我把那些文章整理成一期播客，我完全可以在这些时间消化掉。\n然后我就真的造了这么一台机器。\n它长什么样？ 每天早上 8 点，我的 Telegram 会收到三个文件：\n🎙️ 一期中文播客（两个 AI 主持人对话，10-20 分钟） 🎙️ 一期英文播客（同样内容，练英语用） 📊 一份中文 PPT（给没时间听的时候扫一眼） 内容来源：我订阅的所有 RSS 源，过去 24 小时的新文章。\n全程零人工干预。我唯一要做的事，就是维护我的订阅列表。\n背后的原理 核心是 Google NotebookLM。\n你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。\n我做的事情，就是把\"手动丢链接\"这一步自动化掉：\nR M N 中 T S i o 文 e S n t 播 l i e 客 e 订 ↓ f ↓ b ↓ ↓ g 阅 l o + r 源 每 u 批 o 触 下 a 天 x 量 k 发 英 载 m 抓 （ 写 L 生 文 压 取 R 入 M 成 播 缩 / 过 S （ 客 去 S 自 D 动 + i 2 管 创 s 4 理 建 中 c h 器 当 文 o ） 日 P r 的 P d 新 n T （ 文 o 发 章 t 到 链 e 你 接 b 手 o 机 o ） k ） 整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。\n怎么搭？ 需要准备的东西：\n一台 Linux VPS（1核1G 够用，我用的 Vultr 最便宜那档） Google 账号（NotebookLM 用） Telegram Bot（接收文件用） 第一步：装 Miniflux（RSS 管理器） Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：\n# docker-compose.yml version: '3' services: db: image: postgres:15 environment: POSTGRES_USER: miniflux POSTGRES_PASSWORD: secret POSTGRES_DB: miniflux volumes: - miniflux-db:/var/lib/postgresql/data miniflux: image: miniflux/miniflux:latest ports: - \"8421:8080\" depends_on: - db environment: DATABASE_URL: postgres://miniflux:secret@db/miniflux?sslmode=disable RUN_MIGRATIONS: 1 CREATE_ADMIN: 1 ADMIN_USERNAME: admin ADMIN_PASSWORD: admin123 volumes: miniflux-db: docker compose up -d 起来之后，浏览器打开 http://你的IP:8421，把你想订阅的 RSS 源都加进去。然后在 Settings → API Keys 生成一个 Token，后面要用。\n第二步：登录 NotebookLM 这一步是整个流程里最麻烦的——需要用你的 Google 账号登录，而且登录态大概 7 天过期，需要定期重新登录。\n# 安装 notebooklm-py pip install \"notebooklm-py[browser]\" # 登录（会弹出浏览器，手动点一下） notebooklm --storage ~/.notebooklm/storage_state.json auth login # 验证是否成功 notebooklm --storage ~/.notebooklm/storage_state.json auth check --test --json # 看到 \"token_fetch\": true 就行了 如果你的 VPS 没有图形界面，需要先开 VNC，或者在本地登录完把 storage_state.json 传上去。\n第三步：配置 .env cp .env.example .env 填这几个关键项：\nMINIFLUX_URL=http://127.0.0.1:8421 MINIFLUX_TOKEN=你刚才生成的Token TELEGRAM_TARGET=你的Telegram数字ID TELEGRAM_ACCOUNT=你的bot名称 第四步：跑一次试试 python run.py --once 如果看到这样的输出，就说明成功了：\n{ \"notebook_title\": \"RSS Daily 2026-02-19\", \"sources\": 13, \"watcher_started\": true } 然后等 10-30 分钟，Telegram 就会收到文件。\n第一次收到的时候我愣了一下——两个 AI 在用中文聊我今天订阅的文章，逻辑还挺顺的。有点奇妙。\n第五步：设置每天自动跑 加一条 crontab（UTC 0 点 = 北京时间 8 点）：\n0 0 * * * cd /你的目录/rss-notebooklm \u0026\u0026 .venv/bin/python run.py --once \u003e\u003e /tmp/rss.log 2\u003e\u00261 或者用 OpenClaw 的 cron 功能，让 AI 助手帮你管。\n用了一段时间之后 说几个真实感受：\n好的地方： 信息焦虑真的少了很多。以前看到未读 300+ 会有压力，现在知道反正会有播客，反而不那么焦虑了。英文播客意外地好用，相当于每天有一期专门讲我关注领域的英文 podcast。\n不好的地方： NotebookLM 有日限额，偶尔会生成失败，第二天才能补上。付费墙文章（NYT 之类的）会被跳过，这个没办法。\n意外收获： 有时候 AI 主持人会把几篇看似不相关的文章串联起来，发现一些我自己没注意到的联系。这个挺有意思的。\n常见问题 Q：sources 为 0，没抓到文章？ 先确认 Miniflux 里有订阅源，而且过去 24 小时内有更新。新加的订阅源可能需要等一天才有内容。\nQ：NotebookLM 生成失败？ 大概率是日限额用完了，第二天自动恢复，不用管。\nQ：登录态失效了？ 重新跑一次 notebooklm auth login，重新登录 Google 账号。\nQ：想订阅哪些源？ 我自己订了：Hacker News、少数派、The Verge、几个 AI 公司的博客（Anthropic、OpenAI、Google DeepMind）、一些独立技术博主。根据自己的兴趣来就行。\n信息时代最稀缺的不是信息，是消化信息的时间和注意力。\n这套系统帮我把\"看不完的文章\"变成了\"通勤路上的播客\"，算是找到了一个还不错的平衡点。\n如果你也有信息焦虑的问题，可以试试。\n",
+  "wordCount" : "384",
   "inLanguage": "en",
   "datePublished": "2026-02-19T00:00:00Z",
   "dateModified": "2026-02-19T00:00:00Z",
@@ -201,10 +201,10 @@
   <header class="post-header">
     <div class="breadcrumbs"><a href="https://Lumicreator.github.io/lumi-tech-blog/">Home</a>&nbsp;»&nbsp;<a href="https://Lumicreator.github.io/lumi-tech-blog/posts/">Posts</a></div>
     <h1 class="post-title entry-hint-parent">
-      用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南
+      我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客
     </h1>
     <div class="post-description">
-      每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。
+      订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。
     </div>
     <div class="post-meta"><span title='2026-02-19 00:00:00 +0000 UTC'>February 19, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span>
 
@@ -217,38 +217,53 @@
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e8%a6%81%e5%81%9a%e8%bf%99%e4%b8%aa" aria-label="为什么要做这个？">为什么要做这个？</a></li>
+                    <a href="#%e5%ae%83%e9%95%bf%e4%bb%80%e4%b9%88%e6%a0%b7" aria-label="它长什么样？">它长什么样？</a></li>
                 <li>
-                    <a href="#%e6%8a%80%e6%9c%af%e6%a0%88%e4%b8%80%e8%a7%88" aria-label="技术栈一览">技术栈一览</a></li>
+                    <a href="#%e8%83%8c%e5%90%8e%e7%9a%84%e5%8e%9f%e7%90%86" aria-label="背后的原理">背后的原理</a></li>
                 <li>
-                    <a href="#%e5%89%8d%e7%bd%ae%e6%9d%a1%e4%bb%b6" aria-label="前置条件">前置条件</a></li>
+                    <a href="#%e6%80%8e%e4%b9%88%e6%90%ad" aria-label="怎么搭？">怎么搭？</a><ul>
+                        
                 <li>
-                    <a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e9%83%a8%e7%bd%b2-miniflux" aria-label="第一步：部署 Miniflux">第一步：部署 Miniflux</a></li>
+                    <a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e8%a3%85-minifluxrss-%e7%ae%a1%e7%90%86%e5%99%a8" aria-label="第一步：装 Miniflux（RSS 管理器）">第一步：装 Miniflux（RSS 管理器）</a></li>
                 <li>
-                    <a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e5%ae%89%e8%a3%85%e5%b9%b6%e7%99%bb%e5%bd%95-notebooklm" aria-label="第二步：安装并登录 NotebookLM">第二步：安装并登录 NotebookLM</a></li>
+                    <a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e7%99%bb%e5%bd%95-notebooklm" aria-label="第二步：登录 NotebookLM">第二步：登录 NotebookLM</a></li>
                 <li>
-                    <a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e5%a1%ab%e5%86%99%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" aria-label="第三步：填写配置文件">第三步：填写配置文件</a></li>
+                    <a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e9%85%8d%e7%bd%ae-env" aria-label="第三步：配置 .env">第三步：配置 .env</a></li>
                 <li>
-                    <a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e6%89%8b%e5%8a%a8%e6%b5%8b%e8%af%95" aria-label="第四步：手动测试">第四步：手动测试</a></li>
+                    <a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e8%b7%91%e4%b8%80%e6%ac%a1%e8%af%95%e8%af%95" aria-label="第四步：跑一次试试">第四步：跑一次试试</a></li>
                 <li>
-                    <a href="#%e7%ac%ac%e4%ba%94%e6%ad%a5%e8%ae%be%e7%bd%ae%e6%af%8f%e6%97%a5%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1" aria-label="第五步：设置每日定时任务">第五步：设置每日定时任务</a></li>
+                    <a href="#%e7%ac%ac%e4%ba%94%e6%ad%a5%e8%ae%be%e7%bd%ae%e6%af%8f%e5%a4%a9%e8%87%aa%e5%8a%a8%e8%b7%91" aria-label="第五步：设置每天自动跑">第五步：设置每天自动跑</a></li></ul>
+                </li>
                 <li>
-                    <a href="#%e6%af%8f%e5%a4%a9%e6%94%b6%e5%88%b0%e4%bb%80%e4%b9%88" aria-label="每天收到什么？">每天收到什么？</a></li>
+                    <a href="#%e7%94%a8%e4%ba%86%e4%b8%80%e6%ae%b5%e6%97%b6%e9%97%b4%e4%b9%8b%e5%90%8e" aria-label="用了一段时间之后">用了一段时间之后</a></li>
                 <li>
-                    <a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" aria-label="常见问题">常见问题</a></li>
-                <li>
-                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                    <a href="#%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98" aria-label="常见问题">常见问题</a>
                 </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><p>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到你的 Telegram 和 Discord。全程无需人工干预。</p>
-<h2 id="为什么要做这个">为什么要做这个？<a hidden class="anchor" aria-hidden="true" href="#为什么要做这个">#</a></h2>
-<p>信息焦虑是现代人的通病。你订阅了几十个 RSS 源，每天几百篇文章，根本看不完。</p>
-<p>但如果有人帮你把这些文章&quot;消化&quot;成一期播客呢？</p>
-<p>这正是 Google NotebookLM 的强项——它能把一堆链接变成有逻辑、有深度的对话式播客。而我们要做的，就是把这个过程<strong>完全自动化</strong>：</p>
+  <div class="post-content"><p>我有一个坏习惯：疯狂订阅 RSS。</p>
+<p>Hacker News、少数派、几十个技术博客……每天早上打开 RSS 阅读器，未读数字像债务一样压着我。看不完，但又不敢取关，怕错过什么重要的东西。</p>
+<p>直到我意识到：<strong>我根本不需要&quot;看&quot;，我需要的是&quot;听&quot;。</strong></p>
+<p>通勤路上、做饭的时候、跑步的时候——这些碎片时间加起来每天有两三个小时。如果有人帮我把那些文章整理成一期播客，我完全可以在这些时间消化掉。</p>
+<p>然后我就真的造了这么一台机器。</p>
+<hr>
+<h2 id="它长什么样">它长什么样？<a hidden class="anchor" aria-hidden="true" href="#它长什么样">#</a></h2>
+<p>每天早上 8 点，我的 Telegram 会收到三个文件：</p>
+<ul>
+<li>🎙️ 一期<strong>中文播客</strong>（两个 AI 主持人对话，10-20 分钟）</li>
+<li>🎙️ 一期<strong>英文播客</strong>（同样内容，练英语用）</li>
+<li>📊 一份<strong>中文 PPT</strong>（给没时间听的时候扫一眼）</li>
+</ul>
+<p>内容来源：我订阅的所有 RSS 源，过去 24 小时的新文章。</p>
+<p>全程零人工干预。我唯一要做的事，就是维护我的订阅列表。</p>
+<hr>
+<h2 id="背后的原理">背后的原理<a hidden class="anchor" aria-hidden="true" href="#背后的原理">#</a></h2>
+<p>核心是 <strong>Google NotebookLM</strong>。</p>
+<p>你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。</p>
+<p>我做的事情，就是把&quot;手动丢链接&quot;这一步自动化掉：</p>
 
 
 
@@ -258,91 +273,142 @@
       xmlns="http://www.w3.org/2000/svg"
       font-family="Menlo,Lucida Console,monospace"
       
-        viewBox="0 0 392 25"
+        viewBox="0 0 224 153"
       >
       <g transform='translate(8,16)'>
 <text text-anchor='middle' x='0' y='4' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='0' y='36' fill='currentColor' style='font-size:1em'>M</text>
+<text text-anchor='middle' x='0' y='68' fill='currentColor' style='font-size:1em'>N</text>
+<text text-anchor='middle' x='0' y='100' fill='currentColor' style='font-size:1em'>中</text>
+<text text-anchor='middle' x='0' y='132' fill='currentColor' style='font-size:1em'>T</text>
 <text text-anchor='middle' x='8' y='4' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='8' y='36' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='8' y='68' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='8' y='100' fill='currentColor' style='font-size:1em'>文</text>
+<text text-anchor='middle' x='8' y='132' fill='currentColor' style='font-size:1em'>e</text>
 <text text-anchor='middle' x='16' y='4' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='16' y='36' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='16' y='68' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='16' y='100' fill='currentColor' style='font-size:1em'>播</text>
+<text text-anchor='middle' x='16' y='132' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='24' y='36' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='24' y='68' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='24' y='100' fill='currentColor' style='font-size:1em'>客</text>
+<text text-anchor='middle' x='24' y='132' fill='currentColor' style='font-size:1em'>e</text>
 <text text-anchor='middle' x='32' y='4' fill='currentColor' style='font-size:1em'>订</text>
+<text text-anchor='middle' x='32' y='20' fill='currentColor' style='font-size:1em'>↓</text>
+<text text-anchor='middle' x='32' y='36' fill='currentColor' style='font-size:1em'>f</text>
+<text text-anchor='middle' x='32' y='52' fill='currentColor' style='font-size:1em'>↓</text>
+<text text-anchor='middle' x='32' y='68' fill='currentColor' style='font-size:1em'>b</text>
+<text text-anchor='middle' x='32' y='84' fill='currentColor' style='font-size:1em'>↓</text>
+<text text-anchor='middle' x='32' y='116' fill='currentColor' style='font-size:1em'>↓</text>
+<text text-anchor='middle' x='32' y='132' fill='currentColor' style='font-size:1em'>g</text>
 <text text-anchor='middle' x='40' y='4' fill='currentColor' style='font-size:1em'>阅</text>
-<text text-anchor='middle' x='56' y='4' fill='currentColor' style='font-size:1em'>→</text>
-<text text-anchor='middle' x='72' y='4' fill='currentColor' style='font-size:1em'>自</text>
-<text text-anchor='middle' x='80' y='4' fill='currentColor' style='font-size:1em'>动</text>
-<text text-anchor='middle' x='88' y='4' fill='currentColor' style='font-size:1em'>抓</text>
-<text text-anchor='middle' x='96' y='4' fill='currentColor' style='font-size:1em'>取</text>
-<text text-anchor='middle' x='112' y='4' fill='currentColor' style='font-size:1em'>→</text>
-<text text-anchor='middle' x='128' y='4' fill='currentColor' style='font-size:1em'>写</text>
-<text text-anchor='middle' x='136' y='4' fill='currentColor' style='font-size:1em'>入</text>
-<text text-anchor='middle' x='152' y='4' fill='currentColor' style='font-size:1em'>N</text>
-<text text-anchor='middle' x='160' y='4' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='168' y='4' fill='currentColor' style='font-size:1em'>t</text>
-<text text-anchor='middle' x='176' y='4' fill='currentColor' style='font-size:1em'>e</text>
-<text text-anchor='middle' x='184' y='4' fill='currentColor' style='font-size:1em'>b</text>
-<text text-anchor='middle' x='192' y='4' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='200' y='4' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='208' y='4' fill='currentColor' style='font-size:1em'>k</text>
-<text text-anchor='middle' x='216' y='4' fill='currentColor' style='font-size:1em'>L</text>
-<text text-anchor='middle' x='224' y='4' fill='currentColor' style='font-size:1em'>M</text>
-<text text-anchor='middle' x='240' y='4' fill='currentColor' style='font-size:1em'>→</text>
-<text text-anchor='middle' x='256' y='4' fill='currentColor' style='font-size:1em'>生</text>
-<text text-anchor='middle' x='264' y='4' fill='currentColor' style='font-size:1em'>成</text>
-<text text-anchor='middle' x='272' y='4' fill='currentColor' style='font-size:1em'>播</text>
-<text text-anchor='middle' x='280' y='4' fill='currentColor' style='font-size:1em'>客</text>
-<text text-anchor='middle' x='288' y='4' fill='currentColor' style='font-size:1em'>/</text>
-<text text-anchor='middle' x='296' y='4' fill='currentColor' style='font-size:1em'>P</text>
-<text text-anchor='middle' x='304' y='4' fill='currentColor' style='font-size:1em'>P</text>
-<text text-anchor='middle' x='312' y='4' fill='currentColor' style='font-size:1em'>T</text>
-<text text-anchor='middle' x='328' y='4' fill='currentColor' style='font-size:1em'>→</text>
-<text text-anchor='middle' x='344' y='4' fill='currentColor' style='font-size:1em'>发</text>
-<text text-anchor='middle' x='352' y='4' fill='currentColor' style='font-size:1em'>到</text>
-<text text-anchor='middle' x='360' y='4' fill='currentColor' style='font-size:1em'>你</text>
-<text text-anchor='middle' x='368' y='4' fill='currentColor' style='font-size:1em'>手</text>
-<text text-anchor='middle' x='376' y='4' fill='currentColor' style='font-size:1em'>机</text>
+<text text-anchor='middle' x='40' y='36' fill='currentColor' style='font-size:1em'>l</text>
+<text text-anchor='middle' x='40' y='68' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='40' y='100' fill='currentColor' style='font-size:1em'>+</text>
+<text text-anchor='middle' x='40' y='132' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='48' y='4' fill='currentColor' style='font-size:1em'>源</text>
+<text text-anchor='middle' x='48' y='20' fill='currentColor' style='font-size:1em'>每</text>
+<text text-anchor='middle' x='48' y='36' fill='currentColor' style='font-size:1em'>u</text>
+<text text-anchor='middle' x='48' y='52' fill='currentColor' style='font-size:1em'>批</text>
+<text text-anchor='middle' x='48' y='68' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='48' y='84' fill='currentColor' style='font-size:1em'>触</text>
+<text text-anchor='middle' x='48' y='116' fill='currentColor' style='font-size:1em'>下</text>
+<text text-anchor='middle' x='48' y='132' fill='currentColor' style='font-size:1em'>a</text>
+<text text-anchor='middle' x='56' y='20' fill='currentColor' style='font-size:1em'>天</text>
+<text text-anchor='middle' x='56' y='36' fill='currentColor' style='font-size:1em'>x</text>
+<text text-anchor='middle' x='56' y='52' fill='currentColor' style='font-size:1em'>量</text>
+<text text-anchor='middle' x='56' y='68' fill='currentColor' style='font-size:1em'>k</text>
+<text text-anchor='middle' x='56' y='84' fill='currentColor' style='font-size:1em'>发</text>
+<text text-anchor='middle' x='56' y='100' fill='currentColor' style='font-size:1em'>英</text>
+<text text-anchor='middle' x='56' y='116' fill='currentColor' style='font-size:1em'>载</text>
+<text text-anchor='middle' x='56' y='132' fill='currentColor' style='font-size:1em'>m</text>
+<text text-anchor='middle' x='64' y='20' fill='currentColor' style='font-size:1em'>抓</text>
+<text text-anchor='middle' x='64' y='36' fill='currentColor' style='font-size:1em'>（</text>
+<text text-anchor='middle' x='64' y='52' fill='currentColor' style='font-size:1em'>写</text>
+<text text-anchor='middle' x='64' y='68' fill='currentColor' style='font-size:1em'>L</text>
+<text text-anchor='middle' x='64' y='84' fill='currentColor' style='font-size:1em'>生</text>
+<text text-anchor='middle' x='64' y='100' fill='currentColor' style='font-size:1em'>文</text>
+<text text-anchor='middle' x='64' y='116' fill='currentColor' style='font-size:1em'>压</text>
+<text text-anchor='middle' x='72' y='20' fill='currentColor' style='font-size:1em'>取</text>
+<text text-anchor='middle' x='72' y='36' fill='currentColor' style='font-size:1em'>R</text>
+<text text-anchor='middle' x='72' y='52' fill='currentColor' style='font-size:1em'>入</text>
+<text text-anchor='middle' x='72' y='68' fill='currentColor' style='font-size:1em'>M</text>
+<text text-anchor='middle' x='72' y='84' fill='currentColor' style='font-size:1em'>成</text>
+<text text-anchor='middle' x='72' y='100' fill='currentColor' style='font-size:1em'>播</text>
+<text text-anchor='middle' x='72' y='116' fill='currentColor' style='font-size:1em'>缩</text>
+<text text-anchor='middle' x='72' y='132' fill='currentColor' style='font-size:1em'>/</text>
+<text text-anchor='middle' x='80' y='20' fill='currentColor' style='font-size:1em'>过</text>
+<text text-anchor='middle' x='80' y='36' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='80' y='68' fill='currentColor' style='font-size:1em'>（</text>
+<text text-anchor='middle' x='80' y='100' fill='currentColor' style='font-size:1em'>客</text>
+<text text-anchor='middle' x='88' y='20' fill='currentColor' style='font-size:1em'>去</text>
+<text text-anchor='middle' x='88' y='36' fill='currentColor' style='font-size:1em'>S</text>
+<text text-anchor='middle' x='88' y='68' fill='currentColor' style='font-size:1em'>自</text>
+<text text-anchor='middle' x='88' y='132' fill='currentColor' style='font-size:1em'>D</text>
+<text text-anchor='middle' x='96' y='68' fill='currentColor' style='font-size:1em'>动</text>
+<text text-anchor='middle' x='96' y='100' fill='currentColor' style='font-size:1em'>+</text>
+<text text-anchor='middle' x='96' y='132' fill='currentColor' style='font-size:1em'>i</text>
+<text text-anchor='middle' x='104' y='20' fill='currentColor' style='font-size:1em'>2</text>
+<text text-anchor='middle' x='104' y='36' fill='currentColor' style='font-size:1em'>管</text>
+<text text-anchor='middle' x='104' y='68' fill='currentColor' style='font-size:1em'>创</text>
+<text text-anchor='middle' x='104' y='132' fill='currentColor' style='font-size:1em'>s</text>
+<text text-anchor='middle' x='112' y='20' fill='currentColor' style='font-size:1em'>4</text>
+<text text-anchor='middle' x='112' y='36' fill='currentColor' style='font-size:1em'>理</text>
+<text text-anchor='middle' x='112' y='68' fill='currentColor' style='font-size:1em'>建</text>
+<text text-anchor='middle' x='112' y='100' fill='currentColor' style='font-size:1em'>中</text>
+<text text-anchor='middle' x='112' y='132' fill='currentColor' style='font-size:1em'>c</text>
+<text text-anchor='middle' x='120' y='20' fill='currentColor' style='font-size:1em'>h</text>
+<text text-anchor='middle' x='120' y='36' fill='currentColor' style='font-size:1em'>器</text>
+<text text-anchor='middle' x='120' y='68' fill='currentColor' style='font-size:1em'>当</text>
+<text text-anchor='middle' x='120' y='100' fill='currentColor' style='font-size:1em'>文</text>
+<text text-anchor='middle' x='120' y='132' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='128' y='36' fill='currentColor' style='font-size:1em'>）</text>
+<text text-anchor='middle' x='128' y='68' fill='currentColor' style='font-size:1em'>日</text>
+<text text-anchor='middle' x='128' y='100' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='128' y='132' fill='currentColor' style='font-size:1em'>r</text>
+<text text-anchor='middle' x='136' y='20' fill='currentColor' style='font-size:1em'>的</text>
+<text text-anchor='middle' x='136' y='100' fill='currentColor' style='font-size:1em'>P</text>
+<text text-anchor='middle' x='136' y='132' fill='currentColor' style='font-size:1em'>d</text>
+<text text-anchor='middle' x='144' y='20' fill='currentColor' style='font-size:1em'>新</text>
+<text text-anchor='middle' x='144' y='68' fill='currentColor' style='font-size:1em'>n</text>
+<text text-anchor='middle' x='144' y='100' fill='currentColor' style='font-size:1em'>T</text>
+<text text-anchor='middle' x='144' y='132' fill='currentColor' style='font-size:1em'>（</text>
+<text text-anchor='middle' x='152' y='20' fill='currentColor' style='font-size:1em'>文</text>
+<text text-anchor='middle' x='152' y='68' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='152' y='132' fill='currentColor' style='font-size:1em'>发</text>
+<text text-anchor='middle' x='160' y='20' fill='currentColor' style='font-size:1em'>章</text>
+<text text-anchor='middle' x='160' y='68' fill='currentColor' style='font-size:1em'>t</text>
+<text text-anchor='middle' x='160' y='132' fill='currentColor' style='font-size:1em'>到</text>
+<text text-anchor='middle' x='168' y='20' fill='currentColor' style='font-size:1em'>链</text>
+<text text-anchor='middle' x='168' y='68' fill='currentColor' style='font-size:1em'>e</text>
+<text text-anchor='middle' x='168' y='132' fill='currentColor' style='font-size:1em'>你</text>
+<text text-anchor='middle' x='176' y='20' fill='currentColor' style='font-size:1em'>接</text>
+<text text-anchor='middle' x='176' y='68' fill='currentColor' style='font-size:1em'>b</text>
+<text text-anchor='middle' x='176' y='132' fill='currentColor' style='font-size:1em'>手</text>
+<text text-anchor='middle' x='184' y='68' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='184' y='132' fill='currentColor' style='font-size:1em'>机</text>
+<text text-anchor='middle' x='192' y='68' fill='currentColor' style='font-size:1em'>o</text>
+<text text-anchor='middle' x='192' y='132' fill='currentColor' style='font-size:1em'>）</text>
+<text text-anchor='middle' x='200' y='68' fill='currentColor' style='font-size:1em'>k</text>
+<text text-anchor='middle' x='208' y='68' fill='currentColor' style='font-size:1em'>）</text>
 </g>
 
     </svg>
   
 </div>
-<p>整套流程跑起来之后，你每天早上起床就能在 Telegram 收到昨天的 AI 播客，通勤路上听完，信息不落下。</p>
-<h2 id="技术栈一览">技术栈一览<a hidden class="anchor" aria-hidden="true" href="#技术栈一览">#</a></h2>
-<table>
-  <thead>
-      <tr>
-          <th>组件</th>
-          <th>作用</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><strong>Miniflux</strong></td>
-          <td>自托管 RSS 阅读器，提供 API</td>
-      </tr>
-      <tr>
-          <td><strong>notebooklm-py</strong></td>
-          <td>NotebookLM 的 Python 客户端</td>
-      </tr>
-      <tr>
-          <td><strong>OpenClaw</strong></td>
-          <td>AI 助手框架，负责定时调度和消息发送</td>
-      </tr>
-      <tr>
-          <td><strong>ffmpeg / ghostscript</strong></td>
-          <td>音频/PDF 压缩</td>
-      </tr>
-  </tbody>
-</table>
-<h2 id="前置条件">前置条件<a hidden class="anchor" aria-hidden="true" href="#前置条件">#</a></h2>
-<ul>
-<li>一台 Linux VPS（1核1G 够用）</li>
-<li>Python 3.10+</li>
-<li>Docker</li>
-<li>Google 账号（用于 NotebookLM）</li>
-<li>Telegram Bot 或 Discord Bot（用于接收文件）</li>
-</ul>
+<p>整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。</p>
 <hr>
-<h2 id="第一步部署-miniflux">第一步：部署 Miniflux<a hidden class="anchor" aria-hidden="true" href="#第一步部署-miniflux">#</a></h2>
-<p>Miniflux 是一个极简的自托管 RSS 阅读器，用 Docker Compose 一键启动：</p>
+<h2 id="怎么搭">怎么搭？<a hidden class="anchor" aria-hidden="true" href="#怎么搭">#</a></h2>
+<p>需要准备的东西：</p>
+<ul>
+<li>一台 Linux VPS（1核1G 够用，我用的 Vultr 最便宜那档）</li>
+<li>Google 账号（NotebookLM 用）</li>
+<li>Telegram Bot（接收文件用）</li>
+</ul>
+<h3 id="第一步装-minifluxrss-管理器">第一步：装 Miniflux（RSS 管理器）<a hidden class="anchor" aria-hidden="true" href="#第一步装-minifluxrss-管理器">#</a></h3>
+<p>Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># docker-compose.yml</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">version</span>: <span style="color:#e6db74">&#39;3&#39;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">services</span>:
@@ -371,77 +437,62 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">volumes</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">miniflux-db</span>:
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>docker compose up -d
-</span></span></code></pre></div><p>浏览器打开 <code>http://你的IP:8421</code>，登录后添加 RSS 订阅源，然后在 <strong>Settings → API Keys</strong> 生成一个 API Token 备用。</p>
-<hr>
-<h2 id="第二步安装并登录-notebooklm">第二步：安装并登录 NotebookLM<a hidden class="anchor" aria-hidden="true" href="#第二步安装并登录-notebooklm">#</a></h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cd ~/clawd/skills/rss-notebooklm
-</span></span><span style="display:flex;"><span>python3 -m venv .venv
-</span></span><span style="display:flex;"><span>source .venv/bin/activate
-</span></span><span style="display:flex;"><span>pip install -r requirements.txt
-</span></span></code></pre></div><p>登录 Google 账号（需要图形界面或 VNC）：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>notebooklm --storage /root/.notebooklm/storage_state.json auth login
-</span></span></code></pre></div><p>验证登录状态：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>notebooklm --storage /root/.notebooklm/storage_state.json auth check --test --json
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 看到 &#34;token_fetch&#34;: true 即为成功</span>
-</span></span></code></pre></div><blockquote>
-<p><strong>注意</strong>：登录态约 7 天过期，过期后需重新登录。</p></blockquote>
-<hr>
-<h2 id="第三步填写配置文件">第三步：填写配置文件<a hidden class="anchor" aria-hidden="true" href="#第三步填写配置文件">#</a></h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp .env.example .env
-</span></span></code></pre></div><p>编辑 <code>.env</code>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Miniflux</span>
-</span></span><span style="display:flex;"><span>MINIFLUX_URL<span style="color:#f92672">=</span>http://127.0.0.1:8421
-</span></span><span style="display:flex;"><span>MINIFLUX_TOKEN<span style="color:#f92672">=</span>你的API_Token
-</span></span><span style="display:flex;"><span>MINIFLUX_STATUS<span style="color:#f92672">=</span>unread   <span style="color:#75715e"># 只处理未读文章（可选）</span>
+</span></span></code></pre></div><p>起来之后，浏览器打开 <code>http://你的IP:8421</code>，把你想订阅的 RSS 源都加进去。然后在 <strong>Settings → API Keys</strong> 生成一个 Token，后面要用。</p>
+<h3 id="第二步登录-notebooklm">第二步：登录 NotebookLM<a hidden class="anchor" aria-hidden="true" href="#第二步登录-notebooklm">#</a></h3>
+<p>这一步是整个流程里最麻烦的——需要用你的 Google 账号登录，而且登录态大概 7 天过期，需要定期重新登录。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装 notebooklm-py</span>
+</span></span><span style="display:flex;"><span>pip install <span style="color:#e6db74">&#34;notebooklm-py[browser]&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Telegram</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 登录（会弹出浏览器，手动点一下）</span>
+</span></span><span style="display:flex;"><span>notebooklm --storage ~/.notebooklm/storage_state.json auth login
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证是否成功</span>
+</span></span><span style="display:flex;"><span>notebooklm --storage ~/.notebooklm/storage_state.json auth check --test --json
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 看到 &#34;token_fetch&#34;: true 就行了</span>
+</span></span></code></pre></div><blockquote>
+<p>如果你的 VPS 没有图形界面，需要先开 VNC，或者在本地登录完把 <code>storage_state.json</code> 传上去。</p></blockquote>
+<h3 id="第三步配置-env">第三步：配置 .env<a hidden class="anchor" aria-hidden="true" href="#第三步配置-env">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cp .env.example .env
+</span></span></code></pre></div><p>填这几个关键项：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>MINIFLUX_URL<span style="color:#f92672">=</span>http://127.0.0.1:8421
+</span></span><span style="display:flex;"><span>MINIFLUX_TOKEN<span style="color:#f92672">=</span>你刚才生成的Token
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>TELEGRAM_TARGET<span style="color:#f92672">=</span>你的Telegram数字ID
 </span></span><span style="display:flex;"><span>TELEGRAM_ACCOUNT<span style="color:#f92672">=</span>你的bot名称
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># Discord（可选）</span>
-</span></span><span style="display:flex;"><span>DISCORD_CHANNEL_ID<span style="color:#f92672">=</span>你的频道ID
-</span></span><span style="display:flex;"><span>DISCORD_ACCOUNT<span style="color:#f92672">=</span>你的bot名称
-</span></span></code></pre></div><hr>
-<h2 id="第四步手动测试">第四步：手动测试<a hidden class="anchor" aria-hidden="true" href="#第四步手动测试">#</a></h2>
+</span></span></code></pre></div><h3 id="第四步跑一次试试">第四步：跑一次试试<a hidden class="anchor" aria-hidden="true" href="#第四步跑一次试试">#</a></h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python run.py --once
-</span></span></code></pre></div><p>正常输出：</p>
+</span></span></code></pre></div><p>如果看到这样的输出，就说明成功了：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;notebook_title&#34;</span>: <span style="color:#e6db74">&#34;RSS Daily 2026-02-19&#34;</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;sources&#34;</span>: <span style="color:#ae81ff">13</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;generation&#34;</span>: {
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;audio_cn&#34;</span>: {<span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;pending&#34;</span>},
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;audio_en&#34;</span>: {<span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;pending&#34;</span>},
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;slides_cn&#34;</span>: {<span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;pending&#34;</span>}
-</span></span><span style="display:flex;"><span>  },
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;watcher_started&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>脚本会在后台启动 watcher，生成完成（10-30 分钟）后自动发送文件到 Telegram/Discord。</p>
+</span></span></code></pre></div><p>然后等 10-30 分钟，Telegram 就会收到文件。</p>
+<p>第一次收到的时候我愣了一下——两个 AI 在用中文聊我今天订阅的文章，逻辑还挺顺的。有点奇妙。</p>
+<h3 id="第五步设置每天自动跑">第五步：设置每天自动跑<a hidden class="anchor" aria-hidden="true" href="#第五步设置每天自动跑">#</a></h3>
+<p>加一条 crontab（UTC 0 点 = 北京时间 8 点）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> * * * cd /你的目录/rss-notebooklm <span style="color:#f92672">&amp;&amp;</span> .venv/bin/python run.py --once &gt;&gt; /tmp/rss.log 2&gt;&amp;<span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>或者用 OpenClaw 的 cron 功能，让 AI 助手帮你管。</p>
 <hr>
-<h2 id="第五步设置每日定时任务">第五步：设置每日定时任务<a hidden class="anchor" aria-hidden="true" href="#第五步设置每日定时任务">#</a></h2>
-<p><strong>方式一：OpenClaw Cron（推荐）</strong></p>
-<p>让你的 AI 助手设置：每天北京时间 08:00 自动执行 <code>python run.py --once</code>。</p>
-<p><strong>方式二：systemd Timer</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>chmod +x systemd_install.sh
-</span></span><span style="display:flex;"><span>./systemd_install.sh
-</span></span></code></pre></div><p><strong>方式三：crontab</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># UTC 00:00 = 北京时间 08:00</span>
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span> * * * cd /root/clawd/skills/rss-notebooklm <span style="color:#f92672">&amp;&amp;</span> .venv/bin/python run.py --once &gt;&gt; /tmp/rss.log 2&gt;&amp;<span style="color:#ae81ff">1</span>
-</span></span></code></pre></div><hr>
-<h2 id="每天收到什么">每天收到什么？<a hidden class="anchor" aria-hidden="true" href="#每天收到什么">#</a></h2>
-<ul>
-<li>🎙️ <code>RSS-2026-02-19-CN.mp3</code> — 中文播客（约 10-20 分钟）</li>
-<li>🎙️ <code>RSS-2026-02-19-EN.mp3</code> — 英文播客</li>
-<li>📊 <code>RSS-2026-02-19-slides.pdf</code> — 中文 PPT 摘要</li>
-</ul>
+<h2 id="用了一段时间之后">用了一段时间之后<a hidden class="anchor" aria-hidden="true" href="#用了一段时间之后">#</a></h2>
+<p>说几个真实感受：</p>
+<p><strong>好的地方：</strong> 信息焦虑真的少了很多。以前看到未读 300+ 会有压力，现在知道反正会有播客，反而不那么焦虑了。英文播客意外地好用，相当于每天有一期专门讲我关注领域的英文 podcast。</p>
+<p><strong>不好的地方：</strong> NotebookLM 有日限额，偶尔会生成失败，第二天才能补上。付费墙文章（NYT 之类的）会被跳过，这个没办法。</p>
+<p><strong>意外收获：</strong> 有时候 AI 主持人会把几篇看似不相关的文章串联起来，发现一些我自己没注意到的联系。这个挺有意思的。</p>
 <hr>
 <h2 id="常见问题">常见问题<a hidden class="anchor" aria-hidden="true" href="#常见问题">#</a></h2>
-<p><strong>sources 为 0？</strong> 检查 Miniflux 是否有订阅源，以及过去 24 小时内是否有新文章。</p>
-<p><strong>NotebookLM 生成失败？</strong> 通常是日限额用完，第二天自动恢复。</p>
-<p><strong>登录态失效？</strong> 重新执行 <code>notebooklm auth login</code>。</p>
-<p><strong>付费墙文章失败？</strong> 正常，脚本自动跳过，不影响其他文章。</p>
+<p><strong>Q：sources 为 0，没抓到文章？</strong>
+先确认 Miniflux 里有订阅源，而且过去 24 小时内有更新。新加的订阅源可能需要等一天才有内容。</p>
+<p><strong>Q：NotebookLM 生成失败？</strong>
+大概率是日限额用完了，第二天自动恢复，不用管。</p>
+<p><strong>Q：登录态失效了？</strong>
+重新跑一次 <code>notebooklm auth login</code>，重新登录 Google 账号。</p>
+<p><strong>Q：想订阅哪些源？</strong>
+我自己订了：Hacker News、少数派、The Verge、几个 AI 公司的博客（Anthropic、OpenAI、Google DeepMind）、一些独立技术博主。根据自己的兴趣来就行。</p>
 <hr>
-<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
-<p>搭建完成后，你只需维护 Miniflux 里的订阅源，其他全部自动化。核心价值：<strong>把&quot;信息过载&quot;变成&quot;每日精华&quot;</strong>，用通勤时间消化完昨天的互联网。</p>
+<p>信息时代最稀缺的不是信息，是消化信息的时间和注意力。</p>
+<p>这套系统帮我把&quot;看不完的文章&quot;变成了&quot;通勤路上的播客&quot;，算是找到了一个还不错的平衡点。</p>
+<p>如果你也有信息焦虑的问题，可以试试。</p>
 
 
   </div>

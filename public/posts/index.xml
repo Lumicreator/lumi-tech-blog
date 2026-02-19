@@ -9,11 +9,11 @@
     <lastBuildDate>Thu, 19 Feb 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南</title>
+      <title>我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</link>
       <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/</guid>
-      <description>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。</description>
+      <description>订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。</description>
     </item>
     <item>
       <title>OpenClaw 在 VPS 上使用有头浏览器完全指南</title>

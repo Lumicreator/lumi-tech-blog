@@ -175,20 +175,26 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2 class="entry-hint-parent">用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南
+    <h2 class="entry-hint-parent">我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客
     </h2>
   </header>
   <div class="entry-content">
-    <p>每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到你的 Telegram 和 Discord。全程无需人工干预。
-为什么要做这个？ 信息焦虑是现代人的通病。你订阅了几十个 RSS 源，每天几百篇文章，根本看不完。
-但如果有人帮你把这些文章&#34;消化&#34;成一期播客呢？
-这正是 Google NotebookLM 的强项——它能把一堆链接变成有逻辑、有深度的对话式播客。而我们要做的，就是把这个过程完全自动化：
-R S S 订 阅 → 自 动 抓 取 → 写 入 N o t e b o o k L M → 生 成 播 客 / P P T → 发 到 你 手 机 整套流程跑起来之后，你每天早上起床就能在 Telegram 收到昨天的 AI 播客，通勤路上听完，信息不落下。
-技术栈一览 组件 作用 Miniflux 自托管 RSS 阅读器，提供 API notebooklm-py NotebookLM 的 Python 客户端 OpenClaw AI 助手框架，负责定时调度和消息发送 ffmpeg / ghostscript 音频/PDF 压缩 前置条件 一台 Linux VPS（1核1G 够用） Python 3.10&#43; Docker Google 账号（用于 NotebookLM） Telegram Bot 或 Discord Bot（用于接收文件） 第一步：部署 Miniflux Miniflux 是一个极简的自托管 RSS 阅读器，用 Docker Compose 一键启动：
+    <p>我有一个坏习惯：疯狂订阅 RSS。
+Hacker News、少数派、几十个技术博客……每天早上打开 RSS 阅读器，未读数字像债务一样压着我。看不完，但又不敢取关，怕错过什么重要的东西。
+直到我意识到：我根本不需要&#34;看&#34;，我需要的是&#34;听&#34;。
+通勤路上、做饭的时候、跑步的时候——这些碎片时间加起来每天有两三个小时。如果有人帮我把那些文章整理成一期播客，我完全可以在这些时间消化掉。
+然后我就真的造了这么一台机器。
+它长什么样？ 每天早上 8 点，我的 Telegram 会收到三个文件：
+🎙️ 一期中文播客（两个 AI 主持人对话，10-20 分钟） 🎙️ 一期英文播客（同样内容，练英语用） 📊 一份中文 PPT（给没时间听的时候扫一眼） 内容来源：我订阅的所有 RSS 源，过去 24 小时的新文章。
+全程零人工干预。我唯一要做的事，就是维护我的订阅列表。
+背后的原理 核心是 Google NotebookLM。
+你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。
+我做的事情，就是把&#34;手动丢链接&#34;这一步自动化掉：
+R M N 中 T S i o 文 e S n t 播 l i e 客 e 订 ↓ f ↓ b ↓ ↓ g 阅 l o &#43; r 源 每 u 批 o 触 下 a 天 x 量 k 发 英 载 m 抓 （ 写 L 生 文 压 取 R 入 M 成 播 缩 / 过 S （ 客 去 S 自 D 动 &#43; i 2 管 创 s 4 理 建 中 c h 器 当 文 o ） 日 P r 的 P d 新 n T （ 文 o 发 章 t 到 链 e 你 接 b 手 o 机 o ） k ） 整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。
 ...</p>
   </div>
   <footer class="entry-footer"><span title='2026-02-19 00:00:00 +0000 UTC'>February 19, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
-  <a class="entry-link" aria-label="post link to 用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南" href="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/"></a>
+  <a class="entry-link" aria-label="post link to 我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客" href="https://Lumicreator.github.io/lumi-tech-blog/posts/rss-notebooklm-tutorial/"></a>
 </article>
 
 <article class="post-entry"> 

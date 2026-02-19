@@ -1,51 +1,73 @@
 ---
-title: "用 AI 把每天的 RSS 订阅自动变成播客——RSS × NotebookLM 全自动流水线搭建指南"
+title: "我用 AI 造了一台「信息消化机」——每天早上自动把 RSS 变成播客"
 date: 2026-02-19
 draft: false
 tags: ["AI", "RSS", "NotebookLM", "自动化", "播客"]
 categories: ["教程"]
 author: "Lumi"
-description: "每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到 Telegram 和 Discord。全程无需人工干预。"
+description: "订阅了几十个 RSS 源却根本看不完？我搭了一套全自动流水线，每天早上 8 点把昨天的文章变成播客发到手机，通勤路上听完，信息不落下。"
 ---
 
-每天早上 8 点，自动把你订阅的文章变成中英文播客和 PPT，发到你的 Telegram 和 Discord。全程无需人工干预。
+我有一个坏习惯：疯狂订阅 RSS。
 
-## 为什么要做这个？
+Hacker News、少数派、几十个技术博客……每天早上打开 RSS 阅读器，未读数字像债务一样压着我。看不完，但又不敢取关，怕错过什么重要的东西。
 
-信息焦虑是现代人的通病。你订阅了几十个 RSS 源，每天几百篇文章，根本看不完。
+直到我意识到：**我根本不需要"看"，我需要的是"听"。**
 
-但如果有人帮你把这些文章"消化"成一期播客呢？
+通勤路上、做饭的时候、跑步的时候——这些碎片时间加起来每天有两三个小时。如果有人帮我把那些文章整理成一期播客，我完全可以在这些时间消化掉。
 
-这正是 Google NotebookLM 的强项——它能把一堆链接变成有逻辑、有深度的对话式播客。而我们要做的，就是把这个过程**完全自动化**：
-
-```
-RSS 订阅 → 自动抓取 → 写入 NotebookLM → 生成播客/PPT → 发到你手机
-```
-
-整套流程跑起来之后，你每天早上起床就能在 Telegram 收到昨天的 AI 播客，通勤路上听完，信息不落下。
-
-## 技术栈一览
-
-| 组件 | 作用 |
-|------|------|
-| **Miniflux** | 自托管 RSS 阅读器，提供 API |
-| **notebooklm-py** | NotebookLM 的 Python 客户端 |
-| **OpenClaw** | AI 助手框架，负责定时调度和消息发送 |
-| **ffmpeg / ghostscript** | 音频/PDF 压缩 |
-
-## 前置条件
-
-- 一台 Linux VPS（1核1G 够用）
-- Python 3.10+
-- Docker
-- Google 账号（用于 NotebookLM）
-- Telegram Bot 或 Discord Bot（用于接收文件）
+然后我就真的造了这么一台机器。
 
 ---
 
-## 第一步：部署 Miniflux
+## 它长什么样？
 
-Miniflux 是一个极简的自托管 RSS 阅读器，用 Docker Compose 一键启动：
+每天早上 8 点，我的 Telegram 会收到三个文件：
+
+- 🎙️ 一期**中文播客**（两个 AI 主持人对话，10-20 分钟）
+- 🎙️ 一期**英文播客**（同样内容，练英语用）
+- 📊 一份**中文 PPT**（给没时间听的时候扫一眼）
+
+内容来源：我订阅的所有 RSS 源，过去 24 小时的新文章。
+
+全程零人工干预。我唯一要做的事，就是维护我的订阅列表。
+
+---
+
+## 背后的原理
+
+核心是 **Google NotebookLM**。
+
+你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。
+
+我做的事情，就是把"手动丢链接"这一步自动化掉：
+
+```
+RSS 订阅源
+    ↓ 每天抓取过去 24h 的新文章链接
+Miniflux（RSS 管理器）
+    ↓ 批量写入
+NotebookLM（自动创建当日 notebook）
+    ↓ 触发生成
+中文播客 + 英文播客 + 中文PPT
+    ↓ 下载压缩
+Telegram / Discord（发到你手机）
+```
+
+整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。
+
+---
+
+## 怎么搭？
+
+需要准备的东西：
+- 一台 Linux VPS（1核1G 够用，我用的 Vultr 最便宜那档）
+- Google 账号（NotebookLM 用）
+- Telegram Bot（接收文件用）
+
+### 第一步：装 Miniflux（RSS 管理器）
+
+Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：
 
 ```yaml
 # docker-compose.yml
@@ -81,128 +103,104 @@ volumes:
 docker compose up -d
 ```
 
-浏览器打开 `http://你的IP:8421`，登录后添加 RSS 订阅源，然后在 **Settings → API Keys** 生成一个 API Token 备用。
+起来之后，浏览器打开 `http://你的IP:8421`，把你想订阅的 RSS 源都加进去。然后在 **Settings → API Keys** 生成一个 Token，后面要用。
 
----
+### 第二步：登录 NotebookLM
 
-## 第二步：安装并登录 NotebookLM
-
-```bash
-cd ~/clawd/skills/rss-notebooklm
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-登录 Google 账号（需要图形界面或 VNC）：
+这一步是整个流程里最麻烦的——需要用你的 Google 账号登录，而且登录态大概 7 天过期，需要定期重新登录。
 
 ```bash
-notebooklm --storage /root/.notebooklm/storage_state.json auth login
+# 安装 notebooklm-py
+pip install "notebooklm-py[browser]"
+
+# 登录（会弹出浏览器，手动点一下）
+notebooklm --storage ~/.notebooklm/storage_state.json auth login
+
+# 验证是否成功
+notebooklm --storage ~/.notebooklm/storage_state.json auth check --test --json
+# 看到 "token_fetch": true 就行了
 ```
 
-验证登录状态：
+> 如果你的 VPS 没有图形界面，需要先开 VNC，或者在本地登录完把 `storage_state.json` 传上去。
 
-```bash
-notebooklm --storage /root/.notebooklm/storage_state.json auth check --test --json
-# 看到 "token_fetch": true 即为成功
-```
-
-> **注意**：登录态约 7 天过期，过期后需重新登录。
-
----
-
-## 第三步：填写配置文件
+### 第三步：配置 .env
 
 ```bash
 cp .env.example .env
 ```
 
-编辑 `.env`：
+填这几个关键项：
 
 ```bash
-# Miniflux
 MINIFLUX_URL=http://127.0.0.1:8421
-MINIFLUX_TOKEN=你的API_Token
-MINIFLUX_STATUS=unread   # 只处理未读文章（可选）
+MINIFLUX_TOKEN=你刚才生成的Token
 
-# Telegram
 TELEGRAM_TARGET=你的Telegram数字ID
 TELEGRAM_ACCOUNT=你的bot名称
-
-# Discord（可选）
-DISCORD_CHANNEL_ID=你的频道ID
-DISCORD_ACCOUNT=你的bot名称
 ```
 
----
-
-## 第四步：手动测试
+### 第四步：跑一次试试
 
 ```bash
 python run.py --once
 ```
 
-正常输出：
+如果看到这样的输出，就说明成功了：
 
 ```json
 {
   "notebook_title": "RSS Daily 2026-02-19",
   "sources": 13,
-  "generation": {
-    "audio_cn": {"status": "pending"},
-    "audio_en": {"status": "pending"},
-    "slides_cn": {"status": "pending"}
-  },
   "watcher_started": true
 }
 ```
 
-脚本会在后台启动 watcher，生成完成（10-30 分钟）后自动发送文件到 Telegram/Discord。
+然后等 10-30 分钟，Telegram 就会收到文件。
+
+第一次收到的时候我愣了一下——两个 AI 在用中文聊我今天订阅的文章，逻辑还挺顺的。有点奇妙。
+
+### 第五步：设置每天自动跑
+
+加一条 crontab（UTC 0 点 = 北京时间 8 点）：
+
+```bash
+0 0 * * * cd /你的目录/rss-notebooklm && .venv/bin/python run.py --once >> /tmp/rss.log 2>&1
+```
+
+或者用 OpenClaw 的 cron 功能，让 AI 助手帮你管。
 
 ---
 
-## 第五步：设置每日定时任务
+## 用了一段时间之后
 
-**方式一：OpenClaw Cron（推荐）**
+说几个真实感受：
 
-让你的 AI 助手设置：每天北京时间 08:00 自动执行 `python run.py --once`。
+**好的地方：** 信息焦虑真的少了很多。以前看到未读 300+ 会有压力，现在知道反正会有播客，反而不那么焦虑了。英文播客意外地好用，相当于每天有一期专门讲我关注领域的英文 podcast。
 
-**方式二：systemd Timer**
+**不好的地方：** NotebookLM 有日限额，偶尔会生成失败，第二天才能补上。付费墙文章（NYT 之类的）会被跳过，这个没办法。
 
-```bash
-chmod +x systemd_install.sh
-./systemd_install.sh
-```
-
-**方式三：crontab**
-
-```bash
-# UTC 00:00 = 北京时间 08:00
-0 0 * * * cd /root/clawd/skills/rss-notebooklm && .venv/bin/python run.py --once >> /tmp/rss.log 2>&1
-```
-
----
-
-## 每天收到什么？
-
-- 🎙️ `RSS-2026-02-19-CN.mp3` — 中文播客（约 10-20 分钟）
-- 🎙️ `RSS-2026-02-19-EN.mp3` — 英文播客
-- 📊 `RSS-2026-02-19-slides.pdf` — 中文 PPT 摘要
+**意外收获：** 有时候 AI 主持人会把几篇看似不相关的文章串联起来，发现一些我自己没注意到的联系。这个挺有意思的。
 
 ---
 
 ## 常见问题
 
-**sources 为 0？** 检查 Miniflux 是否有订阅源，以及过去 24 小时内是否有新文章。
+**Q：sources 为 0，没抓到文章？**
+先确认 Miniflux 里有订阅源，而且过去 24 小时内有更新。新加的订阅源可能需要等一天才有内容。
 
-**NotebookLM 生成失败？** 通常是日限额用完，第二天自动恢复。
+**Q：NotebookLM 生成失败？**
+大概率是日限额用完了，第二天自动恢复，不用管。
 
-**登录态失效？** 重新执行 `notebooklm auth login`。
+**Q：登录态失效了？**
+重新跑一次 `notebooklm auth login`，重新登录 Google 账号。
 
-**付费墙文章失败？** 正常，脚本自动跳过，不影响其他文章。
+**Q：想订阅哪些源？**
+我自己订了：Hacker News、少数派、The Verge、几个 AI 公司的博客（Anthropic、OpenAI、Google DeepMind）、一些独立技术博主。根据自己的兴趣来就行。
 
 ---
 
-## 总结
+信息时代最稀缺的不是信息，是消化信息的时间和注意力。
 
-搭建完成后，你只需维护 Miniflux 里的订阅源，其他全部自动化。核心价值：**把"信息过载"变成"每日精华"**，用通勤时间消化完昨天的互联网。
+这套系统帮我把"看不完的文章"变成了"通勤路上的播客"，算是找到了一个还不错的平衡点。
+
+如果你也有信息焦虑的问题，可以试试。

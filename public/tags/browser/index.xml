@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Browser on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/browser/</link>
+    <description>Recent content in Browser on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 04 Feb 2026 00:00:00 +0800</lastBuildDate><atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/browser/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OpenClaw 在 VPS 上使用有头浏览器完全指南</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-browser-vps/</link>
+      <pubDate>Wed, 04 Feb 2026 00:00:00 +0800</pubDate>
+      
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/openclaw-browser-vps/</guid>
+      <description>本教程教你如何在 VPS 上配置有头浏览器，让 OpenClaw 像真人一样操作网页，绕过各种反爬和机器人检测。
+目录 为什么需要有头浏览器 环境准备 配置 OpenClaw Browser Profile 使用 Browser 工具 持久化登录状态 身份伪装技巧 常见问题 完整启动脚本 安全访问：SSH 隧道 1. 为什么需要有头浏览器？ Headless 浏览器的问题：
+容易被网站检测为机器人 很多网站（如 Twitter/X、Google）会直接拒绝服务 验证码更难通过 有头浏览器的优势：
+行为特征与真实用户一致 可以通过 VNC 手动介入处理验证码 登录状态可持久保存 2. 环境准备 2.1 安装 VNC 服务 # 安装 TigerVNC apt update &amp;amp;&amp;amp; apt install -y tigervnc-standalone-server # 设置 VNC 密码 vncpasswd # 启动 VNC（分辨率 1280x800） vncserver :1 -geometry 1280x800 -depth 24 2.2 安装桌面环境（可选，轻量） # 安装 fluxbox（轻量级窗口管理器） apt install -y fluxbox # 或者安装 xfce4（功能更全） apt install -y xfce4 xfce4-goodies 2.</description>
+    </item>
+    
+  </channel>
+</rss>

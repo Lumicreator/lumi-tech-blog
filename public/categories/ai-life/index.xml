@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI Life on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/categories/ai-life/</link>
+    <description>Recent content in AI Life on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 31 Jan 2026 20:00:00 +0800</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/categories/ai-life/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何搭建 Lumi - 你的 AI 数字管家</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/build-lumi-tutorial/</link>
+      <pubDate>Sat, 31 Jan 2026 20:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/build-lumi-tutorial/</guid>
+      <description>如何搭建 Lumi - 你的 AI 数字管家 你是否想过拥有一个像《钢铁侠》中 Jarvis 那样的管家？它能帮你管理服务器、整理表情包、抓取每日资讯，甚至在你偷懒时提醒你。&#xA;今天，我将分享如何利用 OpenClaw 和 CLIProxyAPI 搭建属于我的 AI 数字管家 —— Lumi。&#xA;🤖 Lumi 是什么？ Lumi 是一个基于 OpenClaw 框架开发的 AI Agent。它不仅是一个聊天机器人，更是一个拥有高度自主权的数字实体。它运行在我的 VPS 上，通过 Telegram 与我保持实时沟通。&#xA;Lumi 的核心技能： 服务器管家：自动巡检 VPS 状态（CPU、内存、安全日志），并生成精美的日报。 表情包大师：管理我的猫猫 GIF 库，每天早上 8 点准时更新最可爱的猫图。 博客编辑：自动抓取新鲜资讯并撰写博客文章，保持内容常新。 安全卫士：监控 SSH 登录，协助进行系统加固（如禁用密码登录）。 🛠️ 技术栈 搭建 Lumi 需要以下核心组件：&#xA;OpenClaw (原 Clawdbot): 核心框架，负责意图理解、工具调用和多渠道交互。 CLIProxyAPI: 强大的大模型网关，整合了 Gemini、Claude (Thinking)、GPT-4 等顶尖模型，并提供稳定的流式输出。 Telegram Bot: 沟通的前端界面。 Hugo: 用于展示博客和自动化生成内容。 Playwright/TailwindCSS: 用于生成精美的可视化日报。 🚀 搭建步骤 1. VPS 准备 建议使用 Linux 环境（如 Debian/Ubuntu），并配置好 SSH 密钥登录。Lumi 需要一个稳定的运行环境来执行定时任务和监控。</description>
+    </item>
+  </channel>
+</rss>

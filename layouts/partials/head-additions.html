@@ -1,0 +1,37 @@
+<style>
+  /* Improve table rendering for Ananke theme */
+  .prose table, .nested-copy-line-height table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 1px solid #444;
+    background-color: #1a1a1a;
+    color: #eee;
+  }
+  .prose th, .prose td, .nested-copy-line-height th, .nested-copy-line-height td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #444;
+  }
+  .prose th, .nested-copy-line-height th {
+    background-color: #333;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+  .prose tr:nth-child(even), .nested-copy-line-height tr:nth-child(even) {
+    background-color: #222;
+  }
+  .prose tr:hover, .nested-copy-line-height tr:hover {
+    background-color: #2a2a2a;
+  }
+  /* Fix code blocks in tables */
+  .prose td code, .nested-copy-line-height td code {
+    background-color: #333;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: #ffb86c;
+  }
+</style>

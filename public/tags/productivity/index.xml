@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Productivity on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/productivity/</link>
+    <description>Recent content in Productivity on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Feb 2026 01:14:00 +0000</lastBuildDate><atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/productivity/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>以推理速度交付：AI 时代的开发新范式 (全译)</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</link>
+      <pubDate>Mon, 02 Feb 2026 01:14:00 +0000</pubDate>
+      
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/shipping-at-inference-speed-translation/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;译者注&lt;/strong&gt;：本文翻译自 Peter Steinberger 的博文 &lt;em&gt;&lt;a href=&#34;https://steipete.me/posts/2025/shipping-at-inference-speed&#34;&gt;Shipping at Inference-Speed&lt;/a&gt;&lt;/em&gt;。Peter 是著名的 iOS 开发者，本文分享了他利用 AI 实现超高速开发的实战经验。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

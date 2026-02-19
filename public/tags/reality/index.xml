@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reality on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/tags/reality/</link>
+    <description>Recent content in Reality on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 01 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://Lumicreator.github.io/lumi-tech-blog/tags/reality/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>保姆级 VLESS &#43; Reality &amp; CDN 加速全指南</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/</link>
+      <pubDate>Wed, 01 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/</guid>
+      <description>这是一份从零到上线的专业教程，涵盖 VLESS + Reality 直连 与 VMess+WS+TLS 经 CDN 的双线路方案，附带工作原理、排错与性能优化建议。适合具备基础 Linux 经验的读者。
+目录 为什么要双线路（Reality 直连 + CDN 备用） 前置条件与规划 服务端部署步骤 客户端配置示例 如何理解 Cloudflare Tunnel 的工作方式 常见 502 / 超时错误排查 低延迟优化指南 安全与运维清单 1. 为什么要双线路？ 抗封锁与稳定性：Reality 直连不依赖域名或 CDN，抗干扰强；CDN 线路可在域名遭遇干扰时快速切换。 速度与体验：直连延迟低、握手短；跨境链路拥塞或晚高峰时，可用 CDN 线路借助边缘节点绕路提速。 灵活扩展：两条线路并行，客户端可按延迟/健康度自动切换，也可手动一键切换。 2. 前置条件与规划 服务器：境外 VPS（Debian 11+/Ubuntu 22.04，1C1G+，root 权限）。 域名：用于 CDN 方案；Reality 直连可不依赖域名。 基础能力：SSH、编辑配置、查看日志。 端口规划：建议 Reality 用 443/8443 或高位随机端口；WS 端口 443/8443，与防火墙放行一致。 3. 服务端部署 3.1 开启 BBR（推荐） uname -r cat &amp;lt;&amp;lt;&amp;#39;EOF&amp;#39; | sudo tee /etc/sysctl.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>保姆级 VLESS &#43; Reality &amp; CDN 加速全指南 | Lumi&#39;s Tech Blog</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="保姆级 VLESS&#43;Reality 教程：单服务器部署直连与 CDN 备用线路，涵盖 sing-box 配置、Tunnel 工作原理与常见故障排查清单。">
+    <meta name="generator" content="Hugo 0.111.3">
+    
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+
+    
+<link rel="stylesheet" href="/lumi-tech-blog/ananke/css/main.min.css" >
+
+
+
+    <script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true });
+  
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const codeBlocks = document.querySelectorAll('pre > code.language-mermaid');
+    codeBlocks.forEach((block) => {
+      const pre = block.parentElement;
+      const content = block.textContent;
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = content;
+      pre.replaceWith(div);
+    });
+    mermaid.run();
+  });
+</script>
+
+    
+    
+      
+
+    
+
+    
+    
+    <meta property="og:title" content="保姆级 VLESS &#43; Reality &amp; CDN 加速全指南" />
+<meta property="og:description" content="保姆级 VLESS&#43;Reality 教程：单服务器部署直连与 CDN 备用线路，涵盖 sing-box 配置、Tunnel 工作原理与常见故障排查清单。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/vpn-tutorial/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-05-01T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-01T00:00:00+00:00" />
+<meta itemprop="name" content="保姆级 VLESS &#43; Reality &amp; CDN 加速全指南">
+<meta itemprop="description" content="保姆级 VLESS&#43;Reality 教程：单服务器部署直连与 CDN 备用线路，涵盖 sing-box 配置、Tunnel 工作原理与常见故障排查清单。"><meta itemprop="datePublished" content="2024-05-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2024-05-01T00:00:00+00:00" />
+<meta itemprop="wordCount" content="501">
+<meta itemprop="keywords" content="Reality,VLESS,CDN,Cloudflare,sing-box,X-UI," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="保姆级 VLESS &#43; Reality &amp; CDN 加速全指南"/>
+<meta name="twitter:description" content="保姆级 VLESS&#43;Reality 教程：单服务器部署直连与 CDN 备用线路，涵盖 sing-box 配置、Tunnel 工作原理与常见故障排查清单。"/>
+
+	<style>
+   
+  .prose table, .nested-copy-line-height table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 1px solid #444;
+    background-color: #1a1a1a;
+    color: #eee;
+  }
+  .prose th, .prose td, .nested-copy-line-height th, .nested-copy-line-height td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #444;
+  }
+  .prose th, .nested-copy-line-height th {
+    background-color: #333;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+  }
+  .prose tr:nth-child(even), .nested-copy-line-height tr:nth-child(even) {
+    background-color: #222;
+  }
+  .prose tr:hover, .nested-copy-line-height tr:hover {
+    background-color: #2a2a2a;
+  }
+   
+  .prose td code, .nested-copy-line-height td code {
+    background-color: #333;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: #ffb86c;
+  }
+</style>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white DEV">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-near-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="/lumi-tech-blog/" class="f3 fw2 hover-white no-underline white-90 dib">
+      
+        Lumi&#39;s Tech Blog
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+<div class="ananke-socials">
+  
+</div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+    <header class="mt4 w-100">
+      <aside class="instapaper_ignoref b helvetica tracked">
+          
+        POSTS
+      </aside>
+      
+
+
+
+
+
+
+
+
+
+
+  <div id="sharing" class="mt3 ananke-socials">
+    
+  </div>
+
+
+      <h1 class="f1 athelas mt3 mb1">保姆级 VLESS &#43; Reality &amp; CDN 加速全指南</h1>
+      
+      <p class="tracked">
+        By <strong>Lumi</strong>
+      </p>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2024-05-01T00:00:00Z">May 1, 2024</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-two-thirds-l"><blockquote>
+<p>这是一份从零到上线的专业教程，涵盖 <strong>VLESS + Reality 直连</strong> 与 <strong>VMess+WS+TLS 经 CDN</strong> 的双线路方案，附带工作原理、排错与性能优化建议。适合具备基础 Linux 经验的读者。</p>
+</blockquote>
+<h2 id="目录">目录</h2>
+<ol>
+<li>为什么要双线路（Reality 直连 + CDN 备用）</li>
+<li>前置条件与规划</li>
+<li>服务端部署步骤</li>
+<li>客户端配置示例</li>
+<li>如何理解 Cloudflare Tunnel 的工作方式</li>
+<li>常见 502 / 超时错误排查</li>
+<li>低延迟优化指南</li>
+<li>安全与运维清单</li>
+</ol>
+<hr>
+<h2 id="1-为什么要双线路">1. 为什么要双线路？</h2>
+<ul>
+<li><strong>抗封锁与稳定性</strong>：Reality 直连不依赖域名或 CDN，抗干扰强；CDN 线路可在域名遭遇干扰时快速切换。</li>
+<li><strong>速度与体验</strong>：直连延迟低、握手短；跨境链路拥塞或晚高峰时，可用 CDN 线路借助边缘节点绕路提速。</li>
+<li><strong>灵活扩展</strong>：两条线路并行，客户端可按延迟/健康度自动切换，也可手动一键切换。</li>
+</ul>
+<h2 id="2-前置条件与规划">2. 前置条件与规划</h2>
+<ul>
+<li><strong>服务器</strong>：境外 VPS（Debian 11+/Ubuntu 22.04，1C1G+，root 权限）。</li>
+<li><strong>域名</strong>：用于 CDN 方案；Reality 直连可不依赖域名。</li>
+<li><strong>基础能力</strong>：SSH、编辑配置、查看日志。</li>
+<li><strong>端口规划</strong>：建议 Reality 用 443/8443 或高位随机端口；WS 端口 443/8443，与防火墙放行一致。</li>
+</ul>
+<h2 id="3-服务端部署">3. 服务端部署</h2>
+<h3 id="31-开启-bbr推荐">3.1 开启 BBR（推荐）</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>uname -r
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt;&#39;EOF&#39; | sudo tee /etc/sysctl.d/99-bbr.conf
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.core.default_qdisc=fq
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">net.ipv4.tcp_congestion_control=bbr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>sudo sysctl --system
+</span></span><span style="display:flex;"><span>sysctl net.ipv4.tcp_congestion_control net.core.default_qdisc
+</span></span></code></pre></div><p>输出含 <code>bbr</code> 和 <code>fq</code> 即生效。</p>
+<h3 id="32-安装-sing-boxreality-直连">3.2 安装 sing-box（Reality 直连）</h3>
+<p><strong>方案 A：一键脚本（快速上手）</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>bash &lt;<span style="color:#f92672">(</span>curl -fsSL https://raw.githubusercontent.com/ok233wz/reality-ezpz/main/install.sh<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>安装后记录：<code>uuid</code>、端口、<code>serverName</code>、<code>short_id</code>、Public/Private Key。</p>
+<p><strong>方案 B：官方脚本（便于自定义）</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo bash -c <span style="color:#e6db74">&#39;wget -O- https://sing-box.app/install.sh | bash&#39;</span>
+</span></span></code></pre></div><p>关键字段（<code>/etc/sing-box/config.json</code>）：</p>
+<ul>
+<li><code>type: vless</code>，<code>flow: xtls-rprx-vision</code></li>
+<li><code>reality</code>: <code>private_key</code>/<code>public_key</code>、<code>server_name</code>(SNI)、<code>short_id</code></li>
+<li><code>dest/server_name</code> 选热门 HTTPS 站点，例如 <code>www.microsoft.com:443</code></li>
+</ul>
+<p><strong>Reality 入站示例</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;inbounds&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;vless&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;listen&#34;</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;listen_port&#34;</span>: <span style="color:#ae81ff">443</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;users&#34;</span>: [{<span style="color:#f92672">&#34;uuid&#34;</span>: <span style="color:#e6db74">&#34;&lt;uuid&gt;&#34;</span>, <span style="color:#f92672">&#34;flow&#34;</span>: <span style="color:#e6db74">&#34;xtls-rprx-vision&#34;</span>}],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;tls&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;enabled&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;reality&#34;</span>: {
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;dest&#34;</span>: <span style="color:#e6db74">&#34;www.microsoft.com:443&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;server_name&#34;</span>: <span style="color:#e6db74">&#34;www.microsoft.com&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;private_key&#34;</span>: <span style="color:#e6db74">&#34;&lt;private-key&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&#34;short_id&#34;</span>: <span style="color:#e6db74">&#34;a1b2c3d4&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="33-安装-x-uivmesswstls经-cdn">3.3 安装 X-UI（VMess+WS+TLS，经 CDN）</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -fsSL https://get.docker.com | sh
+</span></span><span style="display:flex;"><span>sudo systemctl enable --now docker
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mkdir -p /opt/x-ui <span style="color:#f92672">&amp;&amp;</span> cd /opt/x-ui
+</span></span><span style="display:flex;"><span>cat &gt; docker-compose.yml <span style="color:#e6db74">&lt;&lt;&#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">version: &#39;3&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">services:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  xui:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    image: enwaiax/x-ui:latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    container_name: x-ui
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    restart: unless-stopped
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    network_mode: host
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    volumes:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./db/:/etc/x-ui/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - ./cert/:/root/cert/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    environment:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      - XRAY_VMESS_AEAD_FORCED=true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>sudo docker compose up -d
+</span></span></code></pre></div><p>登录面板（默认 54321），<strong>立刻修改用户名/密码/端口</strong>。</p>
+<p>在面板创建 <strong>VMess + WebSocket + TLS</strong>：</p>
+<ul>
+<li>传输：WS，路径如 <code>/ws123</code>（随机）。</li>
+<li>TLS：开启；证书自签或 ACME。</li>
+<li>域名：解析到服务器 IP，CDN（如 Cloudflare）代理需“橙色云”开启。</li>
+</ul>
+<p><strong>客户端导出摘要</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;add&#34;</span>: <span style="color:#e6db74">&#34;your.domain.com&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">443</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;&lt;uuid&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;net&#34;</span>: <span style="color:#e6db74">&#34;ws&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#e6db74">&#34;/ws123&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;tls&#34;</span>: <span style="color:#e6db74">&#34;tls&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;your.domain.com&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="4-客户端配置示例">4. 客户端配置示例</h2>
+<h3 id="clash--clash-meta">Clash / Clash Meta</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">proxies</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;Reality-Direct&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">vless</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">server</span>: <span style="color:#ae81ff">your.server.ip</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">port</span>: <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">uuid</span>: <span style="color:#ae81ff">&lt;uuid&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tls</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">flow</span>: <span style="color:#ae81ff">xtls-rprx-vision</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">servername</span>: <span style="color:#ae81ff">www.microsoft.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">reality-opts</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">public-key</span>: <span style="color:#ae81ff">&lt;public-key&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">short-id</span>: <span style="color:#ae81ff">a1b2c3d4</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">udp</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;CDN-VMess-WS&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">vmess</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">server</span>: <span style="color:#ae81ff">your.domain.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">port</span>: <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">uuid</span>: <span style="color:#ae81ff">&lt;uuid&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">alterId</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cipher</span>: <span style="color:#ae81ff">auto</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tls</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">network</span>: <span style="color:#ae81ff">ws</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ws-opts</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/ws123</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">headers</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">Host</span>: <span style="color:#ae81ff">your.domain.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">udp</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">proxy-groups</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;🚀 Proxy&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">select</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxies</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">Reality-Direct</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">CDN-VMess-WS</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">DIRECT</span>
+</span></span></code></pre></div><h3 id="shadowrocketios">Shadowrocket（iOS）</h3>
+<ul>
+<li>Reality：填服务器 IP、端口、UUID、Public Key、Short ID、SNI；传输选 Vision/Reality。</li>
+<li>VMess+WS：服务器域名，端口 443，UUID，TLS 开启，WS 路径 <code>/ws123</code>，Host 填域名。</li>
+<li>建议在客户端创建「按延迟排序」或「自动切换」列表。</li>
+</ul>
+<hr>
+<h2 id="5-how-cloudflare-tunnel-works">5. How Cloudflare Tunnel Works</h2>
+<ul>
+<li><strong>定位</strong>：Cloudflare Tunnel（cloudflared）在服务器端创建一条到 Cloudflare 边缘的持久出站隧道，无需暴露入站端口。</li>
+<li><strong>流程</strong>：
+<ol>
+<li>服务器上的 <code>cloudflared</code> 主动连接最近的 Cloudflare 边缘节点。</li>
+<li>用户访问域名 → DNS 解析到 Cloudflare → 流量经已建立的隧道回源到本机服务。</li>
+<li>支持 <code>--url http://localhost:PORT</code> 方式将本地服务映射到公网域名，也可配合 <code>--protocol h2mux/quic</code> 提高握手与穿透效率。</li>
+</ol>
+</li>
+<li><strong>对比</strong>：
+<ul>
+<li>传统反代：需在服务器开放 80/443，受防火墙/运营商限制。</li>
+<li>Tunnel：无入站暴露，穿透阻断能力更好，证书与 WAF 由 Cloudflare 处理。</li>
+</ul>
+</li>
+<li><strong>最佳实践</strong>：
+<ul>
+<li>为 Tunnel 专用子域（如 <code>edge.example.com</code>）单独创建；</li>
+<li>运行多条隧道做高可用；</li>
+<li>选择 <code>--protocol quic</code> 获取更低时延与抖动。</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-troubleshooting-common-502--timeout-errors">6. Troubleshooting Common 502 / Timeout Errors</h2>
+<ul>
+<li><strong>TLS/证书问题</strong>：
+<ul>
+<li>502 多见于证书不匹配或过期；检查时间同步（<code>timedatectl</code>）。</li>
+<li>在 Cloudflare 面板选择「完全（严格）」模式并确保证书合法。</li>
+</ul>
+</li>
+<li><strong>WS 路径/端口不一致</strong>：客户端 <code>path</code> 必须与服务端一致；端口、防火墙需放行。</li>
+<li><strong>CDN 代理未开启或缓存干扰</strong>：确保橙色云开启；必要时在 Cloudflare 规则中为 WS 路径禁用缓存。</li>
+<li><strong>回源超时</strong>：
+<ul>
+<li>服务器压力过高或进程崩溃 → <code>docker logs -f x-ui</code> / <code>journalctl -u sing-box -e</code>。</li>
+<li>边缘到源站链路差 → 切换数据中心（更换域名解析到其他 PoP）或临时改直连。</li>
+</ul>
+</li>
+<li><strong>SNI / Host 不匹配</strong>：Reality 的 <code>server_name</code> 与客户端一致；WS 的 <code>Host</code> 头与证书域名一致。</li>
+<li><strong>端口被占用</strong>：443/8443 被其他服务占用会导致握手失败；用 <code>ss -tlnp</code> 排查并调整。</li>
+</ul>
+<h2 id="7-optimizing-for-low-latency">7. Optimizing for Low Latency</h2>
+<ul>
+<li><strong>优先 Reality 直连</strong>：减少中转环节；选稳定的热门 SNI 以获得更佳路由。</li>
+<li><strong>BBR 与内核参数</strong>：已启用 BBR；如需进一步调整可设置 <code>net.ipv4.tcp_fastopen = 3</code>（客户端亦需支持）。</li>
+<li><strong>Cloudflare PoP 选择</strong>：不同域名、前缀或负载均衡策略可命中更近的边缘节点；尝试多域名测试 RTT。</li>
+<li><strong>协议与握手</strong>：
+<ul>
+<li>Reality：握手短、加密开销低，适合实时应用。</li>
+<li>Tunnel：<code>--protocol quic</code> 往往优于 h2mux，尤其在高丢包环境。</li>
+</ul>
+</li>
+<li><strong>客户端策略</strong>：使用「按延迟/健康度自动切换」；定期测速，移除高抖动节点。</li>
+<li><strong>UDP 支持</strong>：开启 <code>udp: true</code> 以优化游戏/实时语音体验。</li>
+</ul>
+<h2 id="8-安全与运维清单">8. 安全与运维清单</h2>
+<ul>
+<li>更改 X-UI 默认登录端口/密码，限制面板暴露（可仅允许本地或安全网段访问）。</li>
+<li>定期更新：<code>sudo apt update &amp;&amp; apt upgrade</code>，<code>docker pull enwaiax/x-ui &amp;&amp; docker compose up -d</code>，<code>systemctl restart sing-box</code>。</li>
+<li>防火墙：只放行实际使用端口（如 443/8443/54321），其余关闭；可用 <code>ufw</code>/<code>firewalld</code>。</li>
+<li>日志巡检：
+<ul>
+<li>sing-box：<code>journalctl -u sing-box -e</code></li>
+<li>x-ui 容器：<code>docker logs -f x-ui</code></li>
+</ul>
+</li>
+<li>备份：定期备份 sing-box 配置、X-UI 数据库（<code>/opt/x-ui/db/</code>）。</li>
+</ul>
+<hr>
+<p><strong>完成！</strong> 现在你拥有具备抗封锁能力的 Reality 直连主线路与 Cloudflare CDN 备用线路，并掌握排错与优化要点。祝使用顺畅 🚀</p>
+<ul class="pa0">
+  
+   <li class="list di">
+     <a href="/tags/reality" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Reality</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/vless" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">VLESS</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/cdn" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">CDN</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/cloudflare" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">Cloudflare</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/sing-box" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">sing-box</a>
+   </li>
+  
+   <li class="list di">
+     <a href="/tags/x-ui" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">X-UI</a>
+   </li>
+  
+</ul>
+<div class="mt6 instapaper_ignoref">
+      
+      
+      </div>
+    </div>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://Lumicreator.github.io/lumi-tech-blog/" >
+    &copy;  Lumi's Tech Blog 2026 
+  </a>
+    <div>
+<div class="ananke-socials">
+  
+</div>
+</div>
+  </div>
+</footer>
+
+  </body>
+</html>

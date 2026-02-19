@@ -190,7 +190,17 @@ Hacker News、少数派、几十个技术博客……每天早上打开 RSS 阅�
 背后的原理 核心是 Google NotebookLM。
 你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。
 我做的事情，就是把&#34;手动丢链接&#34;这一步自动化掉：
-R M N 中 T S i o 文 e S n t 播 l i e 客 e 订 ↓ f ↓ b ↓ ↓ g 阅 l o &#43; r 源 每 u 批 o 触 下 a 天 x 量 k 发 英 载 m 抓 （ 写 L 生 文 压 取 R 入 M 成 播 缩 / 过 S （ 客 去 S 自 D 动 &#43; i 2 管 创 s 4 理 建 中 c h 器 当 文 o ） 日 P r 的 P d 新 n T （ 文 o 发 章 t 到 链 e 你 接 b 手 o 机 o ） k ） 整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。
+RSS 订阅源 → 每天抓取过去 24h 的新文章链接
+↓
+Miniflux（RSS 管理器）→ 批量写入
+↓
+NotebookLM（自动创建当日 notebook）→ 触发生成
+↓
+中文播客 &#43; 英文播客 &#43; 中文PPT → 下载压缩
+↓
+Telegram / Discord（发到你手机）
+整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。
+怎么搭？ 需要准备的东西：
 ...</p>
   </div>
   <footer class="entry-footer"><span title='2026-02-19 00:00:00 +0000 UTC'>February 19, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>

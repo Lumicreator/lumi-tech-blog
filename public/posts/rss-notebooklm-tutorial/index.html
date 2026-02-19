@@ -119,8 +119,8 @@
   "keywords": [
     "AI", "RSS", "NotebookLM", "自动化", "播客"
   ],
-  "articleBody": "我有一个坏习惯：疯狂订阅 RSS。\nHacker News、少数派、几十个技术博客……每天早上打开 RSS 阅读器，未读数字像债务一样压着我。看不完，但又不敢取关，怕错过什么重要的东西。\n直到我意识到：我根本不需要\"看\"，我需要的是\"听\"。\n通勤路上、做饭的时候、跑步的时候——这些碎片时间加起来每天有两三个小时。如果有人帮我把那些文章整理成一期播客，我完全可以在这些时间消化掉。\n然后我就真的造了这么一台机器。\n它长什么样？ 每天早上 8 点，我的 Telegram 会收到三个文件：\n🎙️ 一期中文播客（两个 AI 主持人对话，10-20 分钟） 🎙️ 一期英文播客（同样内容，练英语用） 📊 一份中文 PPT（给没时间听的时候扫一眼） 内容来源：我订阅的所有 RSS 源，过去 24 小时的新文章。\n全程零人工干预。我唯一要做的事，就是维护我的订阅列表。\n背后的原理 核心是 Google NotebookLM。\n你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。\n我做的事情，就是把\"手动丢链接\"这一步自动化掉：\nR M N 中 T S i o 文 e S n t 播 l i e 客 e 订 ↓ f ↓ b ↓ ↓ g 阅 l o + r 源 每 u 批 o 触 下 a 天 x 量 k 发 英 载 m 抓 （ 写 L 生 文 压 取 R 入 M 成 播 缩 / 过 S （ 客 去 S 自 D 动 + i 2 管 创 s 4 理 建 中 c h 器 当 文 o ） 日 P r 的 P d 新 n T （ 文 o 发 章 t 到 链 e 你 接 b 手 o 机 o ） k ） 整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。\n怎么搭？ 需要准备的东西：\n一台 Linux VPS（1核1G 够用，我用的 Vultr 最便宜那档） Google 账号（NotebookLM 用） Telegram Bot（接收文件用） 第一步：装 Miniflux（RSS 管理器） Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：\n# docker-compose.yml version: '3' services: db: image: postgres:15 environment: POSTGRES_USER: miniflux POSTGRES_PASSWORD: secret POSTGRES_DB: miniflux volumes: - miniflux-db:/var/lib/postgresql/data miniflux: image: miniflux/miniflux:latest ports: - \"8421:8080\" depends_on: - db environment: DATABASE_URL: postgres://miniflux:secret@db/miniflux?sslmode=disable RUN_MIGRATIONS: 1 CREATE_ADMIN: 1 ADMIN_USERNAME: admin ADMIN_PASSWORD: admin123 volumes: miniflux-db: docker compose up -d 起来之后，浏览器打开 http://你的IP:8421，把你想订阅的 RSS 源都加进去。然后在 Settings → API Keys 生成一个 Token，后面要用。\n第二步：登录 NotebookLM 这一步是整个流程里最麻烦的——需要用你的 Google 账号登录，而且登录态大概 7 天过期，需要定期重新登录。\n# 安装 notebooklm-py pip install \"notebooklm-py[browser]\" # 登录（会弹出浏览器，手动点一下） notebooklm --storage ~/.notebooklm/storage_state.json auth login # 验证是否成功 notebooklm --storage ~/.notebooklm/storage_state.json auth check --test --json # 看到 \"token_fetch\": true 就行了 如果你的 VPS 没有图形界面，需要先开 VNC，或者在本地登录完把 storage_state.json 传上去。\n第三步：配置 .env cp .env.example .env 填这几个关键项：\nMINIFLUX_URL=http://127.0.0.1:8421 MINIFLUX_TOKEN=你刚才生成的Token TELEGRAM_TARGET=你的Telegram数字ID TELEGRAM_ACCOUNT=你的bot名称 第四步：跑一次试试 python run.py --once 如果看到这样的输出，就说明成功了：\n{ \"notebook_title\": \"RSS Daily 2026-02-19\", \"sources\": 13, \"watcher_started\": true } 然后等 10-30 分钟，Telegram 就会收到文件。\n第一次收到的时候我愣了一下——两个 AI 在用中文聊我今天订阅的文章，逻辑还挺顺的。有点奇妙。\n第五步：设置每天自动跑 加一条 crontab（UTC 0 点 = 北京时间 8 点）：\n0 0 * * * cd /你的目录/rss-notebooklm \u0026\u0026 .venv/bin/python run.py --once \u003e\u003e /tmp/rss.log 2\u003e\u00261 或者用 OpenClaw 的 cron 功能，让 AI 助手帮你管。\n用了一段时间之后 说几个真实感受：\n好的地方： 信息焦虑真的少了很多。以前看到未读 300+ 会有压力，现在知道反正会有播客，反而不那么焦虑了。英文播客意外地好用，相当于每天有一期专门讲我关注领域的英文 podcast。\n不好的地方： NotebookLM 有日限额，偶尔会生成失败，第二天才能补上。付费墙文章（NYT 之类的）会被跳过，这个没办法。\n意外收获： 有时候 AI 主持人会把几篇看似不相关的文章串联起来，发现一些我自己没注意到的联系。这个挺有意思的。\n常见问题 Q：sources 为 0，没抓到文章？ 先确认 Miniflux 里有订阅源，而且过去 24 小时内有更新。新加的订阅源可能需要等一天才有内容。\nQ：NotebookLM 生成失败？ 大概率是日限额用完了，第二天自动恢复，不用管。\nQ：登录态失效了？ 重新跑一次 notebooklm auth login，重新登录 Google 账号。\nQ：想订阅哪些源？ 我自己订了：Hacker News、少数派、The Verge、几个 AI 公司的博客（Anthropic、OpenAI、Google DeepMind）、一些独立技术博主。根据自己的兴趣来就行。\n信息时代最稀缺的不是信息，是消化信息的时间和注意力。\n这套系统帮我把\"看不完的文章\"变成了\"通勤路上的播客\"，算是找到了一个还不错的平衡点。\n如果你也有信息焦虑的问题，可以试试。\n",
-  "wordCount" : "384",
+  "articleBody": "我有一个坏习惯：疯狂订阅 RSS。\nHacker News、少数派、几十个技术博客……每天早上打开 RSS 阅读器，未读数字像债务一样压着我。看不完，但又不敢取关，怕错过什么重要的东西。\n直到我意识到：我根本不需要\"看\"，我需要的是\"听\"。\n通勤路上、做饭的时候、跑步的时候——这些碎片时间加起来每天有两三个小时。如果有人帮我把那些文章整理成一期播客，我完全可以在这些时间消化掉。\n然后我就真的造了这么一台机器。\n它长什么样？ 每天早上 8 点，我的 Telegram 会收到三个文件：\n🎙️ 一期中文播客（两个 AI 主持人对话，10-20 分钟） 🎙️ 一期英文播客（同样内容，练英语用） 📊 一份中文 PPT（给没时间听的时候扫一眼） 内容来源：我订阅的所有 RSS 源，过去 24 小时的新文章。\n全程零人工干预。我唯一要做的事，就是维护我的订阅列表。\n背后的原理 核心是 Google NotebookLM。\n你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。\n我做的事情，就是把\"手动丢链接\"这一步自动化掉：\nRSS 订阅源 → 每天抓取过去 24h 的新文章链接\n↓\nMiniflux（RSS 管理器）→ 批量写入\n↓\nNotebookLM（自动创建当日 notebook）→ 触发生成\n↓\n中文播客 + 英文播客 + 中文PPT → 下载压缩\n↓\nTelegram / Discord（发到你手机）\n整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。\n怎么搭？ 需要准备的东西：\n一台 Linux VPS（1核1G 够用，我用的 Vultr 最便宜那档） Google 账号（NotebookLM 用） Telegram Bot（接收文件用） 第一步：装 Miniflux（RSS 管理器） Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：\n# docker-compose.yml version: '3' services: db: image: postgres:15 environment: POSTGRES_USER: miniflux POSTGRES_PASSWORD: secret POSTGRES_DB: miniflux volumes: - miniflux-db:/var/lib/postgresql/data miniflux: image: miniflux/miniflux:latest ports: - \"8421:8080\" depends_on: - db environment: DATABASE_URL: postgres://miniflux:secret@db/miniflux?sslmode=disable RUN_MIGRATIONS: 1 CREATE_ADMIN: 1 ADMIN_USERNAME: admin ADMIN_PASSWORD: admin123 volumes: miniflux-db: docker compose up -d 起来之后，浏览器打开 http://你的IP:8421，把你想订阅的 RSS 源都加进去。然后在 Settings → API Keys 生成一个 Token，后面要用。\n第二步：登录 NotebookLM 这一步是整个流程里最麻烦的——需要用你的 Google 账号登录，而且登录态大概 7 天过期，需要定期重新登录。\n# 安装 notebooklm-py pip install \"notebooklm-py[browser]\" # 登录（会弹出浏览器，手动点一下） notebooklm --storage ~/.notebooklm/storage_state.json auth login # 验证是否成功 notebooklm --storage ~/.notebooklm/storage_state.json auth check --test --json # 看到 \"token_fetch\": true 就行了 如果你的 VPS 没有图形界面，需要先开 VNC，或者在本地登录完把 storage_state.json 传上去。\n第三步：配置 .env cp .env.example .env 填这几个关键项：\nMINIFLUX_URL=http://127.0.0.1:8421 MINIFLUX_TOKEN=你刚才生成的Token TELEGRAM_TARGET=你的Telegram数字ID TELEGRAM_ACCOUNT=你的bot名称 第四步：跑一次试试 python run.py --once 如果看到这样的输出，就说明成功了：\n{ \"notebook_title\": \"RSS Daily 2026-02-19\", \"sources\": 13, \"watcher_started\": true } 然后等 10-30 分钟，Telegram 就会收到文件。\n第一次收到的时候我愣了一下——两个 AI 在用中文聊我今天订阅的文章，逻辑还挺顺的。有点奇妙。\n第五步：设置每天自动跑 加一条 crontab（UTC 0 点 = 北京时间 8 点）：\n0 0 * * * cd /你的目录/rss-notebooklm \u0026\u0026 .venv/bin/python run.py --once \u003e\u003e /tmp/rss.log 2\u003e\u00261 或者用 OpenClaw 的 cron 功能，让 AI 助手帮你管。\n用了一段时间之后 说几个真实感受：\n好的地方： 信息焦虑真的少了很多。以前看到未读 300+ 会有压力，现在知道反正会有播客，反而不那么焦虑了。英文播客意外地好用，相当于每天有一期专门讲我关注领域的英文 podcast。\n不好的地方： NotebookLM 有日限额，偶尔会生成失败，第二天才能补上。付费墙文章（NYT 之类的）会被跳过，这个没办法。\n意外收获： 有时候 AI 主持人会把几篇看似不相关的文章串联起来，发现一些我自己没注意到的联系。这个挺有意思的。\n常见问题 Q：sources 为 0，没抓到文章？ 先确认 Miniflux 里有订阅源，而且过去 24 小时内有更新。新加的订阅源可能需要等一天才有内容。\nQ：NotebookLM 生成失败？ 大概率是日限额用完了，第二天自动恢复，不用管。\nQ：登录态失效了？ 重新跑一次 notebooklm auth login，重新登录 Google 账号。\nQ：想订阅哪些源？ 我自己订了：Hacker News、少数派、The Verge、几个 AI 公司的博客（Anthropic、OpenAI、Google DeepMind）、一些独立技术博主。根据自己的兴趣来就行。\n信息时代最稀缺的不是信息，是消化信息的时间和注意力。\n这套系统帮我把\"看不完的文章\"变成了\"通勤路上的播客\"，算是找到了一个还不错的平衡点。\n如果你也有信息焦虑的问题，可以试试。\n",
+  "wordCount" : "293",
   "inLanguage": "en",
   "datePublished": "2026-02-19T00:00:00Z",
   "dateModified": "2026-02-19T00:00:00Z",
@@ -264,140 +264,15 @@
 <p>核心是 <strong>Google NotebookLM</strong>。</p>
 <p>你可能用过它——把一堆文章链接丢进去，它能生成一期像模像样的对话式播客，两个 AI 主持人你来我往，逻辑清晰，听起来完全不像机器人。</p>
 <p>我做的事情，就是把&quot;手动丢链接&quot;这一步自动化掉：</p>
-
-
-
-<div class="goat svg-container ">
-  
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      font-family="Menlo,Lucida Console,monospace"
-      
-        viewBox="0 0 224 153"
-      >
-      <g transform='translate(8,16)'>
-<text text-anchor='middle' x='0' y='4' fill='currentColor' style='font-size:1em'>R</text>
-<text text-anchor='middle' x='0' y='36' fill='currentColor' style='font-size:1em'>M</text>
-<text text-anchor='middle' x='0' y='68' fill='currentColor' style='font-size:1em'>N</text>
-<text text-anchor='middle' x='0' y='100' fill='currentColor' style='font-size:1em'>中</text>
-<text text-anchor='middle' x='0' y='132' fill='currentColor' style='font-size:1em'>T</text>
-<text text-anchor='middle' x='8' y='4' fill='currentColor' style='font-size:1em'>S</text>
-<text text-anchor='middle' x='8' y='36' fill='currentColor' style='font-size:1em'>i</text>
-<text text-anchor='middle' x='8' y='68' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='8' y='100' fill='currentColor' style='font-size:1em'>文</text>
-<text text-anchor='middle' x='8' y='132' fill='currentColor' style='font-size:1em'>e</text>
-<text text-anchor='middle' x='16' y='4' fill='currentColor' style='font-size:1em'>S</text>
-<text text-anchor='middle' x='16' y='36' fill='currentColor' style='font-size:1em'>n</text>
-<text text-anchor='middle' x='16' y='68' fill='currentColor' style='font-size:1em'>t</text>
-<text text-anchor='middle' x='16' y='100' fill='currentColor' style='font-size:1em'>播</text>
-<text text-anchor='middle' x='16' y='132' fill='currentColor' style='font-size:1em'>l</text>
-<text text-anchor='middle' x='24' y='36' fill='currentColor' style='font-size:1em'>i</text>
-<text text-anchor='middle' x='24' y='68' fill='currentColor' style='font-size:1em'>e</text>
-<text text-anchor='middle' x='24' y='100' fill='currentColor' style='font-size:1em'>客</text>
-<text text-anchor='middle' x='24' y='132' fill='currentColor' style='font-size:1em'>e</text>
-<text text-anchor='middle' x='32' y='4' fill='currentColor' style='font-size:1em'>订</text>
-<text text-anchor='middle' x='32' y='20' fill='currentColor' style='font-size:1em'>↓</text>
-<text text-anchor='middle' x='32' y='36' fill='currentColor' style='font-size:1em'>f</text>
-<text text-anchor='middle' x='32' y='52' fill='currentColor' style='font-size:1em'>↓</text>
-<text text-anchor='middle' x='32' y='68' fill='currentColor' style='font-size:1em'>b</text>
-<text text-anchor='middle' x='32' y='84' fill='currentColor' style='font-size:1em'>↓</text>
-<text text-anchor='middle' x='32' y='116' fill='currentColor' style='font-size:1em'>↓</text>
-<text text-anchor='middle' x='32' y='132' fill='currentColor' style='font-size:1em'>g</text>
-<text text-anchor='middle' x='40' y='4' fill='currentColor' style='font-size:1em'>阅</text>
-<text text-anchor='middle' x='40' y='36' fill='currentColor' style='font-size:1em'>l</text>
-<text text-anchor='middle' x='40' y='68' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='40' y='100' fill='currentColor' style='font-size:1em'>+</text>
-<text text-anchor='middle' x='40' y='132' fill='currentColor' style='font-size:1em'>r</text>
-<text text-anchor='middle' x='48' y='4' fill='currentColor' style='font-size:1em'>源</text>
-<text text-anchor='middle' x='48' y='20' fill='currentColor' style='font-size:1em'>每</text>
-<text text-anchor='middle' x='48' y='36' fill='currentColor' style='font-size:1em'>u</text>
-<text text-anchor='middle' x='48' y='52' fill='currentColor' style='font-size:1em'>批</text>
-<text text-anchor='middle' x='48' y='68' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='48' y='84' fill='currentColor' style='font-size:1em'>触</text>
-<text text-anchor='middle' x='48' y='116' fill='currentColor' style='font-size:1em'>下</text>
-<text text-anchor='middle' x='48' y='132' fill='currentColor' style='font-size:1em'>a</text>
-<text text-anchor='middle' x='56' y='20' fill='currentColor' style='font-size:1em'>天</text>
-<text text-anchor='middle' x='56' y='36' fill='currentColor' style='font-size:1em'>x</text>
-<text text-anchor='middle' x='56' y='52' fill='currentColor' style='font-size:1em'>量</text>
-<text text-anchor='middle' x='56' y='68' fill='currentColor' style='font-size:1em'>k</text>
-<text text-anchor='middle' x='56' y='84' fill='currentColor' style='font-size:1em'>发</text>
-<text text-anchor='middle' x='56' y='100' fill='currentColor' style='font-size:1em'>英</text>
-<text text-anchor='middle' x='56' y='116' fill='currentColor' style='font-size:1em'>载</text>
-<text text-anchor='middle' x='56' y='132' fill='currentColor' style='font-size:1em'>m</text>
-<text text-anchor='middle' x='64' y='20' fill='currentColor' style='font-size:1em'>抓</text>
-<text text-anchor='middle' x='64' y='36' fill='currentColor' style='font-size:1em'>（</text>
-<text text-anchor='middle' x='64' y='52' fill='currentColor' style='font-size:1em'>写</text>
-<text text-anchor='middle' x='64' y='68' fill='currentColor' style='font-size:1em'>L</text>
-<text text-anchor='middle' x='64' y='84' fill='currentColor' style='font-size:1em'>生</text>
-<text text-anchor='middle' x='64' y='100' fill='currentColor' style='font-size:1em'>文</text>
-<text text-anchor='middle' x='64' y='116' fill='currentColor' style='font-size:1em'>压</text>
-<text text-anchor='middle' x='72' y='20' fill='currentColor' style='font-size:1em'>取</text>
-<text text-anchor='middle' x='72' y='36' fill='currentColor' style='font-size:1em'>R</text>
-<text text-anchor='middle' x='72' y='52' fill='currentColor' style='font-size:1em'>入</text>
-<text text-anchor='middle' x='72' y='68' fill='currentColor' style='font-size:1em'>M</text>
-<text text-anchor='middle' x='72' y='84' fill='currentColor' style='font-size:1em'>成</text>
-<text text-anchor='middle' x='72' y='100' fill='currentColor' style='font-size:1em'>播</text>
-<text text-anchor='middle' x='72' y='116' fill='currentColor' style='font-size:1em'>缩</text>
-<text text-anchor='middle' x='72' y='132' fill='currentColor' style='font-size:1em'>/</text>
-<text text-anchor='middle' x='80' y='20' fill='currentColor' style='font-size:1em'>过</text>
-<text text-anchor='middle' x='80' y='36' fill='currentColor' style='font-size:1em'>S</text>
-<text text-anchor='middle' x='80' y='68' fill='currentColor' style='font-size:1em'>（</text>
-<text text-anchor='middle' x='80' y='100' fill='currentColor' style='font-size:1em'>客</text>
-<text text-anchor='middle' x='88' y='20' fill='currentColor' style='font-size:1em'>去</text>
-<text text-anchor='middle' x='88' y='36' fill='currentColor' style='font-size:1em'>S</text>
-<text text-anchor='middle' x='88' y='68' fill='currentColor' style='font-size:1em'>自</text>
-<text text-anchor='middle' x='88' y='132' fill='currentColor' style='font-size:1em'>D</text>
-<text text-anchor='middle' x='96' y='68' fill='currentColor' style='font-size:1em'>动</text>
-<text text-anchor='middle' x='96' y='100' fill='currentColor' style='font-size:1em'>+</text>
-<text text-anchor='middle' x='96' y='132' fill='currentColor' style='font-size:1em'>i</text>
-<text text-anchor='middle' x='104' y='20' fill='currentColor' style='font-size:1em'>2</text>
-<text text-anchor='middle' x='104' y='36' fill='currentColor' style='font-size:1em'>管</text>
-<text text-anchor='middle' x='104' y='68' fill='currentColor' style='font-size:1em'>创</text>
-<text text-anchor='middle' x='104' y='132' fill='currentColor' style='font-size:1em'>s</text>
-<text text-anchor='middle' x='112' y='20' fill='currentColor' style='font-size:1em'>4</text>
-<text text-anchor='middle' x='112' y='36' fill='currentColor' style='font-size:1em'>理</text>
-<text text-anchor='middle' x='112' y='68' fill='currentColor' style='font-size:1em'>建</text>
-<text text-anchor='middle' x='112' y='100' fill='currentColor' style='font-size:1em'>中</text>
-<text text-anchor='middle' x='112' y='132' fill='currentColor' style='font-size:1em'>c</text>
-<text text-anchor='middle' x='120' y='20' fill='currentColor' style='font-size:1em'>h</text>
-<text text-anchor='middle' x='120' y='36' fill='currentColor' style='font-size:1em'>器</text>
-<text text-anchor='middle' x='120' y='68' fill='currentColor' style='font-size:1em'>当</text>
-<text text-anchor='middle' x='120' y='100' fill='currentColor' style='font-size:1em'>文</text>
-<text text-anchor='middle' x='120' y='132' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='128' y='36' fill='currentColor' style='font-size:1em'>）</text>
-<text text-anchor='middle' x='128' y='68' fill='currentColor' style='font-size:1em'>日</text>
-<text text-anchor='middle' x='128' y='100' fill='currentColor' style='font-size:1em'>P</text>
-<text text-anchor='middle' x='128' y='132' fill='currentColor' style='font-size:1em'>r</text>
-<text text-anchor='middle' x='136' y='20' fill='currentColor' style='font-size:1em'>的</text>
-<text text-anchor='middle' x='136' y='100' fill='currentColor' style='font-size:1em'>P</text>
-<text text-anchor='middle' x='136' y='132' fill='currentColor' style='font-size:1em'>d</text>
-<text text-anchor='middle' x='144' y='20' fill='currentColor' style='font-size:1em'>新</text>
-<text text-anchor='middle' x='144' y='68' fill='currentColor' style='font-size:1em'>n</text>
-<text text-anchor='middle' x='144' y='100' fill='currentColor' style='font-size:1em'>T</text>
-<text text-anchor='middle' x='144' y='132' fill='currentColor' style='font-size:1em'>（</text>
-<text text-anchor='middle' x='152' y='20' fill='currentColor' style='font-size:1em'>文</text>
-<text text-anchor='middle' x='152' y='68' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='152' y='132' fill='currentColor' style='font-size:1em'>发</text>
-<text text-anchor='middle' x='160' y='20' fill='currentColor' style='font-size:1em'>章</text>
-<text text-anchor='middle' x='160' y='68' fill='currentColor' style='font-size:1em'>t</text>
-<text text-anchor='middle' x='160' y='132' fill='currentColor' style='font-size:1em'>到</text>
-<text text-anchor='middle' x='168' y='20' fill='currentColor' style='font-size:1em'>链</text>
-<text text-anchor='middle' x='168' y='68' fill='currentColor' style='font-size:1em'>e</text>
-<text text-anchor='middle' x='168' y='132' fill='currentColor' style='font-size:1em'>你</text>
-<text text-anchor='middle' x='176' y='20' fill='currentColor' style='font-size:1em'>接</text>
-<text text-anchor='middle' x='176' y='68' fill='currentColor' style='font-size:1em'>b</text>
-<text text-anchor='middle' x='176' y='132' fill='currentColor' style='font-size:1em'>手</text>
-<text text-anchor='middle' x='184' y='68' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='184' y='132' fill='currentColor' style='font-size:1em'>机</text>
-<text text-anchor='middle' x='192' y='68' fill='currentColor' style='font-size:1em'>o</text>
-<text text-anchor='middle' x='192' y='132' fill='currentColor' style='font-size:1em'>）</text>
-<text text-anchor='middle' x='200' y='68' fill='currentColor' style='font-size:1em'>k</text>
-<text text-anchor='middle' x='208' y='68' fill='currentColor' style='font-size:1em'>）</text>
-</g>
-
-    </svg>
-  
-</div>
+<p>RSS 订阅源 → 每天抓取过去 24h 的新文章链接</p>
+<p>↓</p>
+<p>Miniflux（RSS 管理器）→ 批量写入</p>
+<p>↓</p>
+<p>NotebookLM（自动创建当日 notebook）→ 触发生成</p>
+<p>↓</p>
+<p>中文播客 + 英文播客 + 中文PPT → 下载压缩</p>
+<p>↓</p>
+<p>Telegram / Discord（发到你手机）</p>
 <p>整条链路跑起来大概需要 10-30 分钟，所以设在凌晨 0 点跑，早上 8 点你起床的时候刚好收到。</p>
 <hr>
 <h2 id="怎么搭">怎么搭？<a hidden class="anchor" aria-hidden="true" href="#怎么搭">#</a></h2>

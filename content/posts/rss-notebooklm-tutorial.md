@@ -67,11 +67,15 @@ Telegram / Discord（发到你手机）
 ## 怎么搭？
 
 需要准备的东西：
-- 一台 Linux VPS（1核1G 够用，我用的 Vultr 最便宜那档）
+- 一台 Linux VPS（**至少 2C4G**，因为要同时跑 OpenClaw + Miniflux + 自动化任务）
 - Google 账号（NotebookLM 用）
 - Telegram Bot（接收文件用）
 
-### 第一步：装 Miniflux（RSS 管理器）
+### 第一步：先部署 OpenClaw，再装 Miniflux（RSS 管理器）
+
+先把 OpenClaw 网关跑起来（建议按官方文档安装并确认 `openclaw status` 正常），后续自动化任务都依赖它来调度和消息投递。
+
+Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：
 
 Miniflux 是一个极简的自托管 RSS 阅读器，Docker 一键起：
 

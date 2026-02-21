@@ -1,0 +1,27 @@
+{{/* PaperMod custom head extension */}}
+<link rel="stylesheet" href="/css/custom.css">
+<style>
+  /* Fix odd spacing in mixed CJK/EN paragraphs */
+  .post-content,
+  .entry-content,
+  .post-description,
+  p,
+  li {
+    text-align: left;
+    text-justify: auto;
+    word-spacing: normal;
+    letter-spacing: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: none;
+  }
+
+  /* Avoid stretched spacing inside inline code/links */
+  .post-content code,
+  .entry-content code,
+  .post-content a,
+  .entry-content a {
+    letter-spacing: normal;
+    word-spacing: normal;
+  }
+</style>

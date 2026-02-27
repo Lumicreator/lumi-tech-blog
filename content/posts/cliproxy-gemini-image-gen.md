@@ -23,12 +23,6 @@ Gemini CLI、Claude Code、OpenAI Codex 这些工具都是通过 OAuth 登录的
 
 ![CLIProxyAPI 架构图](/lumi-tech-blog/images/cliproxy-architecture.png)
 
-```
-Gemini CLI  ─┐
-Claude Code ─┤── OAuth 登录 ──→ CLIProxyAPI ──→ /v1/chat/completions ──→ 你的工具
-Codex       ─┘                  (反代层)                                  Agent/脚本/App
-```
-
 CLIProxyAPI 在中间做了两件事：
 1. **管理 OAuth 登录态**：帮你维护多个 CLI 账号的登录，支持轮询负载均衡
 2. **协议翻译**：把各家 CLI 的私有协议统一翻译成 OpenAI 兼容格式

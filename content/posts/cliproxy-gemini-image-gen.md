@@ -21,7 +21,7 @@ Gemini CLI、Claude Code、OpenAI Codex 这些工具都是通过 OAuth 登录的
 
 ## 架构
 
-![CLIProxyAPI 架构图](/images/cliproxy-architecture.png)
+![CLIProxyAPI 架构图](/lumi-tech-blog/images/cliproxy-architecture.png)
 
 ```
 Gemini CLI  ─┐
@@ -82,7 +82,7 @@ CLIProxyAPI 支持同时登录多个 Gemini 账号，请求会自动轮询分配
 
 Gemini 3 系列模型原生支持图片生成。通过 CLIProxyAPI，你可以用标准 OpenAI 格式调用这个能力。
 
-![生图流程](/images/cliproxy-image-gen-flow.png)
+![生图流程](/lumi-tech-blog/images/cliproxy-image-gen-flow.png)
 
 ### 基础调用
 

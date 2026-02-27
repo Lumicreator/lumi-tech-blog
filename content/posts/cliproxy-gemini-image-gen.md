@@ -1,159 +1,130 @@
 ---
 title: "用 CLIProxyAPI 反代 Gemini，让任何工具都能 AI 生图"
 date: 2026-02-27T00:00:00+08:00
-description: "通过 CLIProxyAPI 将 Gemini 的原生生图能力包装成 OpenAI 兼容 API，一行代码调用 AI 生图，零门槛接入任何工具链。"
+description: "通过 CLIProxyAPI 将 Gemini CLI 的 OAuth 登录转成标准 OpenAI API，零成本获得 AI 生图能力，接入任何工具链。"
 categories: ["教程"]
 tags: ["CLIProxyAPI", "Gemini", "AI生图", "反向代理", "OpenAI API"]
 ---
 
-> Gemini 原生支持图片生成，但它的 API 格式和 OpenAI 不兼容。CLIProxyAPI 做的事很简单：把 Gemini 包装成 OpenAI 格式，这样你现有的所有工具、脚本、Agent 都能直接调用生图，不用改一行代码。
+> 你有 Gemini CLI 的免费账号吗？那你就已经有了 AI 生图的 API。CLIProxyAPI 把 CLI 的 OAuth 登录态转成标准 OpenAI 格式接口，你的 Agent、脚本、任何工具都能直接调用。
 
-## 背景：为什么需要反代？
+## 核心思路
 
-Gemini 3 系列模型（`gemini-3-pro-image-preview`、`gemini-3.1-flash-image`）原生支持图片生成，而且效果相当不错。但问题是：
+Gemini CLI、Claude Code、OpenAI Codex 这些工具都是通过 OAuth 登录的，登录后你就有了对应模型的访问权限。但问题是——这些权限被锁在 CLI 里，你的其他工具用不了。
 
-- Gemini API 的请求/响应格式和 OpenAI 不一样
-- 大部分 AI 工具链（LangChain、OpenClaw、各种 Agent 框架）都是按 OpenAI API 格式设计的
-- 你不想为了用个生图功能就重写所有调用逻辑
+**CLIProxyAPI** 做的事：把 CLI 的 OAuth 登录态"解锁"出来，转成标准的 `/v1/chat/completions` 接口。
 
-**CLIProxyAPI** 就是解决这个问题的——它是一个轻量级反向代理，把各家 AI 服务统一翻译成 OpenAI 兼容的 `/v1/chat/completions` 格式。
+这意味着：
+- 不需要付费 API Key
+- 用 CLI 的免费额度就能调 API
+- 所有支持 OpenAI 格式的工具直接接入
 
-## 架构一览
+## 架构
+
+![CLIProxyAPI 架构图](/images/cliproxy-architecture.png)
 
 ```
-你的工具/脚本/Agent
-    ↓ OpenAI 格式请求
-CLIProxyAPI (反代层)
-    ↓ 翻译成 Gemini 原生格式
-Google Gemini API
-    ↓ 返回图片
-CLIProxyAPI
-    ↓ 包装成 OpenAI 格式响应
-你的工具/脚本/Agent
+Gemini CLI  ─┐
+Claude Code ─┤── OAuth 登录 ──→ CLIProxyAPI ──→ /v1/chat/completions ──→ 你的工具
+Codex       ─┘                  (反代层)                                  Agent/脚本/App
 ```
 
-整个过程对调用方完全透明，你只需要把 `base_url` 指向 CLIProxyAPI 就行。
+CLIProxyAPI 在中间做了两件事：
+1. **管理 OAuth 登录态**：帮你维护多个 CLI 账号的登录，支持轮询负载均衡
+2. **协议翻译**：把各家 CLI 的私有协议统一翻译成 OpenAI 兼容格式
 
-## 部署 CLIProxyAPI
+## 部署
 
-### Docker 一键部署
+### Docker 一键启动
 
 ```bash
-# 克隆仓库
 git clone https://github.com/eceasy/cli-proxy-api.git
 cd cli-proxy-api
-
-# 编辑配置
 cp config.example.yaml config.yaml
-vim config.yaml
-
-# 启动
 docker compose up -d
 ```
 
-### 核心配置
+### 配置文件
 
 ```yaml
 # config.yaml
 host: ""
 port: 8317
 
-# 你的 API Key（用于客户端鉴权）
+# 客户端鉴权用的 Key
 api-keys:
-  - "your-client-key"
+  - "my-client-key"
 
-# Gemini API Key
+# Gemini CLI OAuth 登录（核心）
+# 启动后访问管理面板完成 OAuth 登录
+# 登录态会自动保存，支持多账号轮询
+
+# 也可以配 API Key 作为备选
 gemini-api-key:
-  - api-key: "你的 Google AI Studio API Key"
-
-# 开启调试日志（可选）
-debug: true
+  - api-key: "可选，有OAuth就不需要"
 ```
 
-拿到 Gemini API Key 的方式：去 [Google AI Studio](https://aistudio.google.com/apikey) 免费申请。
+启动后访问管理面板（默认端口的 `/panel`），按引导完成 Gemini CLI 的 OAuth 登录。登录一次，后续自动续期。
 
-### 端口映射
+### 多账号负载均衡
 
-如果用 Docker，建议映射一个独立端口：
+CLIProxyAPI 支持同时登录多个 Gemini 账号，请求会自动轮询分配：
 
-```yaml
-# docker-compose.yml
-ports:
-  - "9417:8317"  # 对外9417，容器内8317
+```
+账号A (免费额度) ─┐
+账号B (免费额度) ─┤── 轮询 ──→ 对外统一接口
+账号C (免费额度) ─┘
 ```
 
-## 调用生图
+单个免费账号额度不够？多登几个就行。
 
-部署完成后，用标准的 OpenAI API 格式就能生图：
+## AI 生图实战
+
+Gemini 3 系列模型原生支持图片生成。通过 CLIProxyAPI，你可以用标准 OpenAI 格式调用这个能力。
+
+![生图流程](/images/cliproxy-image-gen-flow.png)
+
+### 基础调用
 
 ```python
-import requests
-import base64
+import requests, base64
 from pathlib import Path
 
 resp = requests.post("http://127.0.0.1:9417/v1/chat/completions",
-    headers={"Authorization": "Bearer your-client-key"},
+    headers={"Authorization": "Bearer my-client-key"},
     json={
         "model": "gemini-3.1-flash-image",
         "messages": [{
             "role": "user",
-            "content": "画一只橘猫在沙发上跳跃，简笔画风格，白色背景"
+            "content": "画一只橘猫在沙发上跳跃，简笔画风格"
         }],
         "max_tokens": 4096
-    },
-    timeout=120
-)
+    }, timeout=120)
 
-data = resp.json()
-# 图片在 choices[0].message.images 字段
-images = data["choices"][0]["message"]["images"]
-img_url = images[0]["image_url"]["url"]  # data:image/jpeg;base64,...
-
-# 保存图片
-b64 = img_url.split(",", 1)[1]
-Path("output.jpg").write_bytes(base64.b64decode(b64))
-print("Done!")
+# 图片在 images 字段（不是 content）
+images = resp.json()["choices"][0]["message"]["images"]
+b64 = images[0]["image_url"]["url"].split(",", 1)[1]
+Path("cat.jpg").write_bytes(base64.b64decode(b64))
 ```
 
-### 响应格式
+> ⚠️ 注意：图片返回在 `choices[0].message.images[]` 字段，不是 `content`。格式是 `data:image/jpeg;base64,...`。
 
-CLIProxyAPI 返回的图片在 `choices[0].message.images` 数组里（注意不是 `content`）：
+### 批量生图
 
-```json
-{
-  "choices": [{
-    "message": {
-      "role": "assistant",
-      "content": "这是一只可爱的橘猫...",
-      "images": [{
-        "image_url": {
-          "url": "data:image/jpeg;base64,/9j/4AAQ..."
-        }
-      }]
-    }
-  }]
-}
-```
-
-## 实战：批量生成小红书配图
-
-这是我实际在用的场景——每天给小红书账号生成科普配图。
-
-### 批量生图脚本
+实际场景：我每天用这套给小红书账号批量生成科普配图。
 
 ```python
 import requests, base64, time
 from pathlib import Path
 
 ENDPOINT = "http://127.0.0.1:9417/v1/chat/completions"
-API_KEY = "your-client-key"
 OUT_DIR = Path("./images")
 OUT_DIR.mkdir(exist_ok=True)
 
 prompts = [
-    "简笔画风格，一只猫凌晨3点从沙发上起飞...",
-    "简笔画风格，猫上完厕所后疯狂冲刺...",
-    # ... 更多 prompt
+    "简笔画风格，一只猫凌晨3点从沙发上起飞，主人被吵醒...",
+    "简笔画风格，猫上完厕所后疯狂冲刺，灰尘飞扬...",
+    # ...
 ]
 
 for i, prompt in enumerate(prompts, 1):
@@ -161,40 +132,35 @@ for i, prompt in enumerate(prompts, 1):
         "model": "gemini-3.1-flash-image",
         "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 4096
-    }, headers={"Authorization": f"Bearer {API_KEY}"}, timeout=120)
+    }, headers={"Authorization": "Bearer my-client-key"}, timeout=120)
 
     images = resp.json()["choices"][0]["message"]["images"]
     b64 = images[0]["image_url"]["url"].split(",", 1)[1]
-    
-    out = OUT_DIR / f"image_{i}.jpg"
-    out.write_bytes(base64.b64decode(b64))
-    print(f"[{i}] ✅ {out}")
-    
+    Path(f"images/img_{i}.jpg").write_bytes(base64.b64decode(b64))
+    print(f"[{i}] ✅")
     time.sleep(2)  # 避免限流
 ```
 
-### 模型选择
+### 模型怎么选
 
-| 模型 | 特点 | 适用场景 |
-|------|------|----------|
-| `gemini-3-pro-image-preview` | 质量最高，配额较紧 | 重要的封面图 |
-| `gemini-3.1-flash-image` | 速度快，配额宽松 | 批量生图、日常使用 |
+| 模型 | 速度 | 质量 | 配额 | 建议 |
+|------|------|------|------|------|
+| `gemini-3-pro-image-preview` | 慢 | 最高 | 紧 | 重要封面图 |
+| `gemini-3.1-flash-image` | 快 | 够用 | 宽松 | 日常批量生图 |
 
-**建议**：日常用 `flash-image`，配额不容易爆。`pro-image` 留给关键场景。
+日常用 flash，配额不容易爆。pro 留给关键场景。
 
-## 进阶：接入更多模型
+## 不只是生图
 
-CLIProxyAPI 不只能反代 Gemini，还支持通过 `openai-compatibility` 配置接入任何 OpenAI 兼容的服务：
+CLIProxyAPI 统一的是整个 API 层，不只是生图。你还可以：
+
+- **Claude Code OAuth → API**：用 Claude Code 的免费/Pro 额度调 Claude 模型
+- **Codex OAuth → API**：用 ChatGPT Plus 的额度调 GPT 模型
+- **混合路由**：不同模型走不同后端，对外一个 endpoint
 
 ```yaml
+# 同时接入多家
 openai-compatibility:
-  - name: Minimax
-    base-url: https://api.minimaxi.com/v1
-    api-key-entries:
-      - api-key: "sk-xxx"
-    models:
-      - name: MiniMax-M2.1
-
   - name: 阿里百炼
     base-url: https://coding.dashscope.aliyuncs.com/v1
     api-key-entries:
@@ -203,31 +169,35 @@ openai-compatibility:
       - name: kimi-k2.5
 ```
 
-这样你的工具链只需要对接一个 endpoint，后面接什么模型随时切换。
+一个 endpoint 管所有模型，后面接什么随时切。
 
 ## 踩坑记录
 
-1. **图片在 `images` 字段不在 `content`**：CLIProxyAPI 返回图片的位置是 `choices[0].message.images[]`，不是 `content`，别找错了。
+1. **图片在 `images` 不在 `content`**：CLIProxyAPI 返回图片的位置和标准 OpenAI 不一样，别找错了
 
-2. **3:4 竖版图片**：在 prompt 里指定 `768x1024` 即可，实际输出会是 `896x1200`。
+2. **竖版图片**：prompt 里写 `768x1024` 就行，实际输出 `896x1200`
 
-3. **配额限制**：`pro-image` 模型配额比较紧，批量生图容易 429。换 `flash-image` 基本不会遇到。
+3. **配额共享**：如果你同时用 Gemini API Key 做 embedding 和生图，配额是共享的。生图一顿造，embedding 也会 429。建议分开
 
-4. **超时设置**：生图比纯文本慢很多，`timeout` 建议设 120 秒以上。
+4. **超时要长**：生图比文本慢很多，timeout 至少 120 秒
+
+5. **OAuth 续期**：CLI 的 OAuth token 会过期，CLIProxyAPI 会自动刷新，但偶尔需要重新登录一次
 
 ## 总结
 
-CLIProxyAPI 做的事情很简单但很实用：
+CLIProxyAPI 的核心价值：
 
-- **统一 API 格式**：不管后面是 Gemini、Minimax 还是别的，对外都是 OpenAI 格式
-- **零改造接入**：现有工具链不用改代码，换个 `base_url` 就行
-- **生图能力平权**：Gemini 的生图能力通过反代变成了任何工具都能调用的标准 API
+- **把 CLI 的免费额度变成 API**——OAuth 登录一次，所有工具都能用
+- **统一协议**——不管后面是 Gemini、Claude 还是 GPT，对外都是 OpenAI 格式
+- **多账号负载均衡**——单账号额度不够就多登几个
+- **零成本生图**——Gemini 免费额度 + CLIProxyAPI = 任何工具都能 AI 生图
 
-如果你也在用 AI Agent 做内容生产（小红书、公众号、博客配图），这个方案值得一试。
+如果你在用 AI Agent 做内容生产，这套方案基本是零成本的。
 
 ---
 
 *相关链接：*
 - [CLIProxyAPI GitHub](https://github.com/eceasy/cli-proxy-api)
-- [Google AI Studio（申请 API Key）](https://aistudio.google.com/apikey)
+- [CLIProxyAPI 文档](https://help.router-for.me/)
+- [Google AI Studio](https://aistudio.google.com/apikey)
 - [Gemini 生图文档](https://ai.google.dev/gemini-api/docs/image-generation)

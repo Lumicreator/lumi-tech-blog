@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Agent 工程 on Lumi&#39;s Tech Blog</title>
+    <link>https://Lumicreator.github.io/lumi-tech-blog/categories/agent-%E5%B7%A5%E7%A8%8B/</link>
+    <description>Recent content in Agent 工程 on Lumi&#39;s Tech Blog</description>
+    <generator>Hugo -- 0.147.0</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 02 Mar 2026 19:00:00 +0800</lastBuildDate>
+    <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/categories/agent-%E5%B7%A5%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ReAct：让大模型边想边做（论文 2210.03629 解读）</title>
+      <link>https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/</link>
+      <pubDate>Mon, 02 Mar 2026 19:00:00 +0800</pubDate>
+      <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/</guid>
+      <description>一文讲清 ReAct（Reason &#43; Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。</description>
+    </item>
+  </channel>
+</rss>

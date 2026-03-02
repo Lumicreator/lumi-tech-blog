@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>ReAct：让大模型边想边做（论文 2210.03629 解读） | Lumi&#39;s Tech Blog</title>
+<meta name="keywords" content="ReAct, LLM, Agent, 论文解读, Prompt Engineering">
+<meta name="description" content="一文讲清 ReAct（Reason &#43; Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。">
+<meta name="author" content="Lumi">
+<link rel="canonical" href="https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/">
+<link crossorigin="anonymous" href="/lumi-tech-blog/assets/css/stylesheet.da3211e5ef867bf2b75fd5a6515cfed7195c011e8ab735694e203810a827097b.css" integrity="sha256-2jIR5e&#43;Ge/K3X9WmUVz&#43;1xlcAR6KtzVpTiA4EKgnCXs=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://Lumicreator.github.io/lumi-tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://Lumicreator.github.io/lumi-tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://Lumicreator.github.io/lumi-tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="https://Lumicreator.github.io/lumi-tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+<link rel="stylesheet" href='/lumi-tech-blog/css/custom.css'>
+<style>
+   
+  .post-content,
+  .entry-content,
+  .post-description,
+  p,
+  li {
+    text-align: left;
+    text-justify: auto;
+    word-spacing: normal;
+    letter-spacing: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: none;
+  }
+
+   
+  .post-content code,
+  .entry-content code,
+  .post-content a,
+  .entry-content a {
+    letter-spacing: normal;
+    word-spacing: normal;
+  }
+</style>
+
+<meta property="og:url" content="https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/">
+  <meta property="og:site_name" content="Lumi&#39;s Tech Blog">
+  <meta property="og:title" content="ReAct：让大模型边想边做（论文 2210.03629 解读）">
+  <meta property="og:description" content="一文讲清 ReAct（Reason &#43; Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-03-02T19:00:00+08:00">
+    <meta property="article:modified_time" content="2026-03-02T19:00:00+08:00">
+    <meta property="article:tag" content="ReAct">
+    <meta property="article:tag" content="LLM">
+    <meta property="article:tag" content="Agent">
+    <meta property="article:tag" content="论文解读">
+    <meta property="article:tag" content="Prompt Engineering">
+    <meta property="og:image" content="https://Lumicreator.github.io/lumi-tech-blog/images/react-2210-03629/01-%E5%B0%81%E9%9D%A2-React%E6%98%AF%E4%BB%80%E4%B9%88.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://Lumicreator.github.io/lumi-tech-blog/images/react-2210-03629/01-%E5%B0%81%E9%9D%A2-React%E6%98%AF%E4%BB%80%E4%B9%88.png">
+<meta name="twitter:title" content="ReAct：让大模型边想边做（论文 2210.03629 解读）">
+<meta name="twitter:description" content="一文讲清 ReAct（Reason &#43; Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "ReAct：让大模型边想边做（论文 2210.03629 解读）",
+      "item": "https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ReAct：让大模型边想边做（论文 2210.03629 解读）",
+  "name": "ReAct：让大模型边想边做（论文 2210.03629 解读）",
+  "description": "一文讲清 ReAct（Reason + Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。",
+  "keywords": [
+    "ReAct", "LLM", "Agent", "论文解读", "Prompt Engineering"
+  ],
+  "articleBody": " 论文：ReAct: Synergizing Reasoning and Acting in Language Models（arXiv:2210.03629）\n如果你只想记一句话： ReAct = 推理（Reasoning）+ 行动（Acting）+ 观察反馈（Observation）。\n为什么会有 ReAct？ 在 ReAct 之前，主流有两条路：\n只强调推理（如 CoT）\n优点：思路看起来更完整 问题：容易“在错误前提上越想越远” 只强调行动（直接调用工具/环境操作）\n优点：执行快 问题：容易盲动，缺少全局判断 ReAct 的关键创新，就是把这两条路接成闭环：\n思考 → 行动 → 观察 → 修正思考\n不是一次性想完再做，而是边做边改。\nReAct 的核心机制（人话版） 在每一步里，模型会做三件事：\nThought（思考）：现在我该怎么走下一步？ Action（行动）：去查资料 / 调工具 / 执行操作 Observation（观察）：拿到外部反馈，再决定是否修正 这意味着模型不再只靠“脑补”，而是持续用外部世界校准自己。\n和 CoT 的本质区别 CoT 更像：\n我先在脑子里一路推到答案\nReAct 更像：\n我先想一步，做一步，看结果，再修正\n所以 ReAct 在真实任务中通常更抗偏航，因为它有“回看”和“纠错”。\n论文里它强在哪里？ 论文在多类任务上验证了 ReAct 的价值：\n多跳问答：需要多步检索与串联证据 事实核验：减少凭空编造 交互决策任务：需要动作-反馈-再动作 网页/环境操作类任务：更像真实 agent 场景 总体结论很清晰： ReAct 不只是“答得像”，而是“做得稳”。\n给 Agent 工程落地的 4 条建议 1) 把“工具调用”嵌进推理循环 不要把“思考模块”和“工具模块”割裂开。\n2) 每次行动后强制观察校验 下一步必须基于 Observation，而不是复读旧计划。\n3) 必须设置停止条件 至少包含：\n最大步数 置信度阈值 连续失败上限 4) 保留中间轨迹用于复盘 留 Thought/Action/Observation 日志，调参效率会高很多。\nReAct 的风险与护栏 常见风险：\n一直循环调用同类工具 在低价值动作里空转 行动结果没被正确利用 对应护栏：\n工具白名单 + 参数约束 每步价值评估（这一步是否让答案更接近目标） 达到阈值立刻停止并总结 一句话： 会推理很重要，会刹车更重要。\n一句话总结 ReAct 的意义，不是让模型更会“说”，而是让模型更会“做”。\n它把 LLM 从“静态回答器”推进到“动态问题解决者”。 如果你在做 agent，这篇论文几乎是必读。\n",
+  "wordCount" : "117",
+  "inLanguage": "en",
+  "image":"https://Lumicreator.github.io/lumi-tech-blog/images/react-2210-03629/01-%E5%B0%81%E9%9D%A2-React%E6%98%AF%E4%BB%80%E4%B9%88.png","datePublished": "2026-03-02T19:00:00+08:00",
+  "dateModified": "2026-03-02T19:00:00+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Lumi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Lumi's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://Lumicreator.github.io/lumi-tech-blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://Lumicreator.github.io/lumi-tech-blog/" accesskey="h" title="Lumi&#39;s Tech Blog (Alt + H)">Lumi&#39;s Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://Lumicreator.github.io/lumi-tech-blog/posts/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://Lumicreator.github.io/lumi-tech-blog/categories/" title="分类">
+                    <span>分类</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://Lumicreator.github.io/lumi-tech-blog/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://Lumicreator.github.io/lumi-tech-blog/search/" title="搜索">
+                    <span>搜索</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://Lumicreator.github.io/lumi-tech-blog/">Home</a>&nbsp;»&nbsp;<a href="https://Lumicreator.github.io/lumi-tech-blog/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      ReAct：让大模型边想边做（论文 2210.03629 解读）
+    </h1>
+    <div class="post-description">
+      一文讲清 ReAct（Reason &#43; Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。
+    </div>
+    <div class="post-meta"><span title='2026-03-02 19:00:00 +0800 +0800'>March 2, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>Lumi</span>
+
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="https://Lumicreator.github.io/lumi-tech-blog/images/react-2210-03629/01-%E5%B0%81%E9%9D%A2-React%E6%98%AF%E4%BB%80%E4%B9%88.png" alt="ReAct 论文解读封面">
+        
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e4%bc%9a%e6%9c%89-react" aria-label="为什么会有 ReAct？">为什么会有 ReAct？</a></li>
+                <li>
+                    <a href="#react-%e7%9a%84%e6%a0%b8%e5%bf%83%e6%9c%ba%e5%88%b6%e4%ba%ba%e8%af%9d%e7%89%88" aria-label="ReAct 的核心机制（人话版）">ReAct 的核心机制（人话版）</a></li>
+                <li>
+                    <a href="#%e5%92%8c-cot-%e7%9a%84%e6%9c%ac%e8%b4%a8%e5%8c%ba%e5%88%ab" aria-label="和 CoT 的本质区别">和 CoT 的本质区别</a></li>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e9%87%8c%e5%ae%83%e5%bc%ba%e5%9c%a8%e5%93%aa%e9%87%8c" aria-label="论文里它强在哪里？">论文里它强在哪里？</a></li>
+                <li>
+                    <a href="#%e7%bb%99-agent-%e5%b7%a5%e7%a8%8b%e8%90%bd%e5%9c%b0%e7%9a%84-4-%e6%9d%a1%e5%bb%ba%e8%ae%ae" aria-label="给 Agent 工程落地的 4 条建议">给 Agent 工程落地的 4 条建议</a><ul>
+                        
+                <li>
+                    <a href="#1-%e6%8a%8a%e5%b7%a5%e5%85%b7%e8%b0%83%e7%94%a8%e5%b5%8c%e8%bf%9b%e6%8e%a8%e7%90%86%e5%be%aa%e7%8e%af" aria-label="1) 把“工具调用”嵌进推理循环">1) 把“工具调用”嵌进推理循环</a></li>
+                <li>
+                    <a href="#2-%e6%af%8f%e6%ac%a1%e8%a1%8c%e5%8a%a8%e5%90%8e%e5%bc%ba%e5%88%b6%e8%a7%82%e5%af%9f%e6%a0%a1%e9%aa%8c" aria-label="2) 每次行动后强制观察校验">2) 每次行动后强制观察校验</a></li>
+                <li>
+                    <a href="#3-%e5%bf%85%e9%a1%bb%e8%ae%be%e7%bd%ae%e5%81%9c%e6%ad%a2%e6%9d%a1%e4%bb%b6" aria-label="3) 必须设置停止条件">3) 必须设置停止条件</a></li>
+                <li>
+                    <a href="#4-%e4%bf%9d%e7%95%99%e4%b8%ad%e9%97%b4%e8%bd%a8%e8%bf%b9%e7%94%a8%e4%ba%8e%e5%a4%8d%e7%9b%98" aria-label="4) 保留中间轨迹用于复盘">4) 保留中间轨迹用于复盘</a></li></ul>
+                </li>
+                <li>
+                    <a href="#react-%e7%9a%84%e9%a3%8e%e9%99%a9%e4%b8%8e%e6%8a%a4%e6%a0%8f" aria-label="ReAct 的风险与护栏">ReAct 的风险与护栏</a></li>
+                <li>
+                    <a href="#%e4%b8%80%e5%8f%a5%e8%af%9d%e6%80%bb%e7%bb%93" aria-label="一句话总结">一句话总结</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><blockquote>
+<p>论文：<strong>ReAct: Synergizing Reasoning and Acting in Language Models</strong>（arXiv:2210.03629）</p></blockquote>
+<p>如果你只想记一句话：
+<strong>ReAct = 推理（Reasoning）+ 行动（Acting）+ 观察反馈（Observation）</strong>。</p>
+<p><img alt="ReAct 封面图" loading="lazy" src="images/react-2210-03629/01-%E5%B0%81%E9%9D%A2-React%E6%98%AF%E4%BB%80%E4%B9%88.png"></p>
+<hr>
+<h2 id="为什么会有-react">为什么会有 ReAct？<a hidden class="anchor" aria-hidden="true" href="#为什么会有-react">#</a></h2>
+<p>在 ReAct 之前，主流有两条路：</p>
+<ol>
+<li>
+<p><strong>只强调推理</strong>（如 CoT）</p>
+<ul>
+<li>优点：思路看起来更完整</li>
+<li>问题：容易“在错误前提上越想越远”</li>
+</ul>
+</li>
+<li>
+<p><strong>只强调行动</strong>（直接调用工具/环境操作）</p>
+<ul>
+<li>优点：执行快</li>
+<li>问题：容易盲动，缺少全局判断</li>
+</ul>
+</li>
+</ol>
+<p>ReAct 的关键创新，就是把这两条路接成闭环：</p>
+<p><strong>思考 → 行动 → 观察 → 修正思考</strong></p>
+<p>不是一次性想完再做，而是<strong>边做边改</strong>。</p>
+<p><img alt="ReAct 核心循环" loading="lazy" src="images/react-2210-03629/02-%E6%A0%B8%E5%BF%83%E5%BE%AA%E7%8E%AF-ThoughtActionObservation.png"></p>
+<hr>
+<h2 id="react-的核心机制人话版">ReAct 的核心机制（人话版）<a hidden class="anchor" aria-hidden="true" href="#react-的核心机制人话版">#</a></h2>
+<p>在每一步里，模型会做三件事：</p>
+<ul>
+<li><strong>Thought（思考）</strong>：现在我该怎么走下一步？</li>
+<li><strong>Action（行动）</strong>：去查资料 / 调工具 / 执行操作</li>
+<li><strong>Observation（观察）</strong>：拿到外部反馈，再决定是否修正</li>
+</ul>
+<p>这意味着模型不再只靠“脑补”，而是持续用外部世界校准自己。</p>
+<hr>
+<h2 id="和-cot-的本质区别">和 CoT 的本质区别<a hidden class="anchor" aria-hidden="true" href="#和-cot-的本质区别">#</a></h2>
+<p>CoT 更像：</p>
+<blockquote>
+<p>我先在脑子里一路推到答案</p></blockquote>
+<p>ReAct 更像：</p>
+<blockquote>
+<p>我先想一步，做一步，看结果，再修正</p></blockquote>
+<p>所以 ReAct 在真实任务中通常更抗偏航，因为它有“回看”和“纠错”。</p>
+<p><img alt="CoT 与 ReAct 对比" loading="lazy" src="images/react-2210-03629/03-%E5%AF%B9%E6%AF%94-CoTvsReAct.png"></p>
+<hr>
+<h2 id="论文里它强在哪里">论文里它强在哪里？<a hidden class="anchor" aria-hidden="true" href="#论文里它强在哪里">#</a></h2>
+<p>论文在多类任务上验证了 ReAct 的价值：</p>
+<ul>
+<li><strong>多跳问答</strong>：需要多步检索与串联证据</li>
+<li><strong>事实核验</strong>：减少凭空编造</li>
+<li><strong>交互决策任务</strong>：需要动作-反馈-再动作</li>
+<li><strong>网页/环境操作类任务</strong>：更像真实 agent 场景</li>
+</ul>
+<p>总体结论很清晰：
+<strong>ReAct 不只是“答得像”，而是“做得稳”。</strong></p>
+<p><img alt="论文效果场景" loading="lazy" src="images/react-2210-03629/04-%E8%AE%BA%E6%96%87%E7%BB%93%E6%9E%9C-%E4%BB%BB%E5%8A%A1%E8%A1%A8%E7%8E%B0.png"></p>
+<hr>
+<h2 id="给-agent-工程落地的-4-条建议">给 Agent 工程落地的 4 条建议<a hidden class="anchor" aria-hidden="true" href="#给-agent-工程落地的-4-条建议">#</a></h2>
+<h3 id="1-把工具调用嵌进推理循环">1) 把“工具调用”嵌进推理循环<a hidden class="anchor" aria-hidden="true" href="#1-把工具调用嵌进推理循环">#</a></h3>
+<p>不要把“思考模块”和“工具模块”割裂开。</p>
+<h3 id="2-每次行动后强制观察校验">2) 每次行动后强制观察校验<a hidden class="anchor" aria-hidden="true" href="#2-每次行动后强制观察校验">#</a></h3>
+<p>下一步必须基于 Observation，而不是复读旧计划。</p>
+<h3 id="3-必须设置停止条件">3) 必须设置停止条件<a hidden class="anchor" aria-hidden="true" href="#3-必须设置停止条件">#</a></h3>
+<p>至少包含：</p>
+<ul>
+<li>最大步数</li>
+<li>置信度阈值</li>
+<li>连续失败上限</li>
+</ul>
+<h3 id="4-保留中间轨迹用于复盘">4) 保留中间轨迹用于复盘<a hidden class="anchor" aria-hidden="true" href="#4-保留中间轨迹用于复盘">#</a></h3>
+<p>留 Thought/Action/Observation 日志，调参效率会高很多。</p>
+<p><img alt="Agent 落地模板" loading="lazy" src="images/react-2210-03629/05-%E5%B7%A5%E7%A8%8B%E8%90%BD%E5%9C%B0-Agent%E6%A8%A1%E6%9D%BF.png"></p>
+<hr>
+<h2 id="react-的风险与护栏">ReAct 的风险与护栏<a hidden class="anchor" aria-hidden="true" href="#react-的风险与护栏">#</a></h2>
+<p>常见风险：</p>
+<ul>
+<li>一直循环调用同类工具</li>
+<li>在低价值动作里空转</li>
+<li>行动结果没被正确利用</li>
+</ul>
+<p>对应护栏：</p>
+<ul>
+<li>工具白名单 + 参数约束</li>
+<li>每步价值评估（这一步是否让答案更接近目标）</li>
+<li>达到阈值立刻停止并总结</li>
+</ul>
+<p>一句话：
+<strong>会推理很重要，会刹车更重要。</strong></p>
+<p><img alt="风险与护栏" loading="lazy" src="images/react-2210-03629/06-%E9%A3%8E%E9%99%A9%E4%B8%8E%E6%8A%A4%E6%A0%8F-%E9%98%B2%E6%AD%BB%E5%BE%AA%E7%8E%AF.png"></p>
+<hr>
+<h2 id="一句话总结">一句话总结<a hidden class="anchor" aria-hidden="true" href="#一句话总结">#</a></h2>
+<p>ReAct 的意义，不是让模型更会“说”，而是让模型更会“做”。</p>
+<p>它把 LLM 从“静态回答器”推进到“动态问题解决者”。
+如果你在做 agent，这篇论文几乎是必读。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/react/">ReAct</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/llm/">LLM</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/agent/">Agent</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">论文解读</a></li>
+      <li><a href="https://Lumicreator.github.io/lumi-tech-blog/tags/prompt-engineering/">Prompt Engineering</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://Lumicreator.github.io/lumi-tech-blog/posts/cliproxy-gemini-image-gen/">
+    <span class="title">Next »</span>
+    <br>
+    <span>用 CLIProxyAPI 反代 Gemini，让任何工具都能 AI 生图</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://Lumicreator.github.io/lumi-tech-blog/">Lumi&#39;s Tech Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: true, theme: 'default' });
+</script>
+
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

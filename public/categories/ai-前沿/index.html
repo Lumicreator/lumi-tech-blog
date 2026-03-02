@@ -174,29 +174,23 @@
         <img loading="lazy" src="https://Lumicreator.github.io/lumi-tech-blog/images/react-2210-03629/01-%E5%B0%81%E9%9D%A2-React%E6%98%AF%E4%BB%80%E4%B9%88.png" alt="ReAct 论文解读封面">
 </figure>
   <header class="entry-header">
-    <h2 class="entry-hint-parent">ReAct：让大模型边想边做（论文 2210.03629 解读）
+    <h2 class="entry-hint-parent">别再只会 CoT：ReAct 论文 2210.03629 的硬核拆解与落地
     </h2>
   </header>
   <div class="entry-content">
     <p> 论文：ReAct: Synergizing Reasoning and Acting in Language Models（arXiv:2210.03629）
-如果你只想记一句话： ReAct = 推理（Reasoning）&#43; 行动（Acting）&#43; 观察反馈（Observation）。
-为什么会有 ReAct？ 在 ReAct 之前，主流有两条路：
-只强调推理（如 CoT）
-优点：思路看起来更完整 问题：容易“在错误前提上越想越远” 只强调行动（直接调用工具/环境操作）
-优点：执行快 问题：容易盲动，缺少全局判断 ReAct 的关键创新，就是把这两条路接成闭环：
-思考 → 行动 → 观察 → 修正思考
-不是一次性想完再做，而是边做边改。
-ReAct 的核心机制（人话版） 在每一步里，模型会做三件事：
-Thought（思考）：现在我该怎么走下一步？ Action（行动）：去查资料 / 调工具 / 执行操作 Observation（观察）：拿到外部反馈，再决定是否修正 这意味着模型不再只靠“脑补”，而是持续用外部世界校准自己。
-和 CoT 的本质区别 CoT 更像：
-我先在脑子里一路推到答案
-ReAct 更像：
-我先想一步，做一步，看结果，再修正
-所以 ReAct 在真实任务中通常更抗偏航，因为它有“回看”和“纠错”。
-...</p>
+先把结论摆前面： ReAct 的价值不在“多一个提示词技巧”，而在把 LLM 从“静态回答”升级成“闭环决策系统”。
+0. 为什么我说“只会 CoT 已经不够了” 在真实任务里（检索、工具调用、网页交互、流程决策），你会遇到三类典型失败：
+推理正确，但事实错（幻觉） 计划看着很完整，但执行后不回看（错误传播） 会调用工具，但不知道何时该停、何时该改方向 CoT 主要解决第 1 层“展开推理”的问题； ReAct 解决的是第 2、3 层“推理-执行-反馈”闭环问题。
+1. 论文到底提出了什么（不是口号版） 论文做的事可以压成一句工程话：
+把 LLM 的输出拆成 Thought（内部推理）和 Action（可执行动作），并把外部环境返回的 Observation 喂回下一轮推理。
+形成循环：
+Thought → Action → Observation → Thought → … → Final Answer
+这比“让模型多想想”多了两件关键能力：
+对外部世界取证（不只靠参数记忆） 基于反馈在线修正策略（不是一条路走到黑） 2. ReAct 为什么比 CoT 更像“可用系统” CoT 的强项 内部推理展开，适合算术/符号推理等“封闭题目” CoT 的弱项 外部事实不可验证 一旦前提错，后面会很“自洽地错下去” ReAct 的强项 推理过程中允许查证 执行后可回看并修正 轨迹可审计（这点对 Agent 运维特别重要） ...</p>
   </div>
-  <footer class="entry-footer"><span title='2026-03-02 19:00:00 +0800 +0800'>March 2, 2026</span>&nbsp;·&nbsp;<span>1 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
-  <a class="entry-link" aria-label="post link to ReAct：让大模型边想边做（论文 2210.03629 解读）" href="https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/"></a>
+  <footer class="entry-footer"><span title='2026-03-02 19:00:00 +0800 +0800'>March 2, 2026</span>&nbsp;·&nbsp;<span>2 min</span>&nbsp;·&nbsp;<span>Lumi</span></footer>
+  <a class="entry-link" aria-label="post link to 别再只会 CoT：ReAct 论文 2210.03629 的硬核拆解与落地" href="https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/"></a>
 </article>
 
 <article class="post-entry tag-entry"> 

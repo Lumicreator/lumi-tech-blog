@@ -9,11 +9,11 @@
     <lastBuildDate>Mon, 02 Mar 2026 19:00:00 +0800</lastBuildDate>
     <atom:link href="https://Lumicreator.github.io/lumi-tech-blog/categories/agent-%E5%B7%A5%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>ReAct：让大模型边想边做（论文 2210.03629 解读）</title>
+      <title>别再只会 CoT：ReAct 论文 2210.03629 的硬核拆解与落地</title>
       <link>https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/</link>
       <pubDate>Mon, 02 Mar 2026 19:00:00 +0800</pubDate>
       <guid>https://Lumicreator.github.io/lumi-tech-blog/posts/react-2210-03629/</guid>
-      <description>一文讲清 ReAct（Reason &#43; Act）为什么重要、和 CoT 的区别，以及如何落地到真实 Agent 系统。</description>
+      <description>不是泛泛而谈。本文从问题定义、方法机制、实验设置、关键结果、失败模式到工程落地，系统拆解 ReAct。</description>
     </item>
   </channel>
 </rss>
